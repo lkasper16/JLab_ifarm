@@ -1,0 +1,100 @@
+#+1663042450
+cp -r RunLog002029 ~/TRDData
+#+1663042454
+cp -r RunLog002030 ~/TRDData
+#+1663042458
+cp -r RunLog002031 ~/TRDData
+#+1663042461
+cp -r RunLog002032 ~/TRDData
+#+1663042465
+cp -r RunLog002033 ~/TRDData
+#+1663042472
+cp -r RunLog002034 ~/TRDData
+#+1663042476
+cp -r RunLog002035 ~/TRDData
+#+1663042479
+cp -r RunLog002036 ~/TRDData
+#+1663042483
+cp -r RunLog002037 ~/TRDData
+#+1663042486
+cp -r RunLog002038 ~/TRDData
+#+1663042490
+cp -r RunLog002039 ~/TRDData
+#+1663042494
+cp -r RunLog002040 ~/TRDData
+#+1663042497
+cp -r RunLog002041 ~/TRDData
+#+1663042501
+cp -r RunLog002042 ~/TRDData
+#+1663042504
+cp -r RunLog002043 ~/TRDData
+#+1663042507
+cp -r RunLog002044 ~/TRDData
+#+1663042510
+cp -r RunLog002045 ~/TRDData
+#+1663042513
+cp -r RunLog002046 ~/TRDData
+#+1663042516
+cp -r RunLog002047 ~/TRDData
+#+1663042519
+cp -r RunLog002048 ~/TRDData
+#+1663042522
+cp -r RunLog002049 ~/TRDData
+#+1663042529
+cp -r RunLog002050 ~/TRDData
+#+1663042532
+cp -r RunLog002051 ~/TRDData
+#+1663042535
+cp -r RunLog002052 ~/TRDData
+#+1663042538
+cp -r RunLog002053 ~/TRDData
+#+1663042541
+cp -r RunLog002054 ~/TRDData
+#+1663042544
+cp -r RunLog002055 ~/TRDData
+#+1663042547
+cp -r RunLog002056 ~/TRDData
+#+1663042550
+cp -r RunLog002057 ~/TRDData
+#+1663042553
+cp -r RunLog002058 ~/TRDData
+#+1663042556
+cp -r RunLog002059 ~/TRDData
+#+1663042560
+cp -r RunLog002060 ~/TRDData
+#+1663042564
+cp -r RunLog002061 ~/TRDData
+#+1663042566
+cp -r RunLog002062 ~/TRDData
+#+1663042569
+cp -r RunLog002063 ~/TRDData
+#+1663042572
+cp -r RunLog002064 ~/TRDData
+#+1663042575
+cp -r RunLog002065 ~/TRDData
+#+1663042580
+cp -r RunLog002066 ~/TRDData
+#+1663042583
+cp -r RunLog002067 ~/TRDData
+#+1663042587
+cp -r RunLog002068 ~/TRDData
+#+1663042590
+cp -r RunLog002069 ~/TRDData
+#+1663042595
+cp -r RunLog002070 ~/TRDData
+#+1663042599
+cp -r RunLog002071 ~/TRDData
+#+1663042602
+cp -r RunLog002072 ~/TRDData
+#+1663042606
+cp -r RunLog002073 ~/TRDData
+#+1663042610
+cp -r RunLog002074 ~/TRDData
+#+1663042624
+cd
+#+1663042628
+cd TRDData/
+#+1663042629
+ls
+#+1663042655
+exit

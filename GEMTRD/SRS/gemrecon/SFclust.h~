@@ -1,0 +1,9 @@
+  typedef struct {
+    double x;
+    double y;
+    double E;
+    double A;
+    int N;
+  } Gclust;
+
+  vector <Gclust> clusters;

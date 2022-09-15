@@ -1,0 +1,4 @@
+Library.TSQLiteResult:                      libRSQLite.so libNet.so libRIO.so
+Library.TSQLiteRow:                         libRSQLite.so libNet.so libRIO.so
+Library.TSQLiteServer:                      libRSQLite.so libNet.so libRIO.so
+Library.TSQLiteStatement:                   libRSQLite.so libNet.so libRIO.so

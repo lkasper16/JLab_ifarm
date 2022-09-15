@@ -1,0 +1,4 @@
+Library.TLDAPAttribute:                     libRLDAP.so libNet.so libRIO.so
+Library.TLDAPEntry:                         libRLDAP.so libNet.so libRIO.so
+Library.TLDAPResult:                        libRLDAP.so libNet.so libRIO.so
+Library.TLDAPServer:                        libRLDAP.so libNet.so libRIO.so

@@ -1,0 +1,21 @@
+\contentsline {title}{ Transition Radiation Detector for the GlueX experiment }{1}{}
+\contentsline {abstract}{Abstract}{1}{}
+\tocdepth@munge 
+\contentsline {section}{\numberline {}Contents}{2}{}
+\tocdepth@restore 
+\contentsline {section}{\numberline {I}Executive summary}{3}{}
+\contentsline {section}{\numberline {II}The GEM-TRD detector}{5}{}
+\contentsline {section}{\numberline {III}Physics objectives}{8}{}
+\contentsline {subsection}{\numberline {A}Improving the systematics of the $J/\psi $ photoproduction using GEM-TRD}{10}{}
+\contentsline {subsubsection}{\numberline {1}Pion rejection efficiency}{10}{}
+\contentsline {subsubsection}{\numberline {2}The efficiency of the Kinematic Fit}{11}{}
+\contentsline {subsubsection}{\numberline {3}BH normalization}{12}{}
+\contentsline {subsection}{\numberline {B}Amplitude Analysis of the $J/\psi $ photoproduction and search for the LHCb pentaquarks}{12}{}
+\contentsline {subsection}{\numberline {C}Other di-electron reactions to be studied with GlueX}{13}{}
+\contentsline {subsection}{\numberline {D}Improving the tracking with the GEM-TRD}{13}{}
+\contentsline {section}{\numberline {IV}Studies with prototypes}{14}{}
+\contentsline {section}{\numberline {V}Gas System Requirements}{15}{}
+\contentsline {section}{\numberline {VI}Electronics}{17}{}
+\contentsline {section}{\numberline {VII}Cost estimates and timeline}{18}{}
+\contentsline {section}{\numberline {VIII}Appendix}{18}{}
+\contentsline {section}{\numberline {}References}{19}{}

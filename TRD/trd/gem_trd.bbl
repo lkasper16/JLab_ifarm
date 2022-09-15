@@ -1,0 +1,151 @@
+%merlin.mbs apsrev4-1.bst 2010-07-25 4.21a (PWD, AO, DPC) hacked
+%Control: key (0)
+%Control: author (8) initials jnrlst
+%Control: editor formatted (1) identically to author
+%Control: production of article title (-1) disabled
+%Control: page (0) single
+%Control: year (1) truncated
+%Control: production of eprint (0) enabled
+\begin{thebibliography}{12}%
+\makeatletter
+\providecommand \@ifxundefined [1]{%
+ \@ifx{#1\undefined}
+}%
+\providecommand \@ifnum [1]{%
+ \ifnum #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \@ifx [1]{%
+ \ifx #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \natexlab [1]{#1}%
+\providecommand \enquote  [1]{``#1''}%
+\providecommand \bibnamefont  [1]{#1}%
+\providecommand \bibfnamefont [1]{#1}%
+\providecommand \citenamefont [1]{#1}%
+\providecommand \href@noop [0]{\@secondoftwo}%
+\providecommand \href [0]{\begingroup \@sanitize@url \@href}%
+\providecommand \@href[1]{\@@startlink{#1}\@@href}%
+\providecommand \@@href[1]{\endgroup#1\@@endlink}%
+\providecommand \@sanitize@url [0]{\catcode `\\12\catcode `\$12\catcode
+  `\&12\catcode `\#12\catcode `\^12\catcode `\_12\catcode `\%12\relax}%
+\providecommand \@@startlink[1]{}%
+\providecommand \@@endlink[0]{}%
+\providecommand \url  [0]{\begingroup\@sanitize@url \@url }%
+\providecommand \@url [1]{\endgroup\@href {#1}{\urlprefix }}%
+\providecommand \urlprefix  [0]{URL }%
+\providecommand \Eprint [0]{\href }%
+\providecommand \doibase [0]{http://dx.doi.org/}%
+\providecommand \selectlanguage [0]{\@gobble}%
+\providecommand \bibinfo  [0]{\@secondoftwo}%
+\providecommand \bibfield  [0]{\@secondoftwo}%
+\providecommand \translation [1]{[#1]}%
+\providecommand \BibitemOpen [0]{}%
+\providecommand \bibitemStop [0]{}%
+\providecommand \bibitemNoStop [0]{.\EOS\space}%
+\providecommand \EOS [0]{\spacefactor3000\relax}%
+\providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
+\let\auto@bib@innerbib\@empty
+%</preamble>
+\bibitem [{\citenamefont {Ali~{et al. (GlueX
+  collaboration)}}(2019)}]{prl_gluex}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+  {Ali~{et al. (GlueX collaboration)}}},\ }\href@noop {} {\bibfield  {journal}
+  {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {123}},\
+  \bibinfo {pages} {072001} (\bibinfo {year} {2019})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Joosten}(2021)}]{JP007}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {S.}~\bibnamefont
+  {Joosten}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Talk
+  at 9th Workshop of the APS Topical Group on Hadronic Phtsics}\ } (\bibinfo
+  {year} {2021})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Aaij~{et al. (LHCb collaboration)}}(2015)}]{LHCb1}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+  {Aaij~{et al. (LHCb collaboration)}}},\ }\href@noop {} {\bibfield  {journal}
+  {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {115}},\
+  \bibinfo {pages} {072001} (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Aaij~{et al. (LHCb collaboration)}}(2016)}]{LHCb2}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+  {Aaij~{et al. (LHCb collaboration)}}},\ }\href@noop {} {\bibfield  {journal}
+  {\bibinfo  {journal} {Phys. Rev. Lett.}\ }\textbf {\bibinfo {volume} {117}},\
+  \bibinfo {pages} {082002} (\bibinfo {year} {2016})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Babosa}(2009)}]{GASII}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont
+  {Babosa}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+  {https://halldweb.jlab.org/doc-private/DocDB/ShowDocument?docid=1364 The
+  GAS-II/GPC-II GlueX Preamp Card Preliminary Test Results}\ } (\bibinfo {year}
+  {2009})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Visser}\ \emph {et~al.}(2010)\citenamefont {Visser},
+  \citenamefont {Abbot}, \citenamefont {Barbosa}, \citenamefont {Cuevas},
+  \citenamefont {Dong}, \citenamefont {Jastrzembski}, \citenamefont {Moffit},\
+  and\ \citenamefont {Raydo}}]{fADC125}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {G.}~\bibnamefont
+  {Visser}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Abbot}},
+  \bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Barbosa}}, \bibinfo
+  {author} {\bibfnamefont {C.}~\bibnamefont {Cuevas}}, \bibinfo {author}
+  {\bibfnamefont {H.}~\bibnamefont {Dong}}, \bibinfo {author} {\bibfnamefont
+  {E.}~\bibnamefont {Jastrzembski}}, \bibinfo {author} {\bibfnamefont
+  {B.}~\bibnamefont {Moffit}}, \ and\ \bibinfo {author} {\bibfnamefont
+  {B.}~\bibnamefont {Raydo}},\ }in\ \href@noop {} {\emph {\bibinfo {booktitle}
+  {IEEE Nuclear Science Symposuim \& Medical Imaging Conference}}}\ (\bibinfo
+  {organization} {IEEE},\ \bibinfo {year} {2010})\ pp.\ \bibinfo {pages}
+  {777--781}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Berger}\ \emph {et~al.}(2002)\citenamefont {Berger},
+  \citenamefont {Diehl},\ and\ \citenamefont {Pire}}]{Berger}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont
+  {Berger}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Diehl}}, \
+  and\ \bibinfo {author} {\bibfnamefont {B.}~\bibnamefont {Pire}},\ }\href@noop
+  {} {\bibfield  {journal} {\bibinfo  {journal} {Eur.Phys.J.C}\ }\textbf
+  {\bibinfo {volume} {23}},\ \bibinfo {pages} {675} (\bibinfo {year}
+  {2002})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Paremuzyan}(2017)}]{Rafo}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+  {Paremuzyan}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+  {private communication}\ } (\bibinfo {year} {2017})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Jones}(2018)}]{Jones}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.}~\bibnamefont
+  {Jones}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {private
+  communication}\ } (\bibinfo {year} {2018})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Kubarovsky}\ and\ \citenamefont
+  {Voloshin}(2015)}]{Kubarovsky}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {V.}~\bibnamefont
+  {Kubarovsky}}\ and\ \bibinfo {author} {\bibfnamefont {M.~B.}\ \bibnamefont
+  {Voloshin}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal}
+  {Phys. Rev. D}\ }\textbf {\bibinfo {volume} {92}},\ \bibinfo {pages} {031502}
+  (\bibinfo {year} {2015})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Karliner}\ and\ \citenamefont
+  {Rosner}(2016)}]{Karliner}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont
+  {Karliner}}\ and\ \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+  {Rosner}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Phys.
+  Lett. B}\ }\textbf {\bibinfo {volume} {752}},\ \bibinfo {pages} {329}
+  (\bibinfo {year} {2016})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Blin}\ \emph {et~al.}(2016)\citenamefont {Blin},
+  \citenamefont {{Fernandez - Ramirez}}, \citenamefont {Jackura}, \citenamefont
+  {Mathieu}, \citenamefont {Mokeev}, \citenamefont {Pilloni},\ and\
+  \citenamefont {Szczepaniak}}]{Blin}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont
+  {Blin}}, \bibinfo {author} {\bibfnamefont {C.}~\bibnamefont {{Fernandez -
+  Ramirez}}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Jackura}},
+  \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Mathieu}}, \bibinfo
+  {author} {\bibfnamefont {V.}~\bibnamefont {Mokeev}}, \bibinfo {author}
+  {\bibfnamefont {A.}~\bibnamefont {Pilloni}}, \ and\ \bibinfo {author}
+  {\bibfnamefont {A.}~\bibnamefont {Szczepaniak}},\ }\href@noop {} {\bibfield
+  {journal} {\bibinfo  {journal} {Phys. Rev. D}\ }\textbf {\bibinfo {volume}
+  {94}},\ \bibinfo {pages} {034002} (\bibinfo {year} {2016})}\BibitemShut
+  {NoStop}%
+\end{thebibliography}%

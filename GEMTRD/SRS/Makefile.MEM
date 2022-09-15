@@ -1,0 +1,12 @@
+ROOTGLIBS    := $(shell root-config --glibs) -lGeom -lMinuit
+ROOTINC	:= $(shell root-config --cflags)
+
+
+DAQCrateAnalyzer2:  DAQCrateAnalyzer2.cc GEMRawDecoder.cxx GemFEC.cxx GemHistContainer.cxx GemView.cxx GemMapping.cxx GemConfiguration.cxx GemInputHandler.cxx GemException.cxx GEMOnlineHitDecoder.cxx GEMPedestal.cxx GEMHit.cxx GEMCluster.cxx GEMRawPedestal.cxx
+	g++  -std=c++11  -g -Wl,--no-as-needed  -I../libsrc++ -I. -I${CODA_ARCH}/include -I${ROOTINC} -Wall -fPIC -D_GNU_SOURCE -m64 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS  -L${CODA_ARCH}/lib -levio -levioxx  -lexpat -lieee -let  -lrt -lpthread -lz -lm -lnsl -lresolv -ldl -L${ROOTSYS}/lib ${ROOTGLIBS}  -o DAQCrateAnalyzer2 DAQCrateAnalyzer2.cc GEMRawDecoder.cxx GemFEC.cxx GemHistContainer.cxx GemView.cxx GemMapping.cxx GemConfiguration.cxx GemInputHandler.cxx GemException.cxx GEMOnlineHitDecoder.cxx GEMPedestal.cxx GEMHit.cxx GEMCluster.cxx GEMRawPedestal.cxx
+
+
+
+DAQCrateAnalyzer:  DAQCrateAnalyzer.cc 
+	g++  -g -Wl,--no-as-needed -I../libsrc++ -I. -I${CODA_ARCH}/include -I${ROOTINC} -Wall -fPIC -D_GNU_SOURCE -m64 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS  -L${CODA_ARCH}/lib -levio -levioxx  -lexpat -lieee -lrt -lpthread -lz -lm -lnsl -lresolv -ldl -L${ROOTSYS}/lib ${ROOTGLIBS} -o DAQCrateAnalyzer DAQCrateAnalyzer.cc 
+

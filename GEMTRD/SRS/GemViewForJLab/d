@@ -1,0 +1,45 @@
+void GEMRawDecoder::Decode( unsigned int * buf, int n) {
+    cout << "GEMRawDecoder::Decode( unsigned int * buf, int n)  enter n=" << n  << endl;
+  clearMaps();
+  fBufferSize = n;
+  if(fBufferSize <= 0) return;
+  // fsv SwitchEndianess(buf, fBufferSize);
+
+  int channel_active = 1;
+  vector<int> apv;
+  apv.clear();
+  for(int idata = 0;idata<fBufferSize;idata++) {
+      //cout << "buf[idata] 0x" << std::hex << buf[idata] << endl;
+    if( ( (buf[idata+1]>>8) & 0xffffff ) == 0x414443 ) {
+      //cout << "buf[idata+1] 0x" << std::hex << buf[idata+1] << std::dec << endl;
+      if(apv.size() > APV_MIN_LENGTH && channel_active==1) mAPVRawSingleEvent[nfecID][nadcCh] = apv  ;
+
+      apv.clear();
+      nadcCh = buf[idata+1] & 0xff; 
+      nfecID = (buf[idata+2]>>16) & 0xff;
+      idata+=2;
+      channel_active = 1;
+      if( ! IsAdcChannelActive(nfecID, nadcCh) ) {
+         channel_active = 0;
+         CheckInactiveChannel(idata+3, buf);
+      }
+      cout << "nfecID= " << nfecID << " nadcCh= " << nadcCh << " channel_active= " << channel_active << endl;
+    }
+
+    else if( buf[idata+1] == 0xfafafafa ) {
+       cout << "buf[idata+1] 0x" << std::hex << buf[idata+1] << std::dec << " apv size= " << apv.size() << endl;
+      if(channel_active) {
+	FillAPVRaw(apv, buf[idata]);
+    cout << "apv size= " << apv.size() << endl;
+    if(apv.size() > APV_MIN_LENGTH ) mAPVRawSingleEvent[nfecID][nadcCh] = apv;
+	apv.clear();
+      }
+      idata+=1;
+    }
+    else {
+      if(channel_active) FillAPVRaw(apv, buf[idata]);
+        cout << "apv last = " << apv.at(apv.size()-1) << endl;
+    }
+  }
+}
+

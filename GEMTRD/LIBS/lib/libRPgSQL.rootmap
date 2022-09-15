@@ -1,0 +1,4 @@
+Library.TPgSQLResult:                       libRPgSQL.so libNet.so libRIO.so
+Library.TPgSQLRow:                          libRPgSQL.so libNet.so libRIO.so
+Library.TPgSQLServer:                       libRPgSQL.so libNet.so libRIO.so
+Library.TPgSQLStatement:                    libRPgSQL.so libNet.so libRIO.so
