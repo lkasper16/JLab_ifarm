@@ -13,8 +13,8 @@
 /SRS/hd_rawdata_071090.evio.disproot
 /SRS/*.dat
 /SRS/DAQCrateAnalyzer*
-! /SRS/DAQCrateAnalyzer.cc
-! /SRS/DAQCrateAnalyzer
+!/SRS/DAQCrateAnalyzer.cc
+!/SRS/DAQCrateAnalyzer
 /SRS/root_output/hd_rawdata_000721_000.root
 /SRS/root_output/hd_rawdata_000971_000.root
 /SRS/root_output/hd_rawdata_001033_000.root

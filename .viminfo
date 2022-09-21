@@ -8,14 +8,19 @@
 # hlsearch on (H) or off (h):
 ~H
 # Last Search Pattern:
-~MSle0~/analyzeEvent
+~MSle0~/Input
 
 # Command Line History (newest to oldest):
-:q!
+:wq
 :set number
+:q!
 :1G
 
 # Search String History (newest to oldest):
+?/Input
+?/input
+?/root
+?/tree
 ?/analyzeEvent
 ?/evio
 ?/gemView
@@ -35,18 +40,54 @@
 # Registers:
 
 # File marks:
-'0  686  0  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
-'1  49  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemHistContainer.h
-'2  126  1  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemMapping.h
-'3  113  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemView.h
-'4  35  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.h
-'5  1  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.cc
-'6  45  9  ~/DAQCrateAnalyzer2.cc
-'7  56  0  ~/DAQCrateAnalyzer2.cc
-'8  611  17  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
-'9  602  0  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
+'0  1  29  ~/.gitignore
+'1  750  45  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+'2  769  0  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+'3  765  1  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+'4  874  0  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+'5  17  0  ~/GEMTRD/.gitignore
+'6  501  44  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+'7  474  8  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+'8  7  55  ~/.git/config
+'9  20  42  ~/GEMTRD/.gitignore
 
 # Jumplist (newest first):
+-'  1  29  ~/.gitignore
+-'  750  45  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  765  8  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  769  0  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+-'  874  9  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+-'  501  2  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  1  0  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+-'  17  0  ~/GEMTRD/.gitignore
+-'  20  0  ~/GEMTRD/.gitignore
+-'  474  9  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  502  31  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  500  37  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  308  10  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  244  7  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  751  31  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  749  12  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  748  33  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  359  7  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  17  3  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  2665  49  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  2631  33  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  2595  30  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  628  7  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  7  55  ~/.git/config
+-'  1  0  ~/.git/config
+-'  1  0  ~/GEMTRD/.gitignore
+-'  504  54  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  503  33  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  1  18  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  306  0  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  1  0  ~/jcache
+-'  1249  0  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  1  0  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  1959  11  ~/DAQCrateAnalyzer2.cc
+-'  123  0  ~/DAQCrateAnalyzer2.cc
+-'  45  0  ~/DAQCrateAnalyzer2.cc
 -'  686  0  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
 -'  102  5  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
 -'  1  7  /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
@@ -71,7 +112,6 @@
 -'  35  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.h
 -'  1  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.h
 -'  1  0  /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.cc
--'  45  9  ~/DAQCrateAnalyzer2.cc
 -'  42  11  ~/DAQCrateAnalyzer2.cc
 -'  1  13  ~/DAQCrateAnalyzer2.cc
 -'  623  12  ~/DAQCrateAnalyzer2.cc
@@ -105,43 +145,77 @@
 -'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_rawdata_001370_051.evio
 -'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
 -'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2018/RunLog000325/run_000325_comments.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_rawdata_001370_051.evio
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_rawdata_001370_051.evio
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2018/run_log_trd.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2018/RunLog000325/run_000325_comments.txt
--'  13  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_root.root
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2018/run_log_trd.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2018/RunLog000325/run_000325_comments.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_rawdata_001370_051.evio
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_root.root
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hd_rawdata_001370_051.evio
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/RunLog000557/run_000557_info.txt
--'  1  0  /w/mss/halld/TRD/BeamTest_Spring2020/hist
+-'  17  0  ~/GEMTRD/.gitignore
+-'  20  0  ~/GEMTRD/.gitignore
+-'  769  0  ~/DAQCrateAnalyzer.ccORIGINAL.cc
+-'  750  45  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+-'  765  8  ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
 
 # History of marks within files (newest to oldest):
+
+> ~/.gitignore
+	"	1	29
+	^	1	30
+	.	1	29
+	+	1	29
+
+> ~/GEMTRD/SRS/DAQCrateAnalyzer.cc
+	"	750	45
+	^	750	46
+	.	750	39
+	+	501	49
+	+	750	30
+	+	474	9
+	+	501	2
+	+	750	39
+
+> ~/DAQCrateAnalyzer.ccORIGINAL.cc
+	"	769	0
+
+> ~/GEMTRD/.gitignore
+	"	17	0
+	^	17	1
+	.	17	1
+	+	2	36
+	+	3	36
+	+	10	22
+	+	5	22
+	+	4	21
+	+	5	21
+	+	6	21
+	+	7	21
+	+	8	21
+	+	9	21
+	+	10	36
+	+	13	36
+	+	11	21
+	+	12	21
+	+	13	21
+	+	18	43
+	+	19	43
+	+	20	43
+	+	16	1
+	+	17	1
+
+> ~/.git/config
+	"	7	55
+	^	7	56
+	.	7	55
+	+	7	55
+
+> ~/jcache
+	"	1	0
+
+> /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer.cc
+	"	1249	0
+
+> ~/DAQCrateAnalyzer2.cc
+	"	1959	11
+	.	55	0
+	+	50	87
+	+	52	0
+	+	54	0
+	+	55	0
 
 > /u/scratch/furletov/GEMTRD/SRS/DAQCrateAnalyzer2.cc
 	"	686	0
@@ -161,14 +235,6 @@
 > /u/scratch/furletov/GEMTRD/SRS/gemrecon/GemInputHandler.cc
 	"	1	0
 
-> ~/DAQCrateAnalyzer2.cc
-	"	45	9
-	.	55	0
-	+	50	87
-	+	52	0
-	+	54	0
-	+	55	0
-
 > /w/mss/halld/TRD/BeamTest_2021/RunLog002131/current_run.log
 	"	1	0
 
@@ -185,25 +251,4 @@
 	"	1	0
 
 > /w/mss/halld/RunPeriod-2021-11/analysis/ver01/tree_ggmissd__B4/merged/tree_ggmissd__B4_090601.root
-	"	1	0
-
-> /w/mss/hallb/hps/data/testfile
-	"	1	0
-
-> /w/mss/halld/RunPeriod-2021-11/rawdata/Run090627/hd_rawdata_090627_147.evio
-	"	1	0
-
-> /w/mss/halld/home/shankar/kppim_missp_tree_031057.root
-	"	1	0
-
-> /w/mss/halld/home/shankar/kppim_missp_tree_031057
-	"	1	0
-
-> /w/mss/halld/RunPeriod-2021-08/rawdata/Run081475/hd_rawdata_081475_000.evio
-	"	1	0
-
-> /w/mss/halld/TRD/BeamTest_Spring2020/hd_root.root
-	"	13	0
-
-> /w/mss/halld/TRD/BeamTest_Spring2018/run_log_trd.txt
 	"	1	0
