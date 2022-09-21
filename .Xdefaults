@@ -1,7 +1,0 @@
-! .Xdefaults
-!
-! The UNIXbindings change the backspace (delete) key to
-! delete the previous (not next) key in the dtpad CDE editor
-!
-#include "/usr/dt/app-defaults/C/UNIXbindings"
-!
