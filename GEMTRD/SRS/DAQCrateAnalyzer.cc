@@ -34,14 +34,14 @@ using namespace evio;
 #include "TStyle.h"
 
 #define PI 3.14159265
-#define ROLLOVER_COUNT       65460         // get this when configure TDC
-#define TDC_LOOKBACK         15794         // get this when configure TDC 
+#define ROLLOVER_COUNT       65460    // get this when configure TDC
+#define TDC_LOOKBACK         15794    // get this when configure TDC 
 #define TDC_v2BIN_SIZE       0.0580   // ns/LSB
 #define TDC_v3BIN_SIZE       0.1160   // ns/LSB
 
-    float tref;
-    float ave_time;
-    float sang=0.*PI/180.; // strip angle w.r.t. wire
+float tref;
+float ave_time;
+float sang=0.*PI/180.; // strip angle w.r.t. wire
 
 int print_flg=0;
 
@@ -76,29 +76,27 @@ float fADCpeak[15][15][72][200]; //same as in fADCdata class, but calculated by 
 float fADCcharge[15][15][72][200]; //same as in fADCdata class, but calculated by the firmware
 int fADCnhit[15][15][72]; //same as in fADCdata class, but calculated by the firmware
 float fADCtime[15][15][72][200]; //same as in fADCdata class, but calculated by the firmware
-  long int trig_trd[10];
-  int trd_cnt;
-  long int trig_st[10];
-  int st_cnt;
-  long int trig_ps[10];
-  int ps_cnt;
+long int trig_trd[10];
+int trd_cnt;
+long int trig_st[10];
+int st_cnt;
+long int trig_ps[10];
+int ps_cnt;
 int evntno_st=0;
 int evntno_trd=0;
 int evntno_ps=0;
 int tgpoint=0;
 
-
 void analyzeEvent(evioDOMTree &eventTree);
 void analyzeBank(evioDOMNodeP bankPtr);
 void CountTriggers();
 
-      float fADC[20][72][2000];
-      float Ped[20][72];
-      TFile* ROOTfile;
-      TTree* fdcFeTree;
+float fADC[20][72][2000];
+float Ped[20][72];
+TFile* ROOTfile;
+TTree* fdcFeTree;
 
 // trigger stuff
-
 int NEventsInBlock;
 uint64_t EVENTNUMBER;
 uint64_t EVTCounts;
@@ -109,99 +107,89 @@ uint32_t TRIGGER_MASK_GT;
 uint32_t TRIGGER_MASK_FP;
 int TheRunNumber;
 
- ofstream to_sergey_rad;
- ofstream to_sergey_norad;
- ofstream to_sergey_rad2;
- ofstream to_sergey_norad2;
+ofstream to_sergey_rad;
+ofstream to_sergey_norad;
+ofstream to_sergey_rad2;
+ofstream to_sergey_norad2;
 
 #define first_slot 0
 #define wire_slot 2
 #define wire_x_ch0 24
 #define wire_y_ch0 24
+
 // GEM-TRD first/ch dsefinition
 #define gem_x_slot 0
 #define gem_x_ch0 0
+
 // MMG first slot/ch definition
 #define gem_y_slot 3
 #define gem_y_ch0 24
-//cokcok after Aug 20, 2020 both PS and DIRC position
-/*
-#define gem_x_slot 4
-#define gem_x_ch0 48 
-#define gem_y_slot 2
-#define gem_y_ch0 0
-*/
+
 // pad gem first slot/ch definition
 #define gem_p_slot 6
 #define gem_p_ch0  0 
 //cokcok
 
-// Before Aug 20 PS
-//#define gem_x_slot 4
-//#define gem_x_ch0 24 
-//#define gem_y_slot 2
-//#define gem_y_ch0 48
-//#define gem_p_slot 1
-//#define gem_p_ch0 0
-
 // GEM-TRD mapping - it works the way it is
 int GetXSlot(int gch){
-return gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot;
+	return gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot;
 }
 
 int GetXChan(int gch){
-    int fch=(gch+gem_x_ch0)%72;
-    int card=fch/24;
-    int cch=fch%24; 
+	int fch=(gch+gem_x_ch0)%72;
+	int card=fch/24;
+	int cch=fch%24; 
 
-    //cokcok for DIRC
-    return 23-cch+card*24;
+    	//cokcok for DIRC
+    	return 23-cch+card*24;
 
-    //cokcok for PS arm
-    //return cch+card*24;
+    	//cokcok for PS arm
+    	//return cch+card*24;
 }
+
 // MMG mapping !!!!
 int GetYSlot(int gch){
-return gem_y_slot+(int)(gch+gem_y_ch0)/72+first_slot;
+	return gem_y_slot+(int)(gch+gem_y_ch0)/72+first_slot;
 }
 int GetYChan(int gch){
-    int fch=(gch+gem_y_ch0)%72;
-    int card=fch/24;
-    int cch=fch%24; 
-    return 23-cch+card*24;
-    //return cch+card*24;
+	int fch=(gch+gem_y_ch0)%72;
+  	int card=fch/24;
+    	int cch=fch%24; 
+    	return 23-cch+card*24;
+    	//return cch+card*24;
 }
 
 int GetPSlot(int gch){
 
-    //cokcok for DIRC
-    if(gch<8)return 8;
+	//cokcok for DIRC
+    	if(gch<8)return 8;
       
-    //cokcok for PS 
-    //if(gch>91)return 8;
+    	//cokcok for PS 
+    	//if(gch>91)return 8;
 
-return gem_p_slot+(int)(gch+gem_p_ch0)/72+first_slot;
+	return gem_p_slot+(int)(gch+gem_p_ch0)/72+first_slot;
 }
+
 int GetPChan(int gch){
 
-    //cokcok for DIRC
-    if(gch<8)return 71;
-    int fch=(gch-8+gem_p_ch0)%72;
+    	//cokcok for DIRC
+    	if(gch<8)return 71;
+    	int fch=(gch-8+gem_p_ch0)%72;
 
-    //cokcok for PS
-    //if(gch>91)return 71;
-    //int fch=(gch+4+gem_p_ch0)%72;
+    	//cokcok for PS
+    	//if(gch>91)return 71;
+    	//int fch=(gch+4+gem_p_ch0)%72;
 
+    	int card=fch/24;
+    	int cch=fch%24; 
 
-    int card=fch/24;
-    int cch=fch%24; 
+    	//cokcok for DIRC
+    	return cch+card*24;
 
-    //cokcok for DIRC
-    return cch+card*24;
-
-    //cokcok for PS
-    //return 23-cch+card*24;
+    	//cokcok for PS
+    	//return 23-cch+card*24;
 }
+
 //cok #define gem_p_ch0 48
 
 /*
@@ -249,11 +237,10 @@ int main(int argc, char *argv[]) {
   trig_st[i]=0; 
   trig_ps[i]=0; 
   }
-  //
+  
   trd_cnt=0; 
   st_cnt=0; 
   ps_cnt=0; 
-
 
  to_sergey_rad.open("to_sergey_dedx_rad.dat",ios::out);
  to_sergey_norad.open("to_sergey_dedx_norad.dat",ios::out);
@@ -261,46 +248,46 @@ int main(int argc, char *argv[]) {
  to_sergey_norad2.open("to_sergey_dedx_norad2.dat",ios::out);
 
   TApplication theApp("App", &argc, argv);
-
   if (argc>1){
-    
     for (int i=1;i<argc;i++){
-      
-      if (!strcmp(argv[i],"-ND")){
+      	if (!strcmp(argv[i],"-ND")){
 	DISPLAY = 0;
       }
 
-      if (!strcmp(argv[i],"-V")){
+     	if (!strcmp(argv[i],"-V")){
         version = atoi(argv[i+1]);
         i++;
       }
-      if (!strcmp(argv[i],"-R")){
+
+      	if (!strcmp(argv[i],"-R")){
         ROC = atoi(argv[i+1]);
         i++;
       }
-      if (!strcmp(argv[i],"-S")){
+
+      	if (!strcmp(argv[i],"-S")){
         SLOT = atoi(argv[i+1]);
         i++;
       }
-      if (!strcmp(argv[i],"-C")){
+
+      	if (!strcmp(argv[i],"-C")){
         CHANNEL = atoi(argv[i+1]);
         i++;
       }
-      if (!strcmp(argv[i],"-F")){
+
+      	if (!strcmp(argv[i],"-F")){
         sprintf(CrateName,"%s",argv[i+1]);
         i++;
       }
 
-      if (!strcmp(argv[i],"h")){
-	cout<<"-ND        do not display individual events"<<endl;
+      	if (!strcmp(argv[i],"h")){
+	cout<<"-ND      do not display individual events"<<endl;
         cout<<"-R #     ROC number (default 2)"<<endl;
         cout<<"-S  #    SLOT number (default 3)"<<endl;
         cout<<"-C #     CHANNEL number (default 1)"<<endl;
         cout<<"-V #     data version number (default 1)"<<endl;
 	cout<<"-F string  data label (default ROCFDC) \"string\"   "<<endl;
 	return 0;
-      }
-      
+      }   
     }
   }
 
@@ -308,59 +295,21 @@ int main(int argc, char *argv[]) {
   sprintf(InputFile,"%s",argv[1]);
   int RunNumber = atoi(argv[1]);
 
-
-  // cedi  
-  //char DataDir[128] = "/gluonraid1/Users/hdfdcops/fdcdata";
-  //char DataDir[128] = "/gluonraid1/Users/hdfdcops/tagdata/DATA/";
-  //char DataDir[128] = "/gluonraid1/rawdata/volatile/RunPeriod-2015-12/rawdata/Run004450";
-  //char DataDir[128] = "/gluonraid2/rawdata/active/RunPeriod-2016-02/rawdata/Run010480";
-  //char DataDir[128] = "/gluonraid2/rawdata/volatile/RunPeriod-2016-02/rawdata/Run010483";
-  //char DataDir[128] = "/gluonraid2/rawdata/volatile/RunPeriod-2016-02/rawdata/Run010534";
-  //char DataDir[128] = "/gluonraid1/rawdata/active/RunPeriod-2016-02/rawdata/Run010909";
-  //char DataDir[128] = "/gluonraid1/rawdata/volatile/RunPeriod-2016-02/rawdata/Run010909";
-  //char DataDir[128] = "/gluonraid1/rawdata/volatile/RunPeriod-2016-02/rawdata/Run011517";
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030295";
-  //char DataDir[128] = "/gluonraid3/data3/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030362";
-  //char DataDir[128] = "/gluonraid3/data1/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030364";
-  //char DataDir[128] = "/gluonraid3/data3/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030446";
-  //char DataDir[128] = "/gluonwork1/Subsystems/FDC/TRD";
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030647";
-  //char DataDir[128] = "/gluonraid3/data2/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030689";
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030691";
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030767";
-  //char DataDir[128] = "/gluonraid3/data1/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030768";
-  //char DataDir[128] = "/gluonraid3/data2/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030665";
-  //char DataDir[128] = "/gluonraid3/data2/rawdata/active/RunPeriod-2017-01/rawdata/Run030561";
-  //char DataDir[128] = "/gluonraid3/data3/rawdata/volatile/RunPeriod-2017-01/rawdata/Run030866";
-  //char DataDir[128] = "/gluonraid5/data4/rawdata/volatile/RunPeriod-2019-11/rawdata/Run071090/";
-  //char DataDir[128] = "/gluonraid3/data1/rawdata/volatile/RunPeriod-2019-11/rawdata/Run073031/";
-  
   //cok local
   //char DataDir[128] = ".";
-  //char DataDir[128] = "/gluonfs1/home/hdtrdops/pentchev/dirc_data/Run073032/";
-  //char DataDir[128] = "/gluonfs1/home/hdtrdops/pentchev/dirc_data/Run073031/";
-
-  //char DataDir[128] = "/media/ramdisk/active/rawdata/active/RunPeriod-2019-11/rawdata/Run073032";
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/trd/DATA/";
-    
   //cok PS char DataDir[128] = "/gluonraid3/data4/rawdata/trd/DATA";                     
   //char DataDir[128] = "/gluonraid3/data4/rawdata/trd/DATA";                     
   char DataDir[128] = "DATA";                     
 
-  //char DataDir[128] = "/gluonwork1/Subsystems/FDC/TRD";
-  //char DataDir[128] = "/gluonwork1/Subsystems/FDC/Run011055/";
   float tmax1=452.;
   float dmax1=40.;
   float tmax2=112.;
   float dmax2=35.;
-  //char DataDir[128] = "/home/furletov/ttt/daq_pro_vers/DATA/";
-  //char DataDir[128] = "/gluonfs1/home/hdfdcops/code/ADCtests/readout";
   char fnam[228];
   char root_fname[228];
   ifstream INF;
   
   char lin[50000];
-  //string lin;
   int NSlot = -1;
   int NCon = 0;
   int EventNew = 1;
@@ -376,131 +325,126 @@ int main(int argc, char *argv[]) {
   float sthresh=40.;
   float bthresh=40.;
   int Slot=SLOT;
-      int EVENT;
-      short EvtSize;
-      int SlotNum; 
-      int chan;
-      int samples;
-      int isamp=0;
+  int EVENT;
+  short EvtSize;
+  int SlotNum; 
+  int chan;
+  int samples;
+  int isamp=0;
 
-         int trig=0;
+  int trig=0;
 
-         float umax=0.;
-         float uped=0.;
-         int uchmax=0;
-         float ucent=0;
-         float ufit=0;
-         float umcent=0;
-         float umfit=0;
-         float usig=0;
-         int uwid=0;
-         int usmax=0;
-         float dmax=0.;
+  float umax=0.;
+  float uped=0.;
+  int uchmax=0;
+  float ucent=0;
+  float ufit=0;
+  float umcent=0;
+  float umfit=0;
+  float usig=0;
+  int uwid=0;
+  int usmax=0;
+  float dmax=0.;
 
-         float dped=0.;
-         int dchmax=0;
-         float dcent=0;
-         float dfit=0;
-         float dmcent=0;
-         float dmfit=0;
-         float dsig=0;
-         int dwid=0;
-         int dsmax=0;
+  float dped=0.;
+  int dchmax=0;
+  float dcent=0;
+  float dfit=0;
+  float dmcent=0;
+  float dmfit=0;
+  float dsig=0;
+  int dwid=0;
+  int dsmax=0;
 
-         float pped=0.;
-         int pchmax=0;
-         int pxchmax=0;
-         int pychmax=0;
-         float pcent=0;
-         float pxcent=0;
-         float pycent=0;
-         float pxfit=0;
-         float pyfit=0;
-         float pmcent=0;
-         float pmfit=0;
-         float pxsig=0;
-         float pysig=0;
-         int pwid=0;
-         int pxwid=0;
-         int pywid=0;
-         int psmax=0;
+  float pped=0.;
+  int pchmax=0;
+  int pxchmax=0;
+  int pychmax=0;
+  float pcent=0;
+  float pxcent=0;
+  float pycent=0;
+  float pxfit=0;
+  float pyfit=0;
+  float pmcent=0;
+  float pmfit=0;
+  float pxsig=0;
+  float pysig=0;
+  int pwid=0;
+  int pxwid=0;
+  int pywid=0;
+  int psmax=0;
 
+  float wmax=0.;
+  float wped=0.;
+  int wchmax=0;
+  float wcent=0;
+  float wfit=0;
+  float wmcent=0;
+  float wmfit=0;
+  float wsig=0;
+  int wwid=0;
+  int wsmax=0;
+  int pssmax=0;
+  float w2max=0.;
+  float w2ped=0.;
+  int w2chmax=0;
+  float pschmax=0;
+  int pscchmax=0;
+  float w2cent=0;
+  float w2fit=0;
+  float w2mcent=0;
+  float w2mfit=0;
+  float w2sig=0;
+  int w2wid=0;
+  int w2smax=0;
+  float ucharge=0.;
+  float dcharge=0.;
+  float pcharge=0.;
+  float wcharge=0.;
+  float w2charge=0.;
+  float pscharge=0.;
+  float psccharge=0.;
+  int wnumber=0;
+  int w2number=0;
+  float umcharge=0.;
+  float dmcharge=0.;
+  float pmcharge=0.;
+  float wmcharge=0.;
+  float w2mcharge=0.;
+  int usize=0;
+  int dsize=0;
+  int psize=0;
+  int wsize=0;
+  int w2size=0;
 
-         float wmax=0.;
-         float wped=0.;
-         int wchmax=0;
-         float wcent=0;
-         float wfit=0;
-         float wmcent=0;
-         float wmfit=0;
-         float wsig=0;
-         int wwid=0;
-         int wsmax=0;
-         int pssmax=0;
-         float w2max=0.;
-         float w2ped=0.;
-         int w2chmax=0;
-         float pschmax=0;
-         int pscchmax=0;
-         float w2cent=0;
-         float w2fit=0;
-         float w2mcent=0;
-         float w2mfit=0;
-         float w2sig=0;
-         int w2wid=0;
-         int w2smax=0;
-         float ucharge=0.;
-         float dcharge=0.;
-         float pcharge=0.;
-         float wcharge=0.;
-         float w2charge=0.;
-         float pscharge=0.;
-         float psccharge=0.;
-         int wnumber=0;
-         int w2number=0;
-         float umcharge=0.;
-         float dmcharge=0.;
-         float pmcharge=0.;
-         float wmcharge=0.;
-         float w2mcharge=0.;
-         int usize=0;
-         int dsize=0;
-         int psize=0;
-         int wsize=0;
-         int w2size=0;
+  int wnhit;
+  float wthit[1000];
+  float wahit[1000];
+  float wmhit[1000];
+  int wchit[1000];
+  int unhit;
+  float uthit[1000];
+  float uahit[1000];
 
-         int wnhit;
-         float wthit[1000];
-         float wahit[1000];
-         float wmhit[1000];
-         int wchit[1000];
-         int unhit;
-         float uthit[1000];
-         float uahit[1000];
+  int w2nhit;
+  float w2thit[1000];
+  float w2ahit[1000];
+  float w2mhit[1000];
+  int w2chit[1000];
+  int dnhit;
+  float dthit[1000];
+  float dahit[1000];
+  float dmhit[1000];
+  int dchit[1000];
 
-         int w2nhit;
-         float w2thit[1000];
-         float w2ahit[1000];
-         float w2mhit[1000];
-         int w2chit[1000];
-         int dnhit;
-         float dthit[1000];
-         float dahit[1000];
-         float dmhit[1000];
-         int dchit[1000];
-
-
-	 TCanvas *myc;
-	 myc = new TCanvas("myc", "Event", 600, 600);
-
-
-
+   TCanvas *myc;
+   myc = new TCanvas("myc", "Event", 600, 600);
 
     
     //cok sprintf(root_fname,"%s.%s",InputFile,"psroot");
-  sprintf(InputFile,"hd_rawdata_%06d.evio",RunNumber);
+    sprintf(InputFile,"hd_rawdata_%06d.evio",RunNumber);
     sprintf(root_fname,"%s.%s",InputFile,"disproot");
-    cout<<" opening root file "<<root_fname<<endl;
+    cout<<"Opening root file "<<root_fname<<endl;
     ROOTfile = new TFile(root_fname,"RECREATE"," 55Fe root tree results ");
     ROOTfile->cd();
     fdcFeTree = new TTree( "fdctest", "FDC response" );
@@ -749,7 +693,7 @@ string str1(ss.str());
   //sprintf(InputFile,"hd_rawdata_%s_000%d.evio",str1,OK-1);
   sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
   sprintf(fnam,"%s/%s",DataDir,InputFile);
-  cout<<"open file "<<fnam<<endl;
+  cout<<"Open file "<<fnam<<endl;
       if (FILE *file = fopen(fnam,"r")){
         fclose(file);
         OK++;
@@ -758,14 +702,14 @@ string str1(ss.str());
       } else {
         OK=0;
         fOK=false;
+	cout<<"File not found - closing"<<endl;
       }
       if (fOK){
-
-  evioFileChannel EvOchan(fnam,"r",8000000);
-        cout<<" here 1"<<endl;
-  EvOchan.open();
+  	evioFileChannel EvOchan(fnam,"r",8000000);
+        cout<<"here 1..."<<endl;
+  	EvOchan.open();
         bool ReadBack = EvOchan.read();
-        cout<<" here 2"<<endl;
+        cout<<"here 2..."<<endl;
       if (1==1){
         while(ReadBack && evtCount<NEVENT) {
         evtCount++;
@@ -785,7 +729,7 @@ string str1(ss.str());
             evioDOMTree eventTree(EvOchan);
      //cout<<" start analyze event"<<endl;
             analyzeEvent(eventTree);
-     //cout<<" stopt analyze event"<<endl;
+     //cout<<" stop analyze event"<<endl;
 
    trig=TRIGGER_MASK_GT;
   /*

@@ -58,7 +58,7 @@ INCLUDES    = -I.   -I$(EVIO_INC) -I$(GEMINC)
 CXX     =  g++ 
 F77	=  gfortran
 
-CXXFLAGS     =    -std=c++11 -g  $(INCLUDES) $(ROOTCFLAGS)
+CXXFLAGS     =    -std=c++11  -g  $(INCLUDES) $(ROOTCFLAGS)
 
 LINK_FLAGS   =   $(DFLG) -fno-second-underscore
 
@@ -74,7 +74,7 @@ endif
 
 
 HEADERS   = *.h
-PROGRAMS  = DAQCrateAnalyzer2
+PROGRAMS  = DAQCrateAnalyzer
 
 #OBJGEM =  $(GEMOBJ)/GEMRawDecoder.o $(GEMOBJ)/GemFEC.o $(GEMOBJ)/GemHistContainer.o $(GEMOBJ)/GemView.o $(GEMOBJ)/GemMapping.o $(GEMOBJ)/GemConfiguration.o $(GEMOBJ)/GemInputHandler.o $(GEMOBJ)/GemException.o $(GEMOBJ)/GEMOnlineHitDecoder.o $(GEMOBJ)/GEMPedestal.o $(GEMOBJ)/GEMHit.o $(GEMOBJ)/GEMCluster.o $(GEMOBJ)/GEMRawPedestal.o
 
@@ -86,6 +86,10 @@ all:	$(PROGRAMS)
 DAQCrateAnalyzer2: DAQCrateAnalyzer2.o
 	@echo "Building $@ ..."
 	$(CXX) $(LINK_FLAGS) DAQCrateAnalyzer2.o  $(LINK_LIBS) -o $@
+
+DAQCrateAnalyzer: DAQCrateAnalyzer.o
+	@echo "Building $@ ..."
+	$(CXX) $(LINK_FLAGS) DAQCrateAnalyzer.o  $(LINK_LIBS) -o $@
 
 ###############################################################################
 # instructions for building a .o file from a .cxx file
