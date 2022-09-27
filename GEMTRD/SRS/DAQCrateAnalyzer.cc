@@ -626,7 +626,7 @@ int main(int argc, char *argv[]) {
     TH2D *w2AvsB = new TH2D("w2AvsB","Ch.2 Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *w2CvsB = new TH2D("w2CvsB","Ch.2 Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *w2YvsB = new TH2D("w2YvsB","Ch.2 X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-    TH2D *w2TYvsB = new TH2D("w2TYvsB","Ch.1 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *w2TYvsB = new TH2D("w2TYvsB","Ch.2 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *w2AvsD = new TH2D("w2AvsD","Ch.2 Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
     w2AvsTnorm->Sumw2();
     w2AvsT->Sumw2();
@@ -645,7 +645,7 @@ int main(int argc, char *argv[]) {
     TH2D *dAvsB = new TH2D("dAvsB","Ch.2 Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *dCvsB = new TH2D("dCvsB","Ch.2 Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *dYvsB = new TH2D("dYvsB","Ch.2 X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-    TH2D *dTYvsB = new TH2D("dTYvsB","Ch.1 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *dTYvsB = new TH2D("dTYvsB","Ch.2 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
     TH2D *dAvsD = new TH2D("dAvsD","Ch.2 Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
     dAvsTnorm->Sumw2();
     dAvsT->Sumw2();
@@ -667,16 +667,15 @@ int main(int argc, char *argv[]) {
     TH2D *CluCou = new TH2D("CluCou","cluster no. in ch.1 vs ch2",100,-0.5,99.5,100,-0.5,99.5);
     //TF1 *centroid=new TF1("centroid","[0]*(1-tanh([2]*(x-[1]))*tanh([2]*(x-[1])))",N1Up-0.5,N1Up+Aup-0.5);
     TF1 *centroid=new TF1("centroid","[0]*exp(-(x-[1])^2/(2.*[2]^2))",-0.5,6.5);
-
     TF2 *dgaus = new TF2("dgaus","[0]*TMath::Gaus(x,[1],[2])*TMath::Gaus(y,[3],[4])",0,10,0,10); 
 
-    for(int slot=0;slot<15;slot++){
-      for(int ch=0;ch<72;ch++){
-          for (int sm=0;sm<2000;sm++){
-	  ADCSamples[0][slot][ch][sm] = -1000.;
-          }
-       ADCPedestal[0][slot][ch] = 0.;
-       }
+    for (int slot=0;slot<15;slot++){
+        for (int ch=0;ch<72;ch++){
+            for (int sm=0;sm<2000;sm++){
+	        ADCSamples[0][slot][ch][sm] = -1000.;
+            }
+            ADCPedestal[0][slot][ch] = 0.;
+        }
     }
 
   long int evtCount=0;
@@ -693,23 +692,23 @@ int main(int argc, char *argv[]) {
     sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
     sprintf(fnam,"%s/%s",DataDir,InputFile);
     cout<<"Opening file "<<fnam<<endl;
-      if (FILE *file = fopen(fnam,"r")){
+    if (FILE *file = fopen(fnam,"r")){
         fclose(file);
         OK++;
         fOK=true;
         cout<<"File exists!"<<endl;
-      } else {
+    } else {
         OK=0;
         fOK=false;
 	cout<<"File not found - closing"<<endl;
-      }
-      if (fOK){
+    }
+    if (fOK){
   	evioFileChannel EvOchan(fnam,"r",8000000);
         cout<<"here 1..."<<endl;
   	EvOchan.open();
         bool ReadBack = EvOchan.read();
         cout<<"here 2..."<<endl;
-      if (1==1){
+    if (1==1){
         while(ReadBack && evtCount<NEVENT) {
           evtCount++;
           EVENT=evtCount;
@@ -719,15 +718,14 @@ int main(int argc, char *argv[]) {
           cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
  
           if(11==11) {
-          // cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
-
-         try {
-   	 TRIGGER_MASK_GT=0;
-   	 evioDOMTree eventTree(EvOchan);
-   	 //cout<<" start analyze event"<<endl;
-   	 analyzeEvent(eventTree);
-  	 //cout<<" stop analyze event"<<endl;
-   	 trig=TRIGGER_MASK_GT;
+             // cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
+          try {
+   	  TRIGGER_MASK_GT=0;
+   	  evioDOMTree eventTree(EvOchan);
+   	  //cout<<" start analyze event"<<endl;
+   	  analyzeEvent(eventTree);
+  	  //cout<<" stop analyze event"<<endl;
+   	  trig=TRIGGER_MASK_GT;
   /*
   if (TRIGGER_MASK_GT>0){
       if (TRIGGER_MASK_GT & (1<<3)){
@@ -845,8 +843,8 @@ int main(int argc, char *argv[]) {
 */ 
 
       // fixed pedestal !!!
-         for(int ch=0;ch<72;ch++){
-	 //  ADCPedestal[0][uslot][ch] = 100.;
+         for (int ch=0;ch<72;ch++){
+	     //  ADCPedestal[0][uslot][ch] = 100.;
          }
 
          samples=WindowSize;
