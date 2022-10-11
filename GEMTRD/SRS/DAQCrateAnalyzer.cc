@@ -117,7 +117,7 @@ ofstream to_sergey_norad2;
 #define wire_x_ch0 24
 #define wire_y_ch0 24
 
-// GEM-TRD first/ch dsefinition
+// GEM-TRD first slot/ch definition
 #define gem_x_slot 0
 #define gem_x_ch0 0
 
@@ -133,6 +133,7 @@ ofstream to_sergey_norad2;
 // GEM-TRD mapping - it works the way it is
 int GetXSlot(int gch){
 	return gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot;
+	//cout<<"---GetXSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
 
 int GetXChan(int gch){
@@ -140,16 +141,15 @@ int GetXChan(int gch){
 	int card=fch/24;
 	int cch=fch%24; 
 
-    	//cokcok for DIRC
     	return 23-cch+card*24;
-
-    	//cokcok for PS arm
+	//cout<<"---GetXChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
     	//return cch+card*24;
 }
 
 // MMG mapping !!!!
 int GetYSlot(int gch){
 	return gem_y_slot+(int)(gch+gem_y_ch0)/72+first_slot;
+	//cout<<"---GetYSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
 int GetYChan(int gch){
 	int fch=(gch+gem_y_ch0)%72;
@@ -157,37 +157,26 @@ int GetYChan(int gch){
     	int cch=fch%24; 
     	return 23-cch+card*24;
     	//return cch+card*24;
+    	cout<<"---GetYChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
 }
 
 int GetPSlot(int gch){
-
-	//cokcok for DIRC
     	if(gch<8)return 8;
-      
-    	//cokcok for PS 
     	//if(gch>91)return 8;
-
 	return gem_p_slot+(int)(gch+gem_p_ch0)/72+first_slot;
+	//cout<<"---GetPSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
 
 int GetPChan(int gch){
-
-    	//cokcok for DIRC
     	if(gch<8)return 71;
     	int fch=(gch-8+gem_p_ch0)%72;
-
-    	//cokcok for PS
-    	//if(gch>91)return 71;
     	//int fch=(gch+4+gem_p_ch0)%72;
-
     	int card=fch/24;
     	int cch=fch%24; 
 
-    	//cokcok for DIRC
     	return cch+card*24;
-
-    	//cokcok for PS
     	//return 23-cch+card*24;
+	//cout<<"---GetPChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
 }
 
 //cok #define gem_p_ch0 48
@@ -552,9 +541,9 @@ int main(int argc, char *argv[]) {
 
     crate = new TH2F("crate","",8*72,-0.5,12*100.-0.5,410,0.,4100.);
     TAxis *xaxis = (TAxis*)ct_plot->GetXaxis();
-    xaxis->SetTitle("y, mm  ");
+    xaxis->SetTitle("y, mm");
     TAxis *yaxis = (TAxis*)ct_plot->GetYaxis();
-    yaxis->SetTitle("t, 8ns  ");
+    yaxis->SetTitle("t, 8ns");
     //494 int w2choffset=-180;
     //cok int w2choffset=-90;
     int w2choffset=0;
@@ -562,12 +551,12 @@ int main(int argc, char *argv[]) {
     ct_plot->SetMaximum(4000.);
     ct_plot->SetMinimum(1.);  //-- -40 fsv 
     //TH2F *wct_plot = new TH2F("wct_plot","WC X vs Z",24,-0.5*10.,23.5*10.,300,-0.5/10.,299.5/10.);
-    //cok TH2F *wct_plot = new TH2F("wct_plot","WC ",24,-12.05*10.,11.95*10.,300,-0.5/10.,299.5/10.);
+    //cok TH2F *woct_plot = new TH2F("wct_plot","WC ",24,-12.05*10.,11.95*10.,300,-0.5/10.,299.5/10.);
     TH2F *wct_plot = new TH2F("wct_plot","WC X",24,-12.05*10.,11.95*10.,200,-0.5/1.,199.5/1.);
     xaxis = (TAxis*)wct_plot->GetXaxis();
-    xaxis->SetTitle("x, mm  ");
+    xaxis->SetTitle("x, mm");
     yaxis = (TAxis*)wct_plot->GetYaxis();
-    yaxis->SetTitle("t, 8ns  ");
+    yaxis->SetTitle("t, 8ns");
     int wchoffset=-12;
     //wchoffset=0;
     wct_plot->SetMaximum(4000.);
@@ -714,7 +703,6 @@ int main(int argc, char *argv[]) {
           EVENT=evtCount;
           // begin event loop
           if(evtCount%100==0)
-          //if(evtCount%1==0)
           cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
  
           if(11==11) {
@@ -754,7 +742,7 @@ int main(int argc, char *argv[]) {
          int ch_c2w3=48;
 
          int sl_c2w4=2;
-         int sl_c2w4=3;
+         sl_c2w4=3;
          int ch_c2w4=0;
          int sl_c2w5=2;
          int ch_c2w5=24;
@@ -1032,7 +1020,7 @@ int main(int argc, char *argv[]) {
          for (int ch=0;ch<120;ch++){
              int slot=GetXSlot(ch);
              int dch=GetXChan(ch);
-             //cout<<" ch, slot, dch= "<<ch<<" "<<slot<<" "<<dch<<endl;
+             cout<<" ---GetX---GEM Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
              w2Nhit[ch]=0;
              float adcmax=0.;
              for (int i=10;i<samples-10;i++){
@@ -1166,11 +1154,13 @@ int main(int argc, char *argv[]) {
              }
          }
          for (int ch=0;ch<192;ch++){
-             //  cout<<" ch====================="<<ch<<endl;
              //  GetYSlot gives me the slot number that corresponds to this channel "ch"
              //  Same for GetYChan - gives the channel number within the module
              int slot=GetYSlot(ch);
              int dch=GetYChan(ch);
+
+	     cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
+
              dNhit[ch]=0;
              float adcmax=0.;
              // first & last 10 samples are excluded
@@ -2712,9 +2702,11 @@ void analyzeBank(evioDOMNodeP bankPtr) {
 
   if(data_bank->tag == 65313) {
      cout<<"65313 New event"<<endl;
+
   } else if ( data_bank->tag == 76  && bankPtr->tag==16 ) { // rocTRD1
   //} else if ( data_bank->tag == 53) { // rocfdc
 
+     //cout<<"rocTRD1 --> Crate 76 New event Type 16"<<endl;
      int Sz;
      Sz = vec->size();
 
@@ -2774,20 +2766,22 @@ void analyzeBank(evioDOMNodeP bankPtr) {
              //cout<<"slot="<<SLOTNUM<<endl;
 	     int evntnost = (data& 0xf);
              //cout<<" slot, number of events in block="<<evntnost<<endl;
-	  if(SLOTNUM!=OLDSLOT){
-	     //cout<<SLOTNUM<<"   "<<OLDSLOT<<endl;
-	     OLDSLOT = SLOTNUM;  
-	     ROCSlots[ROCID]++;
-	  }
+	     if(SLOTNUM!=OLDSLOT){
+	        //cout<<SLOTNUM<<"   "<<OLDSLOT<<endl;
+	        OLDSLOT = SLOTNUM;  
+	        ROCSlots[ROCID]++;
+	     }
+	     slotidx = SLOTNUM-3;
+	     
+	     if(SLOTNUM>10){
+	        slotidx -= 2; 
+	     }
+	     MaxSlot = slotidx;
 
-	  slotidx = SLOTNUM-3;
-	  if(SLOTNUM>10){
-	     slotidx -= 2; 
-	  }
-	  MaxSlot = slotidx;
 	  } else if (((data & 0xf8000000)>>27) == 0x12) {
-              //cout<<" ST event no="<<SLOTNUM<<" "<<(data & 0x3FFFFF)<<endl; 
-	      evntno_trd = (data & 0x3FFFFF);
+               //cout<<" ST event no="<<SLOTNUM<<" "<<(data & 0x3FFFFF)<<endl; 
+	       evntno_trd = (data & 0x3FFFFF);
+
             } else if (((data & 0xf8000000)>>27) == 0x13) {
                 long int ta = (long int)(data>>16)&0xff;
                 long int tb = (long int)(data>>8)&0xff;
@@ -2815,85 +2809,89 @@ void analyzeBank(evioDOMNodeP bankPtr) {
 	        ADCPedestal[ROCID][slotidx][CHANNEL] = 0.;
 	        fADCPedestal[ROCID][slotidx][CHANNEL] = 0.;
                 //check if(data_bank->tag==58)cout<<endl<<endl<<" slot,ch,wsize="<<SLOTNUM<<" "<<CHANNEL<<" "<<WSize<<endl;;
+
 	    } else if (DATAReady>0) { // Window Raw Data values
 	        DATAReady--;
- 
                 if(data_bank->tag==58){
                    //check cout<<" "<<adc1<<" "<<adc2<<" ";
                 }
-  	        if (pedcnt<16){
-	        //if (pedcnt<4)
-	        adc1 =  (float)((data & 0x1FFF0000) >> 16);
-	        adc2 =  (float)(data & 0x1FFF);
-                //cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
-	        ped += adc1;
-	        ped += adc2;
-                //cout<<" slotidx="<<slotidx<<endl;
-	        ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
-	        ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
-                //if(NPK>10)cout<<" rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCSamples[ROCID][slotidx][CHANNEL][idx-1]<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][idx-2]<<endl;
-	        pedcnt+=2;
-	        if(pedcnt>15){
-	           ped /= 16.;
-	           ADCPedestal[ROCID][slotidx][CHANNEL] = ped;
-	        }
-	        } else {
+
+  	        if(pedcnt<16) {
 	           adc1 =  (float)((data & 0x1FFF0000) >> 16);
 	           adc2 =  (float)(data & 0x1FFF);
-                  //cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
-                  if(adc1>4095)adc1=4095;
-                  if(adc2>4095)adc2=4095;
-	          ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
-                  //if(adc1>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
-	          ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
-                  //if(adc2>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
-                 if(NPK>10){
-                    print_flg=1;
-                    //cout<<" rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx-2<<" "<< ADCSamples[ROCID][slotidx][CHANNEL][idx-2]<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][idx-1]<<" "<<ADCPedestal[ROCID][slotidx][CHANNEL]<<endl;
-                 }
-	         if( (adc1-ADCPedestal[ROCID][slotidx][CHANNEL])>200. || 
+                   //cout<<"adc1="<<adc1<<"   adc2= "<<adc2<<""<<endl;
+	           ped += adc1;
+	           ped += adc2;
+                   //cout<<"slotidx="<<slotidx<<endl;
+	           ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
+	           ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
+                   //if(NPK>10)cout<<" rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCSamples[ROCID][slotidx][CHANNEL][idx-1]<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][idx-2]<<endl;
+	           pedcnt+=2;
+	           if(pedcnt>15){
+	              ped /= 16.;
+	              ADCPedestal[ROCID][slotidx][CHANNEL] = ped;
+	           }
+
+	        } else {
+	             adc1 =  (float)((data & 0x1FFF0000) >> 16);
+	             adc2 =  (float)(data & 0x1FFF);
+                     //cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
+                     if(adc1>4095)adc1=4095;
+                     if(adc2>4095)adc2=4095;
+	             ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
+                     //if(adc1>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
+	             ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
+                     //if(adc2>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
+                     if(NPK>10){
+                        print_flg=1;
+                        //cout<<" rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx-2<<" "<< ADCSamples[ROCID][slotidx][CHANNEL][idx-2]<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][idx-1]<<" "<<ADCPedestal[ROCID][slotidx][CHANNEL]<<endl;
+                     }
+	             if( (adc1-ADCPedestal[ROCID][slotidx][CHANNEL])>200. || 
 		(adc2-ADCPedestal[ROCID][slotidx][CHANNEL])>200.) {
-                    slot_special=slotidx;
-                    ch_special=CHANNEL;
-                    samp_special=idx-1;
-                    //cout<<" ------------------------------ rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCSamples[9][ROCID][slotidx][CHANNEL][idx-1]<<endl;
-                    //cout<<" ------------------------------ rocid,slot,ch,idx,ADCPedestal="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCPedestal[9][ROCID][slotidx][CHANNEL]<<endl;
-	         }
-	   }
-	   } else if (((data & 0xf8000000)>>27) == 0x19) { //pulse integral
-	  CHANNEL = ((data & 0x7F00000)>>20) ; 
-	  NPK = ((data & 0xF8000)>>15) ; 
-          NPK_count=NPK;
-       } else if (NPK_count>0) { //Peak loop
-          NPK_count--;
-          float peak = (float) ((data & 0x7FF80000)>>19) ;
-          float time = (float) ((data & 0x7F800)>>11) ;
-          float ped = (float) (data & 0x7FF) ;
-          fADCpeak[ROCID][slotidx][CHANNEL][fADCnhit[ROCID][slotidx][CHANNEL]]=peak-ped;
-          fADCtime[ROCID][slotidx][CHANNEL][fADCnhit[ROCID][slotidx][CHANNEL]]=time;
-          //if(NPK>10) cout<<" -------------------------------- "<<fADCnhit[ROCID][slotidx][CHANNEL]<<" "<<CHANNEL<<" "<<time<<" "<<peak<<" "<<ped<<endl;
-          fADCnhit[ROCID][slotidx][CHANNEL]++;
-	} else if (((data & 0xf8000000)>>27) == 0x18) { // pulse time
-	  CHANNEL = ((data & 0x7F00000)>>20) ; 
-	  NPEAK = ((data & 0xC0000)>>18) ; 
-          TIME = (float) (data & 0xFFFF) ;
-          //if((ROCID==3&&slotidx==7&&CHANNEL==9))
-          //check if((NPEAK>1))
+                        slot_special=slotidx;
+                        ch_special=CHANNEL;
+                        samp_special=idx-1;
+                        //cout<<" ------------------------------ rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCSamples[9][ROCID][slotidx][CHANNEL][idx-1]<<endl;
+                        //cout<<" ------------------------------ rocid,slot,ch,idx,ADCPedestal="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCPedestal[9][ROCID][slotidx][CHANNEL]<<endl;
+	             }
+	          }
+
+	       } else if (((data & 0xf8000000)>>27) == 0x19) { //pulse integral
+	           CHANNEL = ((data & 0x7F00000)>>20) ; 
+	           NPK = ((data & 0xF8000)>>15) ; 
+                   NPK_count=NPK;
+
+               } else if (NPK_count>0) { //Peak loop
+                   NPK_count--;
+                   float peak = (float) ((data & 0x7FF80000)>>19) ;
+                   float time = (float) ((data & 0x7F800)>>11) ;
+                   float ped = (float) (data & 0x7FF) ;
+                   fADCpeak[ROCID][slotidx][CHANNEL][fADCnhit[ROCID][slotidx][CHANNEL]]=peak-ped;
+                   fADCtime[ROCID][slotidx][CHANNEL][fADCnhit[ROCID][slotidx][CHANNEL]]=time;
+                   //if(NPK>10) cout<<" ---------------------- "<<fADCnhit[ROCID][slotidx][CHANNEL]<<" "<<CHANNEL<<" "<<time<<" "<<peak<<" "<<ped<<endl;
+                   fADCnhit[ROCID][slotidx][CHANNEL]++;
+
+	       } else if (((data & 0xf8000000)>>27) == 0x18) { // pulse time
+	           CHANNEL = ((data & 0x7F00000)>>20) ; 
+	           NPEAK = ((data & 0xC0000)>>18) ; 
+                   TIME = (float) (data & 0xFFFF) ;
+           //if((ROCID==3&&slotidx==7&&CHANNEL==9))
+           //check if((NPEAK>1))
            //    cout<<" roc,slot,ch="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<endl;
            //    cout<<" time, peak number="<<TIME/64<<" "<<NPEAK<<endl;
            //    cout<<" samples0="<<endl;
            //    for(int sm=0;sm<160;sm++)
            //    cout<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][sm];
           
-          //check
-          fADCtime[ROCID][slotidx][CHANNEL][NPEAK]=TIME/64.;
-	} else if (((data & 0xf8000000)>>27) == 0x10) { // pulse pedestal and max amplitude
-	  //run<375(Beni's numbering)  CHANNEL = ((data & 0x7F00000)>>20) ; 
-	  //CHANNEL = ((data & 0x7800000)>>23) ;
-	  NPEAK = ((data & 0x600000)>>21) ; 
-          PEAK = (float) (data & 0xFFF) ;; 
-	  PEDESTAL = (float) ((data & 0x1FF000)>>12) ; 
-	  
+           //check
+                   fADCtime[ROCID][slotidx][CHANNEL][NPEAK]=TIME/64.;
+
+	       } else if (((data & 0xf8000000)>>27) == 0x10) { // pulse pedestal and max amplitude
+	           //run<375(Beni's numbering)  CHANNEL = ((data & 0x7F00000)>>20) ; 
+	           //CHANNEL = ((data & 0x7800000)>>23) ;
+	           NPEAK = ((data & 0x600000)>>21) ; 
+                   PEAK = (float) (data & 0xFFF) ;; 
+	           PEDESTAL = (float) ((data & 0x1FF000)>>12) ;	  
 	  //fADCPedestal[ROCID][slotidx][CHANNEL] =PEDESTAL;
           //fADCpeak[ROCID][slotidx][CHANNEL][0]=PEAK-PEDESTAL;
           //fADCnhit[ROCID][slotidx][CHANNEL]=1;
@@ -2903,12 +2901,15 @@ void analyzeBank(evioDOMNodeP bankPtr) {
           //     cout<<" ped, peak, npeak="<<PEDESTAL<<" "<<PEAK<<" "<<NPEAK<<endl;
           
           //check 
+                 }
        }
-    }
+
     WindowSize = WSize;
 
-    } //Sz>0
- } else if ( data_bank->tag == 83) { //end rocst, begin rocps1 
+    } //end (bank->tag == 76  && bankPtr->tag==16 ) rocTRD1
+
+
+ } else if ( data_bank->tag == 83) { //end rocTRD1, begin rocps1 
    int Sz;
    Sz = vec->size();
    if(Sz>0){
