@@ -149,6 +149,7 @@ int GetXChan(int gch){
 // MMG mapping !!!!
 int GetYSlot(int gch){
 	return gem_y_slot+(int)(gch+gem_y_ch0)/72+first_slot;
+	//return (int)(gch+gem_y_ch0)/72+first_slot;
 	//cout<<"---GetYSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
 int GetYChan(int gch){
@@ -157,7 +158,7 @@ int GetYChan(int gch){
     	int cch=fch%24; 
     	return 23-cch+card*24;
     	//return cch+card*24;
-    	cout<<"---GetYChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
+    	//cout<<"---GetYChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
 }
 
 int GetPSlot(int gch){
@@ -693,10 +694,10 @@ int main(int argc, char *argv[]) {
     }
     if (fOK){
   	evioFileChannel EvOchan(fnam,"r",8000000);
-        cout<<"here 1..."<<endl;
+        cout<<"Here 1...EVIO File exists"<<endl;
   	EvOchan.open();
         bool ReadBack = EvOchan.read();
-        cout<<"here 2..."<<endl;
+        cout<<"Here 2...File is readable"<<endl;
     if (1==1){
         while(ReadBack && evtCount<NEVENT) {
           evtCount++;
@@ -1004,7 +1005,7 @@ int main(int argc, char *argv[]) {
 // Cell2 wires
 //
          int w2wd[240];
-         for (int ch=0;ch<120;ch++){
+         for (int ch=0;ch<240;ch++){
              w2ADCsumall[ch]=0.;
              w2wd[ch]=0.;
              w2Smax[ch]=0;
@@ -1017,10 +1018,10 @@ int main(int argc, char *argv[]) {
                  w2ADCsum[ch][hit]=0.;
              }
          }
-         for (int ch=0;ch<120;ch++){
+         for (int ch=0;ch<240;ch++){
              int slot=GetXSlot(ch);
              int dch=GetXChan(ch);
-             cout<<" ---GetX---GEM Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
+             //cout<<" ---GetX---GEM Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
              w2Nhit[ch]=0;
              float adcmax=0.;
              for (int i=10;i<samples-10;i++){
@@ -1079,7 +1080,7 @@ int main(int argc, char *argv[]) {
              w2clustlwd[i]=0.;
          }
 
-         for (int ch=0;ch<120;ch++){
+         for (int ch=0;ch<240;ch++){
              for (int ihit=0;ihit<w2Nhit[ch];ihit++){
                  int sm=w2SAMPmax[ch][ihit];
                  w2cht[ch][sm]=w2ADCsum[ch][ihit];
@@ -1159,7 +1160,7 @@ int main(int argc, char *argv[]) {
              int slot=GetYSlot(ch);
              int dch=GetYChan(ch);
 
-	     cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
+	     //cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
 
              dNhit[ch]=0;
              float adcmax=0.;
@@ -1476,7 +1477,7 @@ int main(int argc, char *argv[]) {
              }
          }
 
-         for (int ch=0;ch<120;ch++){
+         for (int ch=0;ch<240;ch++){
              //cedi cut
              //if(abs(w2Smax[ch]-42.)<3){
              if(w2Amax[ch]>thresh){
@@ -1484,7 +1485,7 @@ int main(int argc, char *argv[]) {
                 w2charge+=w2ADCsumall[ch];
                 //w2wid+=w2wd[ch];
              }
-             if(w2Amax[ch]>w2mcharge&&ch>0&&ch<120){
+             if(w2Amax[ch]>w2mcharge&&ch>0&&ch<240){
                 w2mcharge=w2Amax[ch];
                 w2chmax=ch;
                 w2smax=w2Smax[ch];
@@ -1865,7 +1866,7 @@ int main(int argc, char *argv[]) {
          }
 
          w2sig=0.;
-         for (int ch=0;ch<120;ch++){
+         for (int ch=0;ch<240;ch++){
              if(abs(ch-wchmax)<10){
                 w2sig+=w2Nhit[ch];
              }
@@ -1912,7 +1913,7 @@ int main(int argc, char *argv[]) {
                    //w2CvsT->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clusttwd[iclust]); 
                    w2CvsL->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustlwd[iclust]); 
                }
-               for (int ch=0;ch<120;ch++){
+               for (int ch=0;ch<240;ch++){
                    for (int ihit=0;ihit<w2Nhit[ch]&&ihit<200;ihit++){
                        //cold if(abs(ch-w2chmax)<10&&abs(w2charge/dcharge-0.8)<0.4&&dcharge>100000)
                        if(abs(ch-w2chmax)<10){

@@ -9,3 +9,4 @@ DAQCrateAnalyzer.ccORIGINAL.cc
 .local/share/mc
 .emacs.d/auto-save-list
 .dbus/session-bus
+slurmJobs/
