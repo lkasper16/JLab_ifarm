@@ -153,7 +153,12 @@ int GetYSlot(int gch){
 	//cout<<"---GetYSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
 int GetYChan(int gch){
-	int fch=(gch+gem_y_ch0)%72;
+
+	//Condition similar to that of GetPChan below
+	//if(gch<24)return 24;
+	//if(gch>215)return 24;
+
+	int fch=(gch+gem_y_ch0)%72
   	int card=fch/24;
     	int cch=fch%24; 
     	return 23-cch+card*24;
@@ -283,12 +288,7 @@ int main(int argc, char *argv[]) {
 
 
   sprintf(InputFile,"%s",argv[1]);
-  int RunNumber = atoi(argv[1]);
-
-  //cok local
-  //char DataDir[128] = ".";
-  //cok PS char DataDir[128] = "/gluonraid3/data4/rawdata/trd/DATA";                     
-  //char DataDir[128] = "/gluonraid3/data4/rawdata/trd/DATA";                     
+  int RunNumber = atoi(argv[1]);            
   char DataDir[128] = "DATA";                     
 
   float tmax1=452.;
@@ -321,7 +321,6 @@ int main(int argc, char *argv[]) {
   int chan;
   int samples;
   int isamp=0;
-
   int trig=0;
 
   float umax=0.;
@@ -585,16 +584,10 @@ int main(int argc, char *argv[]) {
     wcty_plot->SetMinimum(1.);
 
     TH2D *PStest = new TH2D("PStest","PS time vs chmax",100,-0.5,99.5,256,0.5,255.5);
-    //TRIGtest= new TH2D("TRIGtest","TRIG time test",1000,-10000000.5,10000000.-0.5,100,0.5,1000.5);
-    //cok 3d  TH3D *wAvsT = new TH3D("wAvsT","Amplitude vs Time",400,-0.5,399.5,1024,-0.5,4095.5,48,-0.5,47.5);
-    //cok 3d  TH3D *w2AvsT = new TH3D("w2AvsT","Amplitude vs Time",400,-0.5,399.5,1024,-0.5,4095.5,48,-0.5,47.5);
     TH1D *xeff = new TH1D("xeff","X-coordinate of the track",48,-0.5,47.5);
     TH1D *x2eff = new TH1D("x2eff","X-coordinate of the track",48,-0.5,47.5);
-    //TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",72,-0.5,119.5,110,-0.5,109.5);
-    //cok TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",72,-0.5,119.5,24,-0.5,23.5);
     TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",400,-0.5,399.5,24,-0.5,23.5);
     TH2D *wAvsTnorm = new TH2D("wAvsTnorm","Ch.1 Amplitude vs Time norm",400,-0.5,399.5,24,-0.5,23.5);
-    //TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",72,-0.5,119.5,100,9.5,13.5);
     TH2D *wCvsT = new TH2D("wCvsT","Ch.1 Width (transverese) vs Time",400,-0.5,399.5,24,-0.5,23.5);
     TH2D *wCvsL = new TH2D("wCvsL","Ch.1 Width (longitudinal) vs Time",400,-0.5,399.5,24,-0.5,23.5);
     TH2D *wAvsB = new TH2D("wAvsB","Ch.1 Amplitude vs Time (background)",1000,-0.5,999.5,48,-0.5,47.5);
@@ -609,15 +602,15 @@ int main(int argc, char *argv[]) {
     wYvsB->Sumw2();
     wTYvsB->Sumw2();
     wAvsD->Sumw2();
-    TH2D *w2AvsT = new TH2D("w2AvsT","Ch.2 Amplitude vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *w2AvsTnorm = new TH2D("w2AvsTnorm","Ch.2 Amplitude vs Time norm",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *w2CvsT = new TH2D("w2CvsT","Ch.2 Width (transverse) vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *w2CvsL = new TH2D("w2CvsL","Ch.2 Width (longitudinal) vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *w2AvsB = new TH2D("w2AvsB","Ch.2 Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *w2CvsB = new TH2D("w2CvsB","Ch.2 Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *w2YvsB = new TH2D("w2YvsB","Ch.2 X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-    TH2D *w2TYvsB = new TH2D("w2TYvsB","Ch.2 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *w2AvsD = new TH2D("w2AvsD","Ch.2 Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
+    TH2D *w2AvsT = new TH2D("w2AvsT","GEM Amplitude vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *w2AvsTnorm = new TH2D("w2AvsTnorm","GEM Amplitude vs Time norm",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *w2CvsT = new TH2D("w2CvsT","GEM Width (transverse) vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *w2CvsL = new TH2D("w2CvsL","GEM Width (longitudinal) vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *w2AvsB = new TH2D("w2AvsB","GEM Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *w2CvsB = new TH2D("w2CvsB","GEM Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *w2YvsB = new TH2D("w2YvsB","GEM X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
+    TH2D *w2TYvsB = new TH2D("w2TYvsB","GEM TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *w2AvsD = new TH2D("w2AvsD","GEM Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
     w2AvsTnorm->Sumw2();
     w2AvsT->Sumw2();
     w2CvsT->Sumw2();
@@ -628,15 +621,15 @@ int main(int argc, char *argv[]) {
     w2TYvsB->Sumw2();
     w2AvsD->Sumw2();
 
-    TH2D *dAvsT = new TH2D("dAvsT","Ch.2 Amplitude vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *dAvsTnorm = new TH2D("dAvsTnorm","Ch.2 Amplitude vs Time norm",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *dCvsT = new TH2D("dCvsT","Ch.2 Width (transverse) vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *dCvsL = new TH2D("dCvsL","Ch.2 Width (longitudinal) vs Time",400,-0.5,399.5,240,-0.5,239.5);
-    TH2D *dAvsB = new TH2D("dAvsB","Ch.2 Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *dCvsB = new TH2D("dCvsB","Ch.2 Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *dYvsB = new TH2D("dYvsB","Ch.2 X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-    TH2D *dTYvsB = new TH2D("dTYvsB","Ch.2 TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-    TH2D *dAvsD = new TH2D("dAvsD","Ch.2 Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
+    TH2D *dAvsT = new TH2D("dAvsT","MMG Amplitude vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *dAvsTnorm = new TH2D("dAvsTnorm","MMG Amplitude vs Time norm",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *dCvsT = new TH2D("dCvsT","MMG Width (transverse) vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *dCvsL = new TH2D("dCvsL","MMG Width (longitudinal) vs Time",400,-0.5,399.5,240,-0.5,239.5);
+    TH2D *dAvsB = new TH2D("dAvsB","MMG Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *dCvsB = new TH2D("dCvsB","MMG Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *dYvsB = new TH2D("dYvsB","MMG X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
+    TH2D *dTYvsB = new TH2D("dTYvsB","MMG TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
+    TH2D *dAvsD = new TH2D("dAvsD","MMG Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
     dAvsTnorm->Sumw2();
     dAvsT->Sumw2();
     dCvsT->Sumw2();
@@ -655,7 +648,6 @@ int main(int argc, char *argv[]) {
     TH2D *DTimeax = new TH2D("DTimeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
     TH2D *DTimebx = new TH2D("DTimebx","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
     TH2D *CluCou = new TH2D("CluCou","cluster no. in ch.1 vs ch2",100,-0.5,99.5,100,-0.5,99.5);
-    //TF1 *centroid=new TF1("centroid","[0]*(1-tanh([2]*(x-[1]))*tanh([2]*(x-[1])))",N1Up-0.5,N1Up+Aup-0.5);
     TF1 *centroid=new TF1("centroid","[0]*exp(-(x-[1])^2/(2.*[2]^2))",-0.5,6.5);
     TF2 *dgaus = new TF2("dgaus","[0]*TMath::Gaus(x,[1],[2])*TMath::Gaus(y,[3],[4])",0,10,0,10); 
 
@@ -669,8 +661,8 @@ int main(int argc, char *argv[]) {
     }
 
   long int evtCount=0;
-  long int NEVENT=2000000;
-  //cedicedi
+  long int NEVENT=17000000;
+  
   int OK=1;
   bool fOK=true;
 
@@ -678,8 +670,14 @@ int main(int argc, char *argv[]) {
     ostringstream ss;
     ss<<setw(5)<<setfill('0')<<RunNumber;
     string str1(ss.str());
-  
-    sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
+    
+    if (OK-1 < 10){
+      	sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
+    } else {
+        sprintf(InputFile,"hd_rawdata_%06d_0%d.evio",RunNumber,OK-1);
+    }
+
+    //sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
     sprintf(fnam,"%s/%s",DataDir,InputFile);
     cout<<"Opening file "<<fnam<<endl;
     if (FILE *file = fopen(fnam,"r")){
@@ -703,7 +701,7 @@ int main(int argc, char *argv[]) {
           evtCount++;
           EVENT=evtCount;
           // begin event loop
-          if(evtCount%100==0)
+          if(evtCount%500==0)
           cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
  
           if(11==11) {
@@ -1087,7 +1085,7 @@ int main(int argc, char *argv[]) {
              } //end hit loop
          } //end channel loop
 
-         for (int ch=2;ch<118;ch++){
+         for (int ch=2;ch<238;ch++){
              for (int ihit=0;ihit<w2Nhit[ch];ihit++){
                  int sm=w2SAMPmax[ch][ihit];
                  if(sm>400)break;
@@ -1160,7 +1158,7 @@ int main(int argc, char *argv[]) {
              int slot=GetYSlot(ch);
              int dch=GetYChan(ch);
 
-	     //cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
+	     cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
 
              dNhit[ch]=0;
              float adcmax=0.;
@@ -1246,7 +1244,7 @@ int main(int argc, char *argv[]) {
                     int ch1=ch-20; //now sum all amplitudes around if > amax/5
                     if(ch1<0)ch1=0;
                     int ch2=ch+20;
-                    if(ch2>239)ch2=239;
+                    if(ch2>191)ch2=191;
                     int chwid=0;
                     for (int ich=ch1;ich<ch2+1;ich++){
                         bool above_thresh=false;
@@ -1979,7 +1977,7 @@ int main(int argc, char *argv[]) {
                    //w2CvsT->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clusttwd[iclust]); 
                    dCvsL->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustlwd[iclust]); 
                }
-               for (int ch=0;ch<192;ch++){
+               for (int ch=24;ch<216;ch++){
                    for (int ihit=0;ihit<dNhit[ch]&&ihit<200;ihit++){
                        if(abs(ch-dchmax)<10){
                           if(dnhit<999){
@@ -2221,7 +2219,7 @@ int main(int argc, char *argv[]) {
                   }
               } //end ch loop
 // d
-             for (Int_t ch=0;ch<240;ch++){ 
+             for (Int_t ch=0;ch<192;ch++){ 
                  if(dAmax[ch]>thresh){
                     int slot=GetYSlot(ch);
                     int k=GetYChan(ch);
