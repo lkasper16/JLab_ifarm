@@ -128,7 +128,6 @@ ofstream to_sergey_norad2;
 // pad gem first slot/ch definition
 #define gem_p_slot 6
 #define gem_p_ch0  0 
-//cokcok
 
 // GEM-TRD mapping - it works the way it is
 int GetXSlot(int gch){
@@ -154,11 +153,7 @@ int GetYSlot(int gch){
 }
 int GetYChan(int gch){
 
-	//Condition similar to that of GetPChan below
-	//if(gch<24)return 24;
-	//if(gch>215)return 24;
-
-	int fch=(gch+gem_y_ch0)%72
+	int fch=(gch+gem_y_ch0)%72;
   	int card=fch/24;
     	int cch=fch%24; 
     	return 23-cch+card*24;
@@ -168,7 +163,6 @@ int GetYChan(int gch){
 
 int GetPSlot(int gch){
     	if(gch<8)return 8;
-    	//if(gch>91)return 8;
 	return gem_p_slot+(int)(gch+gem_p_ch0)/72+first_slot;
 	//cout<<"---GetPSlot--- gch: "<<gch<<" return: "<<gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot<<""<<endl;
 }
@@ -176,7 +170,6 @@ int GetPSlot(int gch){
 int GetPChan(int gch){
     	if(gch<8)return 71;
     	int fch=(gch-8+gem_p_ch0)%72;
-    	//int fch=(gch+4+gem_p_ch0)%72;
     	int card=fch/24;
     	int cch=fch%24; 
 
@@ -184,8 +177,6 @@ int GetPChan(int gch){
     	//return 23-cch+card*24;
 	//cout<<"---GetPChan--- gch: "<<gch<<" fch: "<<fch<<" card: "<<card<<" cch: "<<cch<<" return: "<<23-cch+card*24<<""<<endl;
 }
-
-//cok #define gem_p_ch0 48
 
 /*
 #define gem_x_slot 1
@@ -535,8 +526,6 @@ int main(int argc, char *argv[]) {
     gStyle->SetOptStat(0);
     TH2F *pad_plot = new TH2F("pad_plot","padGEM ",10,-0.5,9.5,10,-0.5,9.5);
 
-    //TH2F *ct_plot = new TH2F("ct_plot","GEM X vs Z",600,-72.5/2.5,479.5/2.5,300,-0.5/10.,299.5/10.);
-    //cok TH2F *ct_plot = new TH2F("ct_plot","GEM ",240,-72.5,119.5,300,-0.5/1.,299.5/1.);
     TH2F *ct_plot = new TH2F("ct_plot","GEM Y",240,(-0.5-72.)*0.4,(239.5-120.)*0.4,200,-0.5/1.,199.5/1.);
 
     crate = new TH2F("crate","",8*72,-0.5,12*100.-0.5,410,0.,4100.);
@@ -549,9 +538,7 @@ int main(int argc, char *argv[]) {
     int w2choffset=0;
     w2choffset=-72;
     ct_plot->SetMaximum(4000.);
-    ct_plot->SetMinimum(1.);  //-- -40 fsv 
-    //TH2F *wct_plot = new TH2F("wct_plot","WC X vs Z",24,-0.5*10.,23.5*10.,300,-0.5/10.,299.5/10.);
-    //cok TH2F *woct_plot = new TH2F("wct_plot","WC ",24,-12.05*10.,11.95*10.,300,-0.5/10.,299.5/10.);
+    ct_plot->SetMinimum(1.);  //-- -40 fsv
     TH2F *wct_plot = new TH2F("wct_plot","WC X",24,-12.05*10.,11.95*10.,200,-0.5/1.,199.5/1.);
     xaxis = (TAxis*)wct_plot->GetXaxis();
     xaxis->SetTitle("x, mm");
@@ -561,8 +548,6 @@ int main(int argc, char *argv[]) {
     //wchoffset=0;
     wct_plot->SetMaximum(4000.);
     wct_plot->SetMinimum(1.);  // fsv -40
-    //TH2F *cty_plot = new TH2F("cty_plot","GEM Y vs Z",600,-324.5/2.5,275.5/2.5,300,-0.5/10.,299.5/10.);
-    //TH2F *cty_plot = new TH2F("cty_plot","GEM ",600,-300.5/2.5,299.5/2.5,300,-0.5/10.,299.5/10.);
     TH2F *cty_plot = new TH2F("cty_plot","GEM X",240,(-0.5-72.)*0.4,(239.5-120.)*0.4,200,-0.5/1.,199.5/1.);
     xaxis = (TAxis*)cty_plot->GetXaxis();
     xaxis->SetTitle("y, mm  ");
@@ -571,8 +556,7 @@ int main(int argc, char *argv[]) {
     int dchoffset=12;
     dchoffset=-72.;
     cty_plot->SetMaximum(4000.);
-    cty_plot->SetMinimum(1.);  // -30  fsv 
-    //TH2F *wcty_plot = new TH2F("wcty_plot","WC Y vs Z",48,-12.5*5.,35.5*5.,300,-0.5/10.,299.5/10.);
+    cty_plot->SetMinimum(1.);  // -30  fsv
     TH2F *wcty_plot = new TH2F("wcty_plot","WC Y",24,-12.05*5.,11.95*5.,200,-0.5/1.,199.5/1.);
     xaxis = (TAxis*)wcty_plot->GetXaxis();
     xaxis->SetTitle("y, mm  ");
@@ -642,7 +626,6 @@ int main(int argc, char *argv[]) {
 
     TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",1000,-0.5,999.5,4096,-0.5,4095.5);
 
-    //TH2D *TTime = new TH2D("TTime","Time between peaks vs time",1000,-0.5,999.5,1000,-0.5,999.5);
     TH2D *Timeax = new TH2D("Timeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
     TH2D *Timebx = new TH2D("Timebx","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
     TH2D *DTimeax = new TH2D("DTimeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
@@ -676,7 +659,6 @@ int main(int argc, char *argv[]) {
     } else {
         sprintf(InputFile,"hd_rawdata_%06d_0%d.evio",RunNumber,OK-1);
     }
-
     //sprintf(InputFile,"hd_rawdata_%06d_00%d.evio",RunNumber,OK-1);
     sprintf(fnam,"%s/%s",DataDir,InputFile);
     cout<<"Opening file "<<fnam<<endl;
@@ -701,8 +683,8 @@ int main(int argc, char *argv[]) {
           evtCount++;
           EVENT=evtCount;
           // begin event loop
-          if(evtCount%500==0)
-          cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
+         // if(evtCount%1000==0)
+          //cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
  
           if(11==11) {
              // cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
@@ -1045,6 +1027,7 @@ int main(int argc, char *argv[]) {
                     if(adcval>adcmax){
                        adcmax=adcval;
                        w2Amax[ch]=adcval;
+		      // cout<<"ch:"<<ch<<" w2Amax:"<<w2Amax[ch]<<endl;
                        w2Smax[ch]=i;
                        w2ped=ADCPedestal[0][slot][dch];
                     }
@@ -1158,7 +1141,7 @@ int main(int argc, char *argv[]) {
              int slot=GetYSlot(ch);
              int dch=GetYChan(ch);
 
-	     cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
+	     //cout<<" ---GetY---MMG Mapping--- ch:"<<ch<<" slot:"<<slot<<" dch:"<<dch<<""<<endl;
 
              dNhit[ch]=0;
              float adcmax=0.;
@@ -1186,6 +1169,7 @@ int main(int argc, char *argv[]) {
                        if(adcval>adcmax){
                           adcmax=adcval;
                           dAmax[ch]=adcval;
+			  //cout<<"ch:"<<ch<<" dAmax:"<<dAmax[ch]<<endl;
                           dSmax[ch]=i;
                           dped=ADCPedestal[0][slot][dch];
                        }
@@ -1351,13 +1335,10 @@ int main(int argc, char *argv[]) {
                 int px=ch/10;
                 int py=ch%10;
                 pxyADC[px][py]=pADCsumall[ch];
-                //pxyADC[px][py]=pAmax[ch];
                 DHist->SetBinContent(px,py,pADCsumall[ch]);
                 DHist->SetBinError(px,py,1.);
-                //DHist->Fill(px,py,pADCsumall[ch]);
                 psize++;
                 pcharge+=pADCsumall[ch];
-                //cok including timing peaks pwid+=pwd[ch];
                 pwid++;
              }
              if(pAmax[ch]>pmcharge){
@@ -1423,7 +1404,7 @@ int main(int argc, char *argv[]) {
          uchmax=-100;
          dmcharge=0.;
          dsmax=-100;
-         //dchmax=-100;
+         dchmax=-100;
          wmcharge=0.;
          wsmax=-100;
          pssmax=-100;
@@ -1497,11 +1478,12 @@ int main(int argc, char *argv[]) {
                 dcharge+=dADCsumall[ch];
                 dwid+=dwd[ch];
              }
-             if(dAmax[ch]>dmcharge){
+             if(dAmax[ch]>dmcharge&&ch>0&&ch<192){
                 dmcharge=dAmax[ch];
 // dchmax is the channel with the highest amplitude
 // dsmax is the sample no of the channel with the highest amplitude
                 dchmax=ch;
+		//cout<<" dchmax=="<<dchmax<<endl;
                 dsmax=dSmax[ch];
                 //cok dwid=dwd[ch];
              }
@@ -1977,7 +1959,7 @@ int main(int argc, char *argv[]) {
                    //w2CvsT->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clusttwd[iclust]); 
                    dCvsL->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustlwd[iclust]); 
                }
-               for (int ch=24;ch<216;ch++){
+               for (int ch=0;ch<192;ch++){
                    for (int ihit=0;ihit<dNhit[ch]&&ihit<200;ihit++){
                        if(abs(ch-dchmax)<10){
                           if(dnhit<999){
@@ -2198,7 +2180,8 @@ int main(int argc, char *argv[]) {
           int wslast=-1;
           int slot;
           int ch0;
-
+	  
+	  //Begin sample loop
           for (Int_t i=smp1;i<smp2;i++){
 // w1
               slot=sl_c1w1; ch0=ch_c1w1;
@@ -2504,7 +2487,7 @@ int main(int argc, char *argv[]) {
   } // end file loop
     ROOTfile->Close();
     delete ROOTfile;
-    cout<<"Closing root file "<<root_fname<<endl;
+    cout<<"Closing root file..."<<root_fname<<endl;
   
   TGraphErrors *graph;
   char t1[128];
@@ -2797,7 +2780,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
                 //trig_trd[SLOTNUM-10]=8*trig_trd[SLOTNUM-10];
                 //cout<<" -----TRD ----- slot,trig_trd,delta="<<SLOTNUM<<" "<<trig_trd[SLOTNUM-10][9]<<" "<<trig_st[3][9]-trig_trd[SLOTNUM-10][9]<<endl; 
 	    } else if (((data & 0xf8000000)>>27 == 0x14)) {
-	        CHANNEL = ((data & 0x7F00000)>>20) ; // flash is couning channels from 1 to 72 need 0 to 71
+	        CHANNEL = ((data & 0x7F00000)>>20) ; // flash is counting channels from 1 to 72 need 0 to 71
 	        WSize =  (data & 0xFFF);
                 //cout<<" SLOTNUM,CHANNEL,WSize="<<SLOTNUM<<" "<<CHANNEL<<" "<<WSize<<"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"<<endl;
                 //cout<<" channel,samples="<<CHANNEL<<" "<<WSize<<endl;
@@ -2818,7 +2801,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
   	        if(pedcnt<16) {
 	           adc1 =  (float)((data & 0x1FFF0000) >> 16);
 	           adc2 =  (float)(data & 0x1FFF);
-                   //cout<<"adc1="<<adc1<<"   adc2= "<<adc2<<""<<endl;
+                   //cout<<"pedcnt<16-------------adc1="<<adc1<<"   adc2= "<<adc2<<""<<endl;
 	           ped += adc1;
 	           ped += adc2;
                    //cout<<"slotidx="<<slotidx<<endl;
@@ -2834,7 +2817,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
 	        } else {
 	             adc1 =  (float)((data & 0x1FFF0000) >> 16);
 	             adc2 =  (float)(data & 0x1FFF);
-                     //cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
+                    // cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
                      if(adc1>4095)adc1=4095;
                      if(adc2>4095)adc2=4095;
 	             ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
@@ -3118,7 +3101,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
 	      PSCADCSamples[CHANNEL][idx++] = adc2;
            }	    
            }//end data ready
-           //cok PSCWindowSize = WSize;
+           
            PSCWindowSize = 100;
     } // data loop
    } //Sz>0
