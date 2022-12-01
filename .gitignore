@@ -10,3 +10,12 @@ DAQCrateAnalyzer.ccORIGINAL.cc
 .emacs.d/auto-save-list
 .dbus/session-bus
 slurmJobs/
+*.slurm
+trd/
+TRDData/
+DAQCrateAnalyzer2.cc
+.gitconfig
+.root_hist
+.vim/
+.ssh/
+.vimrc

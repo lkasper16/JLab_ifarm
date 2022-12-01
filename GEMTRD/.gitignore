@@ -12,14 +12,16 @@
 /SRS/hd_rawdata_001441.evio.disproot
 /SRS/hd_rawdata_071090.evio.disproot
 /SRS/hd_rawdata_0*
-! /SRS/hd_rawdata_002038.evio.disproot
-! /SRS/hd_rawdata_002048.evio.disproot
-! /SRS/hd_rawdata_002052.evio.disproot
-! /SRS/hd_rawdata_002039.evio.disproot
+/SRS/hd_rawdata_002038.evio.disproot
+/SRS/hd_rawdata_002048.evio.disproot
+/SRS/hd_rawdata_002052.evio.disproot
+/SRS/hd_rawdata_002039.evio.disproot
 /SRS/*.dat
 /SRS/DAQCrateAnalyzer*
 !/SRS/DAQCrateAnalyzer.cc
 !/SRS/DAQCrateAnalyzer
+!/SRS/DAQCrateAnalyzer2.cc
+!/SRS/DAQCrateAnalyzer2
 /SRS/root_output/hd_rawdata_000721_000.root
 /SRS/root_output/hd_rawdata_000971_000.root
 /SRS/root_output/hd_rawdata_001033_000.root
