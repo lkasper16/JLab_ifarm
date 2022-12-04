@@ -514,12 +514,12 @@ int main(int argc, char *argv[]) {
     fdcFeTree->Branch( "w2ahit", &w2ahit, "w2ahit[w2nhit]/F" );
     fdcFeTree->Branch( "w2mhit", &w2mhit, "w2mhit[w2nhit]/F" );
     fdcFeTree->Branch( "w2chit", &w2chit, "w2chit[w2nhit]/I" );
-	 fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
+/*	 fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
 	 fdcFeTree->Branch( "dthit", &dthit, "dthit[dnhit]/F" );
 	 fdcFeTree->Branch( "dahit", &dahit, "dahit[dnhit]/F" );
 	 fdcFeTree->Branch( "dmhit", &dmhit, "dmhit[dnhit]/F" );
 	 fdcFeTree->Branch( "dchit", &dchit, "dchit[dnhit]/I" );
-    fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
+*/    fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
     fdcFeTree->Branch( "uthit", &uthit, "uthit[unhit]/F" );
     fdcFeTree->Branch( "uahit", &uahit, "uahit[unhit]/F" );
 
@@ -567,7 +567,7 @@ int main(int argc, char *argv[]) {
     yaxis->SetTitle("z, mm  ");
     int uchoffset=-12;
     //uchoffset=0;
-    wcty_plot->SetMaximum(4000.);
+    wcty_plot->SetMaximum(400.);
     wcty_plot->SetMinimum(1.);
 
 //    TH2D *PStest = new TH2D("PStest","PS time vs chmax",100,-0.5,99.5,256,0.5,255.5);
@@ -2468,7 +2468,8 @@ int main(int argc, char *argv[]) {
     ROOTfile->cd();
     uAvsT->Write();
     dAvsT->Write();
-    wAvsT->Write();
+    w2AvsT->Write();
+	 wAvsT->Write();
     crate->Write();
     ROOTfile->Write();
   } //1==2
@@ -2726,7 +2727,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
         }
 
       for (int k=0; k<Sz; k++){	
-	  unsigned int data = (*vec)[k];
+	  		 unsigned int data = (*vec)[k];
           //cout<<" data="<<hex<<data<<dec<<endl;
           //cout<<" mode="<<((data & 0xf8000000) >>27)<<endl;
           if(data_bank->tag==58){

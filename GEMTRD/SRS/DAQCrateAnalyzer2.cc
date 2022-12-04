@@ -254,9 +254,7 @@ int main(int argc, char *argv[]) {
   ifstream INF;
   
   char lin[50000];
-  int NSlot = -1;
   int NCon = 0;
-  int EventNew = 1;
   float x[100000];
   float y[100000];
   float dx[100000];
@@ -267,12 +265,9 @@ int main(int argc, char *argv[]) {
   //cok float thresh=100.;
   float thresh=100.;
   float sthresh=40.;
-  float bthresh=40.;
   int Slot=SLOT;
   int EVENT;
-  short EvtSize;
-  int SlotNum;
-  int chan;
+//  int chan;
   int samples;
   int isamp=0;
   int trig=0;
@@ -287,7 +282,7 @@ int main(int argc, char *argv[]) {
   float usig=0;
   int uwid=0;
   int usmax=0;
-  float dmax=0.;
+//  float dmax=0.;
 
   float dped=0.;
   int dchmax=0;
@@ -347,8 +342,8 @@ int main(int argc, char *argv[]) {
   float w2charge=0.;
   float pscharge=0.;
   float psccharge=0.;
-  int wnumber=0;
-  int w2number=0;
+//  int wnumber=0;
+//  int w2number=0;
   float umcharge=0.;
   float dmcharge=0.;
   float pmcharge=0.;
@@ -400,13 +395,13 @@ int main(int argc, char *argv[]) {
   fdcFeTree->Branch( "ped_w2", &w2ped, "ped_w2/F" );
   fdcFeTree->Branch( "q_u", &ucharge, "q_u/F" );
   fdcFeTree->Branch( "q_d", &dcharge, "q_d/F" );
-  fdcFeTree->Branch( "q_p", &pcharge, "q_p/F" );
+  //fdcFeTree->Branch( "q_p", &pcharge, "q_p/F" );
   fdcFeTree->Branch( "q_w", &wcharge, "q_w/F" );
   fdcFeTree->Branch( "q_w2", &w2charge, "q_w2/F" );
 //  fdcFeTree->Branch( "w2_n", &w2number, "w2_n/I" );
   fdcFeTree->Branch( "qm_u", &umcharge, "qm_u/F" );
   fdcFeTree->Branch( "qm_d", &dmcharge, "qm_d/F" );
-  fdcFeTree->Branch( "qm_p", &pmcharge, "qm_p/F" );
+  //fdcFeTree->Branch( "qm_p", &pmcharge, "qm_p/F" );
   fdcFeTree->Branch( "qm_w", &wmcharge, "qm_w/F" );
   fdcFeTree->Branch( "qm_w2", &w2mcharge, "qm_w2/F" );
   fdcFeTree->Branch( "ucent", &ucent, "ucent/F" );
@@ -422,17 +417,17 @@ int main(int argc, char *argv[]) {
 //  fdcFeTree->Branch( "dsig", &dsig, "dsig/F" );
   fdcFeTree->Branch( "dwid", &dwid, "dwid/I" );
 //  fdcFeTree->Branch( "pcent", &pcent, "pcent/F" );
-  fdcFeTree->Branch( "pxcent", &pxcent, "pxcent/F" );
-  fdcFeTree->Branch( "pycent", &pycent, "pycent/F" );
+  //fdcFeTree->Branch( "pxcent", &pxcent, "pxcent/F" );
+  //fdcFeTree->Branch( "pycent", &pycent, "pycent/F" );
 //  fdcFeTree->Branch( "pxfit", &pxfit, "pxfit/F" );
 //  fdcFeTree->Branch( "pyfit", &pyfit, "pyfit/F" );
 //  fdcFeTree->Branch( "pmcent", &pmcent, "pmcent/F" );
 //  fdcFeTree->Branch( "pmfit", &pmfit, "pmfit/F" );
 //  fdcFeTree->Branch( "pxsig", &pxsig, "pxsig/F" );
 //  fdcFeTree->Branch( "pysig", &pysig, "pysig/F" );
-  fdcFeTree->Branch( "pwid", &pwid, "pwid/I" );
-  fdcFeTree->Branch( "pxwid", &pxwid, "pxwid/I" );
-  fdcFeTree->Branch( "pywid", &pywid, "pywid/I" );
+  //fdcFeTree->Branch( "pwid", &pwid, "pwid/I" );
+  //fdcFeTree->Branch( "pxwid", &pxwid, "pxwid/I" );
+  //fdcFeTree->Branch( "pywid", &pywid, "pywid/I" );
   fdcFeTree->Branch( "wcent", &wcent, "wcent/F" );
   fdcFeTree->Branch( "wfit", &wfit, "wfit/F" );
   fdcFeTree->Branch( "wmcent", &wmcent, "wmcent/F" );
@@ -447,14 +442,14 @@ int main(int argc, char *argv[]) {
   fdcFeTree->Branch( "w2wid", &w2wid, "w2wid/I" );
   fdcFeTree->Branch( "t_u", &usmax, "t_u/I" );
   fdcFeTree->Branch( "t_d", &dsmax, "t_d/I" );
-  fdcFeTree->Branch( "t_p", &psmax, "t_p/I" );
+  //fdcFeTree->Branch( "t_p", &psmax, "t_p/I" );
   fdcFeTree->Branch( "t_w", &wsmax, "t_w/I" );
   fdcFeTree->Branch( "t_w2", &w2smax, "t_w2/I" );
   fdcFeTree->Branch( "uch", &uchmax, "uch/I" );
   fdcFeTree->Branch( "dch", &dchmax, "dch/I" );
-  fdcFeTree->Branch( "pch", &pchmax, "pch/I" );
-  fdcFeTree->Branch( "pxch", &pxchmax, "pxch/I" );
-  fdcFeTree->Branch( "pych", &pychmax, "pych/I" );
+  //fdcFeTree->Branch( "pch", &pchmax, "pch/I" );
+  //fdcFeTree->Branch( "pxch", &pxchmax, "pxch/I" );
+  //fdcFeTree->Branch( "pych", &pychmax, "pych/I" );
   fdcFeTree->Branch( "wch", &wchmax, "wch/I" );
   fdcFeTree->Branch( "w2ch", &w2chmax, "w2ch/I" );
   fdcFeTree->Branch( "usz", &usize, "usz/I" );
@@ -480,12 +475,12 @@ int main(int argc, char *argv[]) {
   fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
   fdcFeTree->Branch( "uthit", &uthit, "uthit[unhit]/F" );
   fdcFeTree->Branch( "uahit", &uahit, "uahit[unhit]/F" );
-  fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
+/*  fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
   fdcFeTree->Branch( "dthit", &dthit, "dthit[dnhit]/F" );
   fdcFeTree->Branch( "dahit", &dahit, "dahit[dnhit]/F" );
   fdcFeTree->Branch( "dmhit", &dmhit, "dmhit[dnhit]/F" );
   fdcFeTree->Branch( "dchit", &dchit, "dchit[dnhit]/I" );
-
+*/
 /////////ROOT Histogram definitions//////////
   TH1D *FHist = new TH1D("FHist","Histogram for centroid fitting",7,-0.5,6.5);
   TH2D *DHist = new TH2D("DHist","Histogram for centroid fitting",10,-0.5,9.5,10,-0.5,9.5);
@@ -543,10 +538,10 @@ int main(int argc, char *argv[]) {
   TH2D *wAvsTnorm = new TH2D("wAvsTnorm","Ch.1 Amplitude vs Time norm",300,-0.5,299.5,24,-0.5,23.5);
   TH2D *wCvsT = new TH2D("wCvsT","Ch.1 Width (transverese) vs Time",300,-0.5,299.5,24,-0.5,23.5);
   TH2D *wCvsL = new TH2D("wCvsL","Ch.1 Width (longitudinal) vs Time",300,-0.5,299.5,24,-0.5,23.5);
-  TH2D *wAvsB = new TH2D("wAvsB","Ch.1 Amplitude vs Time (background)",1000,-0.5,999.5,48,-0.5,47.5);
-  TH2D *wCvsB = new TH2D("wCvsB","Ch.1 Counts vs Time (background)",1000,-0.5,999.5,48,-0.5,47.5);
+  TH2D *wAvsB = new TH2D("wAvsB","Ch.1 Amplitude vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
+  TH2D *wCvsB = new TH2D("wCvsB","Ch.1 Counts vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
   TH2D *wYvsB = new TH2D("wYvsB","Ch.1 XY vs Time (background)",48,-0.5,47.5,96,-48.,48.);
-  TH2D *wTYvsB = new TH2D("wTYvsB","Ch.1 TY vs Time (background)",1000,-0.5,999.5,96,-48.,48.);
+  TH2D *wTYvsB = new TH2D("wTYvsB","Ch.1 TY vs Time (background)",300,-0.5,299.5,96,-48.,48.);
   TH2D *wAvsD = new TH2D("wAvsD","Ch.1 Amplitude vs Distance",1000,0.,40.,48,-0.5,47.5);
   wAvsT->Sumw2();
   wCvsT->Sumw2();
@@ -559,11 +554,11 @@ int main(int argc, char *argv[]) {
   TH2D *w2AvsTnorm = new TH2D("w2AvsTnorm","GEM Amplitude vs Time norm",300,-0.5,299.5,240,-0.5,239.5);
   TH2D *w2CvsT = new TH2D("w2CvsT","GEM Width (transverse) vs Time",300,-0.5,299.5,240,-0.5,239.5);
   TH2D *w2CvsL = new TH2D("w2CvsL","GEM Width (longitudinal) vs Time",300,-0.5,299.5,240,-0.5,239.5);
-  TH2D *w2AvsB = new TH2D("w2AvsB","GEM Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *w2CvsB = new TH2D("w2CvsB","GEM Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *w2YvsB = new TH2D("w2YvsB","GEM X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-  TH2D *w2TYvsB = new TH2D("w2TYvsB","GEM TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *w2AvsD = new TH2D("w2AvsD","GEM Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
+  TH2D *w2AvsB = new TH2D("w2AvsB","GEM Amplitude vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
+  TH2D *w2CvsB = new TH2D("w2CvsB","GEM Counts vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
+  TH2D *w2YvsB = new TH2D("w2YvsB","GEM X vs Y (background)",240,-0.5,239.5,240,-0.5,239.5);
+  TH2D *w2TYvsB = new TH2D("w2TYvsB","GEM TY vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
+  TH2D *w2AvsD = new TH2D("w2AvsD","GEM Amplitude vs Distance",1000,0.,35.,240,-0.5,239.5);
   w2AvsTnorm->Sumw2();
   w2AvsT->Sumw2();
   w2CvsT->Sumw2();
@@ -578,11 +573,11 @@ int main(int argc, char *argv[]) {
   TH2D *dAvsTnorm = new TH2D("dAvsTnorm","MMG Amplitude vs Time norm",300,-0.5,299.5,200,-0.5,199.5);
   TH2D *dCvsT = new TH2D("dCvsT","MMG Width (transverse) vs Time",300,-0.5,299.5,200,-0.5,199.5);
   TH2D *dCvsL = new TH2D("dCvsL","MMG Width (longitudinal) vs Time",300,-0.5,299.5,200,-0.5,199.5);
-  TH2D *dAvsB = new TH2D("dAvsB","MMG Amplitude vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *dCvsB = new TH2D("dCvsB","MMG Counts vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *dYvsB = new TH2D("dYvsB","MMG X vs Y (background)",240,-0.5,249.5,240,-0.5,249.5);
-  TH2D *dTYvsB = new TH2D("dTYvsB","MMG TY vs Time (background)",1000,-0.5,999.5,240,-0.5,249.5);
-  TH2D *dAvsD = new TH2D("dAvsD","MMG Amplitude vs Distance",1000,0.,35.,240,-0.5,249.5);
+  TH2D *dAvsB = new TH2D("dAvsB","MMG Amplitude vs Time (background)",300,-0.5,299.5,200,-0.5,199.5);
+  TH2D *dCvsB = new TH2D("dCvsB","MMG Counts vs Time (background)",300,-0.5,299.5,200,-0.5,199.5);
+  TH2D *dYvsB = new TH2D("dYvsB","MMG X vs Y (background)",200,-0.5,199.5,200,-0.5,199.5);
+  TH2D *dTYvsB = new TH2D("dTYvsB","MMG TY vs Time (background)",1000,-0.5,999.5,200,-0.5,199.5);
+  TH2D *dAvsD = new TH2D("dAvsD","MMG Amplitude vs Distance",1000,0.,35.,200,-0.5,199.5);
   dAvsTnorm->Sumw2();
   dAvsT->Sumw2();
   dCvsT->Sumw2();
@@ -593,7 +588,7 @@ int main(int argc, char *argv[]) {
   dTYvsB->Sumw2();
   dAvsD->Sumw2();
 
-  TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",1000,-0.5,999.5,4096,-0.5,4095.5);
+  TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",300,-0.5,299.5,4096,-0.5,4095.5);
 
 //  TH2D *Timeax = new TH2D("Timeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
 //  TH2D *Timebx = new TH2D("Timebx","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
@@ -649,9 +644,10 @@ int main(int argc, char *argv[]) {
       cout<<"Here 2 - File is readable"<<endl;
     	if (1==1){
         	while(ReadBack && evtCount<NEVENT) {
-          		evtCount++;
           		EVENT=evtCount;
+					evtCount++;
           		///////////// begin event loop ///////////////////
+
          		//if(evtCount%1000==0)
           		//cout<<"[][][][][][][][][][][][] new event "<<evtCount<<" [][][][][][][][][][]"<<endl;
  					
@@ -705,49 +701,50 @@ int main(int argc, char *argv[]) {
                      int ch_c2d2=48;
             
                      float uADCmax[72][400];
-                     float wADCmax[72][400];
-                     float uADCsum[72];
-                     float wADCsumall[72];
-                     float wADCsum[72][400];
-            
-                     int uSAMPmax[72][400];
-                     int wSAMPmax[72][400];
-                     int wNSAMP[72][400];
-                     int uNhit[72];
-                     int wNhit[72];
-                     int uSmax[72];
-                     int wSmax[72];
                      float uAmax[72];
+                     float uADCsum[72];
+                     int uSAMPmax[72][400];
+                     int uNhit[72];
+                     int uSmax[72];
+
+							float wADCsumall[72];
+                     float wADCsum[72][400];
+            			float wADCmax[72][400];
+							int wSAMPmax[72][400];
+                     int wNSAMP[72][400];
+							int wNhit[72];
+							int wSmax[72];
                      float wAmax[72];
                      float wAmin[72];
-            
-                     float dADCmax[240][400];
+							
                      float pADCmax[240][400];
-                     float w2ADCmax[240][400];
-                     float dADCsum[240][400];
                      float pADCsum[240][400];
-                     float w2ADCsum[240][400];
-                     float dADCsumall[240];
                      float pADCsumall[240];
-                     float w2ADCsumall[240];
-            
                      int pSAMPmax[240][400];
+            			int pNSAMP[240][400];
+							int pNhit[240];
+							int pSmax[240];
+							float pAmax[240];
+							float pAmin[240];
+							
+                     float dADCmax[240][400];
+        					float dADCsumall[240];
+                     float dADCsum[240][400];
                      int dSAMPmax[240][400];
+							int dNSAMP[240][400];
+							int dNhit[240];
+							int dSmax[240];
+							float dAmax[240];
+							float dAmin[240];
+							
+                     float w2ADCsum[240][400];
+                     float w2ADCmax[240][400];
+                     float w2ADCsumall[240];
                      int w2SAMPmax[240][400];
-                     int dNSAMP[240][400];
-                     int pNSAMP[240][400];
                      int w2NSAMP[240][400];
-                     int dNhit[240];
-                     int pNhit[240];
                      int w2Nhit[240];
-                     int dSmax[240];
-                     int pSmax[240];
                      int w2Smax[240];
-                     float dAmax[240];
-                     float pAmax[240];
                      float w2Amax[240];
-                     float dAmin[240];
-                     float pAmin[240];
                      float w2Amin[240];
             
                      float adcval;
@@ -1111,12 +1108,12 @@ int main(int argc, char *argv[]) {
                          }
                      }
                      int dnclust=0;
-                     float dclustamp[400]; //cluster amplitide
-                     float dclustchn[400]; //cluster channel no
-                     float dclustsmp[400]; //cluster time (sample no)
-                     float dclusttwd[400]; //cluster transverse width (in channels)
-                     float dclustlwd[400]; //cluster lateral width (in samples)
-                     for (int i=0;i<400;i++){
+                     float dclustamp[200]; //cluster amplitide
+                     float dclustchn[200]; //cluster channel no
+                     float dclustsmp[200]; //cluster time (sample no)
+                     float dclusttwd[200]; //cluster transverse width (in channels)
+                     float dclustlwd[200]; //cluster lateral width (in samples)
+                     for (int i=0;i<200;i++){
                          dclustamp[i]=0.;
                          dclustchn[i]=0.;
                          dclustsmp[i]=0.;
@@ -1144,9 +1141,9 @@ int main(int argc, char *argv[]) {
                                 dclustsmp[dnclust]=sm; //take the time at the maximum as cluster time
                                 dclustchn[dnclust]=ch; //take the time at the maximum as cluster time
                                 dclustlwd[dnclust]=dNSAMP[ch][ihit]; //number of samples for the maximum (longitudinal width)
-                                int ch1=ch-20; //now sum all amplitudes around if > amax/5
+                                int ch1=ch-10; //now sum all amplitudes around if > amax/5
                                 if(ch1<0)ch1=0;
-                                int ch2=ch+20;
+                                int ch2=ch+10;
                                 if(ch2>191)ch2=191;
                                 int chwid=0;
                                 for (int ich=ch1;ich<ch2+1;ich++){
@@ -1797,7 +1794,7 @@ int main(int argc, char *argv[]) {
                         tmax12=550.;
                         if(dchmax>0){
                            if(dmcharge>100.){
-                              dnhit=dNhit[uchmax];
+//                              dnhit=dNhit[uchmax];
                               for (int ihit=0;ihit<dNhit[dchmax];ihit++){
                                   dthit[ihit]=dSAMPmax[dchmax][ihit];
                                   dahit[ihit]=dADCmax[dchmax][ihit];
@@ -2376,7 +2373,6 @@ void analyzeEvent(evioDOMTree &eventTree) {
       }
   }
   
-  
   // analyze each bank
   
   for_each(bankList->begin(),bankList->end(),analyzeBank);
@@ -2513,32 +2509,32 @@ void analyzeBank(evioDOMNodeP bankPtr) {
                     fADCtime[ROCID][slot][ch][hit]=-1000.;
                 }
                 for (int sm=0;sm<2000;sm++){
-               ADCSamples[ROCID][slot][ch][sm] = -1000.;
+               	 ADCSamples[ROCID][slot][ch][sm] = -1000.;
                 }
-           ADCPedestal[ROCID][slot][ch] = 0.;
-           fADCPedestal[ROCID][slot][ch] = 0.;
+           		 ADCPedestal[ROCID][slot][ch] = 0.;
+           		 fADCPedestal[ROCID][slot][ch] = 0.;
             }
         }
 
       for (int k=0; k<Sz; k++){
-       unsigned int data = (*vec)[k];
+        unsigned int data = (*vec)[k];
      
-          if(data_bank->tag==58){
-             // cout<<" mode="<<((data & 0xf8000000) >>27)<<endl;
-             //check  printf("mode=0x%x \n",data );
-          }
+        if(data_bank->tag==58){
+           // cout<<" mode="<<((data & 0xf8000000) >>27)<<endl;
+           //check  printf("mode=0x%x \n",data );
+        }
           
     	  if(((data & 0xf8000000) >>27) == 0x10) { // Block Header
         	 SLOTNUM = ((data& 0x07C00000)>>22);
-             //cout<<"slot="<<SLOTNUM<<endl;
+          //cout<<"slot="<<SLOTNUM<<endl;
         	 int evntnost = (data& 0xf);
-             //cout<<" slot, number of events in block="<<evntnost<<endl;
+          //cout<<" slot, number of events in block="<<evntnost<<endl;
              
         	 if(SLOTNUM!=OLDSLOT){
            	//cout<<SLOTNUM<<"   "<<OLDSLOT<<endl;
            	OLDSLOT = SLOTNUM;
            	ROCSlots[ROCID]++;
-            }
+          }
            	
         	 slotidx = SLOTNUM-3;
         		
@@ -2549,14 +2545,14 @@ void analyzeBank(evioDOMNodeP bankPtr) {
        	 MaxSlot = slotidx;
             
      	  } else if (((data & 0xf8000000)>>27) == 0x12) {
-                //cout<<" ST event no="<<SLOTNUM<<" "<<(data & 0x3FFFFF)<<endl;
+               //cout<<" ST event no="<<SLOTNUM<<" "<<(data & 0x3FFFFF)<<endl;
           		evntno_trd = (data & 0x3FFFFF);
             
           } else if (((data & 0xf8000000)>>27) == 0x13) {
                 long int ta = (long int)(data>>16)&0xff;
                 long int tb = (long int)(data>>8)&0xff;
                 long int tc = (long int)data&0xff;
-           	unsigned int next_data = (*vec)[k+1];
+           		 unsigned int next_data = (*vec)[k+1];
                 long int td = (long int)(next_data>>16)&0xff;
                 long int te = (long int)(next_data>>8)&0xff;
                 long int tf = (long int)next_data&0xff;
@@ -2570,30 +2566,30 @@ void analyzeBank(evioDOMNodeP bankPtr) {
        } else if (((data & 0xf8000000)>>27 == 0x14)) {
            CHANNEL = ((data & 0x7F00000)>>20) ; // flash is counting channels from 1 to 72 need 0 to 71
            WSize =  (data & 0xFFF);
-            //cout<<" SLOTNUM,CHANNEL,WSize="<<SLOTNUM<<" "<<CHANNEL<<"
-            //cout<<" channel,samples="<<CHANNEL<<" "<<WSize<<endl;
+           //cout<<" SLOTNUM,CHANNEL,WSize="<<SLOTNUM<<" "<<CHANNEL<<"
+           //cout<<" channel,samples="<<CHANNEL<<" "<<WSize<<endl;
            DATAReady = WSize/2;
-            idx = 0;
+           idx = 0;
            ped = 0.;
            pedcnt = 0;
            ADCPedestal[ROCID][slotidx][CHANNEL] = 0.;
            fADCPedestal[ROCID][slotidx][CHANNEL] = 0.;
-            //check if(data_bank->tag==58)cout<<endl<<endl<<" slot,ch,wsize="<<SLOTNUM<<" "<<CHANNEL<<" "<<WSize<<endl;;
+           //check if(data_bank->tag==58)cout<<endl<<endl<<" slot,ch,wsize="<<SLOTNUM<<" "<<CHANNEL<<" "<<WSize<<endl;;
        
        } else if (DATAReady>0) { // Window Raw Data values
-           DATAReady--;
            
-            if(data_bank->tag==58){
-               //check cout<<" "<<adc1<<" "<<adc2<<" ";
-            }
+			  DATAReady--;
+           if(data_bank->tag==58){
+              //check cout<<" "<<adc1<<" "<<adc2<<" ";
+           }
        
   	        if(pedcnt<16) {
               adc1 =  (float)((data & 0x1FFF0000) >> 16);
               adc2 =  (float)(data & 0x1FFF);
-               //cout<<"pedcnt<16-------------adc1="<<adc1<<"   adc2= "<<adc2<<""<<endl;
+              //cout<<"pedcnt<16-------------adc1="<<adc1<<"   adc2= "<<adc2<<""<<endl;
               ped += adc1;
               ped += adc2;
-               //cout<<"slotidx="<<slotidx<<endl;
+              //cout<<"slotidx="<<slotidx<<endl;
               ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
               ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
                //if(NPK>10)cout<<" rocid,slot,ch,idx,ADCSamples="<<ROCID<<" "<<slotidx<<" "<<CHANNEL<<" "<<idx<<" "<< ADCSamples[ROCID][slotidx][CHANNEL][idx-1]<<" "<<ADCSamples[ROCID][slotidx][CHANNEL][idx-2]<<endl;
@@ -2606,16 +2602,16 @@ void analyzeBank(evioDOMNodeP bankPtr) {
            } else {
                 adc1 = (float)((data & 0x1FFF0000) >> 16);
                 adc2 = (float)(data & 0x1FFF);
-                 // cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
-                 if(adc1>4095)adc1=4095;
-                 if(adc2>4095)adc2=4095;
+                // cout<<" adc1,adc2="<<adc1<<" "<<adc2<<endl;
+                if(adc1>4095)adc1=4095;
+                if(adc2>4095)adc2=4095;
                 ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc1;
-                 //if(adc1>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
+                //if(adc1>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
                 ADCSamples[ROCID][slotidx][CHANNEL][idx++] = adc2;
-                 //if(adc2>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
-                 if(NPK>10){
-                    print_flg=1;
-                 }
+                //if(adc2>200.)crate->Fill((float)slotidx*100.+CHANNEL,adc1);
+                if(NPK>10){
+                   print_flg=1;
+                }
                 if( (adc1-ADCPedestal[ROCID][slotidx][CHANNEL])>200. ||
       (adc2-ADCPedestal[ROCID][slotidx][CHANNEL])>200.) {
                         slot_special=slotidx;
@@ -2629,7 +2625,7 @@ void analyzeBank(evioDOMNodeP bankPtr) {
           } else if (((data & 0xf8000000)>>27) == 0x19) { //pulse integral
               CHANNEL = ((data & 0x7F00000)>>20) ;
               NPK = ((data & 0xF8000)>>15) ;
-               NPK_count=NPK;
+              NPK_count=NPK;
 
            } else if (NPK_count>0) { //Peak loop
                NPK_count--;
@@ -2644,14 +2640,14 @@ void analyzeBank(evioDOMNodeP bankPtr) {
           } else if (((data & 0xf8000000)>>27) == 0x18) { // pulse time
               CHANNEL = ((data & 0x7F00000)>>20) ;
               NPEAK = ((data & 0xC0000)>>18) ;
-               TIME = (float) (data & 0xFFFF) ;
-          	   //check
-               fADCtime[ROCID][slotidx][CHANNEL][NPEAK]=TIME/64.;
+              TIME = (float) (data & 0xFFFF) ;
+          	  //check
+              fADCtime[ROCID][slotidx][CHANNEL][NPEAK]=TIME/64.;
 
           } else if (((data & 0xf8000000)>>27) == 0x10) { // pulse pedestal and max amplitude
-              NPEAK = ((data & 0x600000)>>21) ;
-               PEAK = (float) (data & 0xFFF) ;;
-              PEDESTAL = (float) ((data & 0x1FF000)>>12) ;
+              NPEAK = ((data & 0x600000)>>21);
+              PEAK = (float) (data & 0xFFF);
+              PEDESTAL = (float) ((data & 0x1FF000)>>12);
            }
        } //end k (data) loop
    	   WindowSize = WSize;
