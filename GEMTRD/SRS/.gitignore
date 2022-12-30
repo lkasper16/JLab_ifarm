@@ -1,3 +1,5 @@
 src_not_in_use/
 DAQCrateAnalyzer2.cc~
 DAQCrateAnalyzer_Sparse.cc
+DAQCrateAnalyzer
+DAQCrateAnalyzer2
