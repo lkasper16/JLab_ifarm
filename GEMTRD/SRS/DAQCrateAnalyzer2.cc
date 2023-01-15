@@ -241,7 +241,7 @@ int main(int argc, char *argv[]) {
   	//Xe: float thresh=800.;
   	//Ar(?): float thresh=500.;
   	//Original(Check): float thresh=100.;
-  	float thresh=400.;
+  	float thresh=100.;
   
   	float sthresh=40.;
   	int Slot=SLOT;
@@ -1180,250 +1180,250 @@ int main(int argc, char *argv[]) {
 //////////////////// u-strips centroid & w centroid
 //                          
                      			if(1==1){
-                     	umax=0.;
-                    	for (int ch=0;ch<24;ch++){
-                        	int slot; int ch0;
-                        	slot=sl_c1u1; ch0=ch_c1u1;
-                        	adcval=uADCmax[ch][0];
-                        	if(adcval>umax){
-                           		umax=adcval;
-                           		uchmax=ch;
-                           		usmax=uSAMPmax[ch][0];
-                           		uped=ADCPedestal[0][slot][ch+ch0];
-                         	}
-                     	}
-                     	wmax=0.;
-                     	for (int ch=0;ch<72;ch++){
-                        	int slot; int ch0;
-                        	slot=sl_c1w1; ch0=ch_c1w1;
-                        	adcval=wADCmax[ch][0];
-                        	if(adcval>wmax){
-                           		wmax=adcval;
-                           		wchmax=ch;
-                           		wsmax=wSAMPmax[ch][0];
-                           		wped=ADCPedestal[0][slot][ch+ch0];
-                         	}
-                     	}
-                        
-                        ucharge=0.;
-                        umcharge=0.;
-                        ucent=0.;
-                        ufit=0.;
-                        umcent=0.;
-                        umfit=0.;
-                        int ch1=uchmax-3;
-                        if(ch1<0)ch1=0;
-                        int ch2=uchmax+3;
-                        if(ch2>23)ch2=23;
-                        usig=0.;
-                        
-                        usize=0;
-                        FHist->Reset();
-                        for (int ich=ch1;ich<ch2+1;ich++){
-                            adcval=uADCmax[ich][0];
-                            if(adcval>thresh){
-                               umcharge+=adcval;
-                               umcent+=(float)adcval*ich;
-                               FHist->Fill((double)ich-ch1,(double)adcval);
-                               usize++;
-                            }
-                        }
-                        
-                        umcent/=umcharge;
-                        centroid->SetParameter(0,(double)uADCmax[uchmax][0]);
-                        centroid->SetParameter(1,(double)2.);
-                        centroid->SetParameter(2,(double)1.);
-                        if(usize>2){
-                           TFitResultPtr res=FHist->Fit("centroid","QS");
-                           int fstatus=res;
-                           if(fstatus==0){
-                              umfit=(float)centroid->GetParameter(1)+(float)ch1;
-                              usig=abs((float)centroid->GetParameter(2));
-                              // umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                           }
-                        }
-                        
-                        usize=0;
-                        FHist->Reset();
-                        for (int ich=ch1;ich<ch2+1;ich++){
-                            adcval=uADCsum[ich];
-                            if(adcval>thresh/18.){
-                               ucharge+=adcval;
-                               ucent+=(float)adcval*ich;
-                               FHist->Fill((double)ich-ch1,(double)adcval);
-                               usize++;
-                            }
-                        }
-                        
-                        ucent/=ucharge;
-                        centroid->SetParameter(0,(double)uADCsum[uchmax]);
-                        centroid->SetParameter(1,(double)2.);
-                        centroid->SetParameter(2,(double)1.);
-                        if(usize>2){
-                           TFitResultPtr res=FHist->Fit("centroid","QS");
-                           int fstatus=res;
-                           if(fstatus==0){
-                              ufit=(float)centroid->GetParameter(1)+(float)ch1;
-                              // usig=abs((float)centroid->GetParameter(2));
-                              // ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                           }
-                        }
-                        
+                     				umax=0.;
+                    				for (int ch=0;ch<24;ch++){
+                        				int slot; int ch0;
+                        				slot=sl_c1u1; ch0=ch_c1u1;
+                        				adcval=uADCmax[ch][0];
+                        				if(adcval>umax){
+                           					umax=adcval;
+                           					uchmax=ch;
+                           					usmax=uSAMPmax[ch][0];
+                           					uped=ADCPedestal[0][slot][ch+ch0];
+                         				}
+                     				}
+                     				wmax=0.;
+                     				for (int ch=0;ch<72;ch++){
+                        				int slot; int ch0;
+                        				slot=sl_c1w1; ch0=ch_c1w1;
+                        				adcval=wADCmax[ch][0];
+                        				if(adcval>wmax){
+                           					wmax=adcval;
+                           					wchmax=ch;
+                           					wsmax=wSAMPmax[ch][0];
+                           					wped=ADCPedestal[0][slot][ch+ch0];
+                         				}
+                     				}
+                        			
+                        			ucharge=0.;
+                        			umcharge=0.;
+                        			ucent=0.;
+                        			ufit=0.;
+                        			umcent=0.;
+                        			umfit=0.;
+                        			int ch1=uchmax-3;
+                        			if(ch1<0)ch1=0;
+                        			int ch2=uchmax+3;
+                        			if(ch2>23)ch2=23;
+                        			usig=0.;
+                        			
+                        			usize=0;
+                        			FHist->Reset();
+                        			for (int ich=ch1;ich<ch2+1;ich++){
+                            			adcval=uADCmax[ich][0];
+                            			if(adcval>thresh){
+                               				umcharge+=adcval;
+                               				umcent+=(float)adcval*ich;
+                               				FHist->Fill((double)ich-ch1,(double)adcval);
+                               				usize++;
+                            			}
+                        			}
+                        			
+                        			umcent/=umcharge;
+                        			centroid->SetParameter(0,(double)uADCmax[uchmax][0]);
+                        			centroid->SetParameter(1,(double)2.);
+                        			centroid->SetParameter(2,(double)1.);
+                        			if(usize>2){
+                           				TFitResultPtr res=FHist->Fit("centroid","QS");
+                           				int fstatus=res;
+                           				if(fstatus==0){
+                              				umfit=(float)centroid->GetParameter(1)+(float)ch1;
+                              				usig=abs((float)centroid->GetParameter(2));
+                              				// umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
+                           				}
+                        			}
+                        			
+                        			usize=0;
+                        			FHist->Reset();
+                        			for (int ich=ch1;ich<ch2+1;ich++){
+                            			adcval=uADCsum[ich];
+                            			if(adcval>thresh/18.){
+                               				ucharge+=adcval;
+                               				ucent+=(float)adcval*ich;
+                               				FHist->Fill((double)ich-ch1,(double)adcval);
+                               				usize++;
+                            			}
+                        			}
+                        			
+                        			ucent/=ucharge;
+                        			centroid->SetParameter(0,(double)uADCsum[uchmax]);
+                        			centroid->SetParameter(1,(double)2.);
+                        			centroid->SetParameter(2,(double)1.);
+                        			if(usize>2){
+                           				TFitResultPtr res=FHist->Fit("centroid","QS");
+                           				int fstatus=res;
+                           				if(fstatus==0){
+                              				ufit=(float)centroid->GetParameter(1)+(float)ch1;
+                              				// usig=abs((float)centroid->GetParameter(2));
+                              				// ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
+                           				}
+                        			}
+                        			
                         			if(wchmax>0&&uchmax>0){
 ///
-                           umax=0.;
-                           for (int ch=0;ch<24;ch++){
-                               int slot; int ch0;
-                               slot=sl_c1u1; ch0=ch_c1u1;
-                               adcval=uADCmax[ch][0];
-                               if(adcval>umax){
-                                  umax=adcval;
-                                  uchmax=ch;
-                                  usmax=uSAMPmax[ch][0];
-                                  uped=ADCPedestal[0][slot][ch+ch0];
-                               }
-                           }
-									
-                           wmax=0.;
-                           for (int ch=0;ch<72;ch++){
-                               int slot; int ch0;
-                               slot=sl_c1w1; ch0=ch_c1w1;
-                               adcval=wADCmax[ch][0];
-                               if(adcval>wmax){
-                                  wmax=adcval;
-                                  wchmax=ch;
-                                  wsmax=wSAMPmax[ch][0];
-                                  wped=ADCPedestal[0][slot][ch+ch0];
-                               }
-                           }
-                           
-                           ucharge=0.;
-                           umcharge=0.;
-                           ucent=0.;
-                           ufit=0.;
-                           umcent=0.;
-                           umfit=0.;
-                           int ch1=uchmax-3;
-                           if(ch1<0)ch1=0;
-                           int ch2=uchmax+3;
-                           if(ch2>23)ch2=23;
-                           usig=0.;
-                           usize=0;
-                           
-                           FHist->Reset();
-                           for (int ich=ch1;ich<ch2+1;ich++){
-                               adcval=uADCmax[ich][0];
-                               if(adcval>thresh){
-                                  umcharge+=adcval;
-                                  umcent+=(float)adcval*ich;
-                                  FHist->Fill((double)ich-ch1,(double)adcval);
-                                  usize++;
-                               }
-                           }
-                           umcent/=umcharge;
-                           centroid->SetParameter(0,(double)uADCmax[uchmax][0]);
-                           centroid->SetParameter(1,(double)2.);
-                           centroid->SetParameter(2,(double)1.);
-                           if(usize>2){
-                              TFitResultPtr res=FHist->Fit("centroid","QS");
-                              int fstatus=res;
-                              if(fstatus==0){
-                                 umfit=(float)centroid->GetParameter(1)+(float)ch1;
-                                 usig=abs((float)centroid->GetParameter(2));
-                                 // umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                              }
-                           }
-                           
-                           usize=0;
-                           FHist->Reset();
-                           for (int ich=ch1;ich<ch2+1;ich++){
-                               adcval=uADCsum[ich];
-                               if(adcval>thresh/18.){
-                                  ucharge+=adcval;
-                                  ucent+=(float)adcval*ich;
-                                  FHist->Fill((double)ich-ch1,(double)adcval);
-                                  usize++;
-                               }
-                           }
-                           
-                           ucent/=ucharge;
-                           centroid->SetParameter(0,(double)uADCsum[uchmax]);
-                           centroid->SetParameter(1,(double)2.);
-                           centroid->SetParameter(2,(double)1.);
-                           if(usize>2){
-                              TFitResultPtr res=FHist->Fit("centroid","QS");
-                              int fstatus=res;
-                              if(fstatus==0){
-                                 ufit=(float)centroid->GetParameter(1)+(float)ch1;
-                                 // usig=abs((float)centroid->GetParameter(2));
-                                 // ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                              }
-                           }
+                           				umax=0.;
+                           				for (int ch=0;ch<24;ch++){
+                               				int slot; int ch0;
+                               				slot=sl_c1u1; ch0=ch_c1u1;
+                               				adcval=uADCmax[ch][0];
+                               				if(adcval>umax){
+                                  				umax=adcval;
+                                  				uchmax=ch;
+                                  				usmax=uSAMPmax[ch][0];
+                                  				uped=ADCPedestal[0][slot][ch+ch0];
+                               				}
+                           				}
+										
+                           				wmax=0.;
+                           				for (int ch=0;ch<72;ch++){
+                               				int slot; int ch0;
+                               				slot=sl_c1w1; ch0=ch_c1w1;
+                               				adcval=wADCmax[ch][0];
+                               				if(adcval>wmax){
+                                  				wmax=adcval;
+                                  				wchmax=ch;
+                                  				wsmax=wSAMPmax[ch][0];
+                                  				wped=ADCPedestal[0][slot][ch+ch0];
+                               				}
+                           				}
+                           				
+                           				ucharge=0.;
+                           				umcharge=0.;
+                           				ucent=0.;
+                           				ufit=0.;
+                           				umcent=0.;
+                           				umfit=0.;
+                           				int ch1=uchmax-3;
+                           				if(ch1<0)ch1=0;
+                           				int ch2=uchmax+3;
+                           				if(ch2>23)ch2=23;
+                           				usig=0.;
+     									
+										usize=0;
+                          				FHist->Reset();
+                           				for (int ich=ch1;ich<ch2+1;ich++){
+                               				adcval=uADCmax[ich][0];
+                               				if(adcval>thresh){
+                                  				umcharge+=adcval;
+                                  				umcent+=(float)adcval*ich;
+                                  				FHist->Fill((double)ich-ch1,(double)adcval);
+                                  				usize++;
+                               				}
+                           				}
+                           				umcent/=umcharge;
+                           				centroid->SetParameter(0,(double)uADCmax[uchmax][0]);
+                           				centroid->SetParameter(1,(double)2.);
+                           				centroid->SetParameter(2,(double)1.);
+                           				if(usize>2){
+                              				TFitResultPtr res=FHist->Fit("centroid","QS");
+                              				int fstatus=res;
+                              				if(fstatus==0){
+                                 				umfit=(float)centroid->GetParameter(1)+(float)ch1;
+                                 				usig=abs((float)centroid->GetParameter(2));
+                                 				// umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
+                              				}
+                           				}
+                           				
+                           				usize=0;
+                           				FHist->Reset();
+                           				for (int ich=ch1;ich<ch2+1;ich++){
+                               				adcval=uADCsum[ich];
+                               				if(adcval>thresh/18.){
+                                  				ucharge+=adcval;
+                                  				ucent+=(float)adcval*ich;
+                                  				FHist->Fill((double)ich-ch1,(double)adcval);
+                                  				usize++;
+                               				}
+                           				}
+                           				
+                           				ucent/=ucharge;
+                           				centroid->SetParameter(0,(double)uADCsum[uchmax]);
+                           				centroid->SetParameter(1,(double)2.);
+                           				centroid->SetParameter(2,(double)1.);
+                           				if(usize>2){
+                              				TFitResultPtr res=FHist->Fit("centroid","QS");
+                              				int fstatus=res;
+                              				if(fstatus==0){
+                                 				ufit=(float)centroid->GetParameter(1)+(float)ch1;
+                                 				// usig=abs((float)centroid->GetParameter(2));
+                                 				// ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
+                              				}
+                           				}
 ///                           
-                           wcharge=0.;
-                           wmcharge=0.;
-                           wcent=0.;
-                           wfit=0.;
-                           wmcent=0.;
-                           wmfit=0.;
-                           wsize=0;
-                           ch1=wchmax-3;
-                           if(ch1<0)ch1=0;
-                           ch2=wchmax+3;
-                           if(ch2>23)ch2=23;
-                           
-                           wsize=0;
-                           FHist->Reset();
-                           for (int ich=ch1;ich<ch2+1;ich++){
-                               adcval=wADCmax[ich][0];
-                               if(adcval>thresh){
-                                  wmcharge+=adcval;
-                                  wmcent+=(float)adcval*ich;
-                                  FHist->Fill((double)ich-ch1,(double)adcval);
-                                  wsize++;
-                               }
-                           }
-                           
-                           wmcent/=wmcharge;
-                           centroid->SetParameter(0,(double)wADCmax[wchmax][0]);
-                           centroid->SetParameter(1,(double)2.);
-                           centroid->SetParameter(2,(double)1.);
-                           if(wsize>2){
-                              TFitResultPtr res=FHist->Fit("centroid","QS");
-                              int fstatus=res;
-                              if(fstatus==0){
-                                 wmfit=(float)centroid->GetParameter(1)+(float)ch1;
-                                 // wmcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
-                              }
-                           }
-                           
-                           wsize=0;
-                           FHist->Reset();
-                           for (int ich=ch1;ich<ch2+1;ich++){
-                               adcval=wADCsumall[ich];
-                               if(adcval>sthresh){
-                                  wcharge+=adcval;
-                                  wcent+=(float)adcval*ich;
-                                  FHist->Fill((double)ich-ch1,(double)adcval);
-                                  wsize++;
-                               }
-                           }
-                           
-                           wcent/=wcharge;
-                           centroid->SetParameter(0,(double)wADCsumall[wchmax]);
-                           centroid->SetParameter(1,(double)2.);
-                           centroid->SetParameter(2,(double)1.);
-                           if(wsize>2){
-                              TFitResultPtr res=FHist->Fit("centroid","QS");
-                              int fstatus=res;
-                              if(fstatus==0){
-                              	wfit=centroid->GetParameter(1)+ch1;
-                              	// wsig=abs(centroid->GetParameter(2));
-                              	// wcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
-                              }
-                           }
-             			   			//OK for all
-               					}// end wchmax>0&&uchmax>0
+                           				wcharge=0.;
+                           				wmcharge=0.;
+                           				wcent=0.;
+                           				wfit=0.;
+                           				wmcent=0.;
+                           				wmfit=0.;
+                           				wsize=0;
+                           				ch1=wchmax-3;
+                           				if(ch1<0)ch1=0;
+                           				ch2=wchmax+3;
+                           				if(ch2>23)ch2=23;
+                           				
+                           				wsize=0;
+                           				FHist->Reset();
+                           				for (int ich=ch1;ich<ch2+1;ich++){
+                               				adcval=wADCmax[ich][0];
+                               				if(adcval>thresh){
+                                  				wmcharge+=adcval;
+                                  				wmcent+=(float)adcval*ich;
+                                  				FHist->Fill((double)ich-ch1,(double)adcval);
+                                  				wsize++;
+                               				}
+                           				}
+                           				
+                           				wmcent/=wmcharge;
+                           				centroid->SetParameter(0,(double)wADCmax[wchmax][0]);
+                           				centroid->SetParameter(1,(double)2.);
+                           				centroid->SetParameter(2,(double)1.);
+                           				if(wsize>2){
+                              				TFitResultPtr res=FHist->Fit("centroid","QS");
+                              				int fstatus=res;
+                              				if(fstatus==0){
+                                 				wmfit=(float)centroid->GetParameter(1)+(float)ch1;
+                                 				// wmcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
+                              				}
+                           				}
+                           				
+                           				wsize=0;
+                           				FHist->Reset();
+                           				for (int ich=ch1;ich<ch2+1;ich++){
+                               				adcval=wADCsumall[ich];
+                               				if(adcval>sthresh){
+                                  				wcharge+=adcval;
+                                  				wcent+=(float)adcval*ich;
+                                  				FHist->Fill((double)ich-ch1,(double)adcval);
+                                  				wsize++;
+                               				}
+                           				}
+                           				
+                           				wcent/=wcharge;
+                           				centroid->SetParameter(0,(double)wADCsumall[wchmax]);
+                           				centroid->SetParameter(1,(double)2.);
+                           				centroid->SetParameter(2,(double)1.);
+                           				if(wsize>2){
+                              				TFitResultPtr res=FHist->Fit("centroid","QS");
+                              				int fstatus=res;
+                              				if(fstatus==0){
+                              					wfit=centroid->GetParameter(1)+ch1;
+                              					// wsig=abs(centroid->GetParameter(2));
+                              					// wcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
+                              				}
+                           				}
+             			   				//OK for all
+               						}// end wchmax>0&&uchmax>0
 //////////// End centroids
 //
 //////////// Begin Histo filling
@@ -1578,17 +1578,17 @@ int main(int argc, char *argv[]) {
                                          			w2AvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch,(double)w2ADCsum[ch][ihit]);
                                          			w2CvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch);
                                          			int fillok=1;
-                                         			for (int chd=0;chd<192&&fillok;chd++){
-                                             			for (int ihitd=0;ihitd<dNhit[chd]&&fillok;ihitd++){
-                                                 			if(abs(dSAMPmax[chd][ihitd]-w2SAMPmax[ch][ihit])<3){
-                                                    			float y=chd;
-                                                    			if(w2SAMPmax[ch][ihit]>tmax12+50.){
-                                                       				w2YvsB->Fill((double)ch,(double)y,(double)w2ADCmax[chd][ihitd]);
-                                                    			}
-                                                    			w2TYvsB->Fill((double)w2SAMPmax[ch][ihit],(double)y,(double)dADCmax[chd][ihitd]);
-                                                 			}
-                                             			}
-                                         			}
+//                                         			for (int chd=0;chd<192&&fillok;chd++){
+//                                             			for (int ihitd=0;ihitd<dNhit[chd]&&fillok;ihitd++){
+//                                                 			if(abs(dSAMPmax[chd][ihitd]-w2SAMPmax[ch][ihit])<3){
+//                                                    			float y=chd;
+//                                                    			if(w2SAMPmax[ch][ihit]>tmax12+50.){
+//                                                       				w2YvsB->Fill((double)ch,(double)y,(double)w2ADCmax[chd][ihitd]);
+//                                                    			}
+//                                                    			w2TYvsB->Fill((double)w2SAMPmax[ch][ihit],(double)y,(double)dADCmax[chd][ihitd]);
+//                                                 			}
+//                                             			}
+//                                         			}
                                       			}
                                   			}// end hit loop
                               			}// end ch loop
@@ -1596,6 +1596,14 @@ int main(int argc, char *argv[]) {
                            			}// end w2mcharge loop
                         		}// end w2chmax loop
                         		
+								// NEW
+                                 dsig=0.;
+                                 for (int ch=0;ch<192;ch++){
+                                     if(abs(ch-dchmax)<10){
+                                         dsig+=dNhit[ch];
+                                     }
+                                }
+								
 								dnhit=0;
                         		//dsize=0.;
                         		for (int ihit=0;ihit<200;ihit++){
@@ -1646,13 +1654,6 @@ int main(int argc, char *argv[]) {
 									}// end dmcharge loop
                         		}// end dhcmax loop
 								
-								// NEW
-								dsig=0.;
-                                for (int ch=0;ch<192;ch++){
-                                	if(abs(ch-dchmax)<10){
-                                    	dsig+=dNhit[ch];
-                                    }
-								}
 //								
 //// Begin GEM dedx write ////
 //
