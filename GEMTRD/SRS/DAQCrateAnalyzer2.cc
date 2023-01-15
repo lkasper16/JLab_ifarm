@@ -398,9 +398,9 @@ int main(int argc, char *argv[]) {
   	fdcFeTree->Branch( "w2ahit", &w2ahit, "w2ahit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2mhit", &w2mhit, "w2mhit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2chit", &w2chit, "w2chit[w2nhit]/I" );
-  	fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
-  	fdcFeTree->Branch( "uthit", &uthit, "uthit[unhit]/F" );
-  	fdcFeTree->Branch( "uahit", &uahit, "uahit[unhit]/F" );
+//  	fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
+//  	fdcFeTree->Branch( "uthit", &uthit, "uthit[unhit]/F" );
+//  	fdcFeTree->Branch( "uahit", &uahit, "uahit[unhit]/F" );
   	fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
   	fdcFeTree->Branch( "dthit", &dthit, "dthit[dnhit]/F" );
   	fdcFeTree->Branch( "dahit", &dahit, "dahit[dnhit]/F" );
@@ -1180,7 +1180,7 @@ int main(int argc, char *argv[]) {
 //////////////////// u-strips centroid & w centroid
 //                          
                      			if(1==1){
-                     				umax=0.;
+/*                     				umax=0.;
                     				for (int ch=0;ch<24;ch++){
                         				int slot; int ch0;
                         				slot=sl_c1u1; ch0=ch_c1u1;
@@ -1268,9 +1268,8 @@ int main(int argc, char *argv[]) {
                               				// ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
                            				}
                         			}
-                        			
+*/                        			
                         			if(wchmax>0&&uchmax>0){
-///
                            				umax=0.;
                            				for (int ch=0;ch<24;ch++){
                                				int slot; int ch0;
@@ -1330,7 +1329,6 @@ int main(int argc, char *argv[]) {
                               				if(fstatus==0){
                                  				umfit=(float)centroid->GetParameter(1)+(float)ch1;
                                  				usig=abs((float)centroid->GetParameter(2));
-                                 				// umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
                               				}
                            				}
                            				
@@ -1355,8 +1353,6 @@ int main(int argc, char *argv[]) {
                               				int fstatus=res;
                               				if(fstatus==0){
                                  				ufit=(float)centroid->GetParameter(1)+(float)ch1;
-                                 				// usig=abs((float)centroid->GetParameter(2));
-                                 				// ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
                               				}
                            				}
 ///                           
@@ -1393,7 +1389,6 @@ int main(int argc, char *argv[]) {
                               				int fstatus=res;
                               				if(fstatus==0){
                                  				wmfit=(float)centroid->GetParameter(1)+(float)ch1;
-                                 				// wmcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
                               				}
                            				}
                            				
@@ -1418,8 +1413,6 @@ int main(int argc, char *argv[]) {
                               				int fstatus=res;
                               				if(fstatus==0){
                               					wfit=centroid->GetParameter(1)+ch1;
-                              					// wsig=abs(centroid->GetParameter(2));
-                              					// wcharge=centroid->GetParameter(0)*wsig*sqrt(2.*PI);
                               				}
                            				}
              			   				//OK for all
@@ -1427,197 +1420,197 @@ int main(int argc, char *argv[]) {
 //////////// End centroids
 //
 //////////// Begin Histo filling
-								
-                        		wsig=0.;
-                        		for (int ch=0;ch<24;ch++){
-                            		if(abs(ch-wchmax)<2){
-                               			wsig+=wNhit[ch];
-                            		}
-                        		}
-								
-                        		unhit=0;
-                        		wnhit=0;
-                        		wsize=0.;
-                        		for (int ihit=0;ihit<200;ihit++){
-                            		wthit[ihit]=-100.;
-                            		wahit[ihit]=-100.;
-                            		wmhit[ihit]=-100.;
-                            		wchit[ihit]=-100.;
-                            		uthit[ihit]=-100.;
-                            		uahit[ihit]=-100.;
-                        		}
-                        		
-                        		float tmax12=tmax1;
-                        		if(tmax2>tmax1)tmax12=tmax2;
-                        		tmax12=550.;
-                        		if(wchmax>0){
-                           			if(wmcharge>100.){
-                              			unhit=uNhit[uchmax];
-                              			for (int ihit=0;ihit<uNhit[uchmax];ihit++){
-                                  			uthit[ihit]=uSAMPmax[uchmax][ihit];
-                                  			uahit[ihit]=uADCmax[uchmax][ihit];
-                                  			uAvsT->Fill((double)uSAMPmax[uchmax][ihit],(double)uADCmax[uchmax][ihit]);
-                              			}
-                              			/// short mode
-                              			for (int ch=0;ch<24;ch++){
-                                  			int slot; int ch0;
-                                  			slot=sl_c1w1; ch0=ch_c1w1;
-                                  			if(abs(ch-wchmax)<2){
-                                     			if(ch==wchmax)wsize=fADCnhit[0][slot][ch+ch0];
-                                     			for (int ihit=0;ihit<fADCnhit[0][slot][ch+ch0];ihit++){
-                                         			float adc_peak=fADCpeak[0][slot][ch+ch0][ihit]-fADCPedestal[0][slot][ch+ch0];
-                                         			if(adc_peak>thresh){
-                                            			wthit[wnhit]=fADCtime[0][slot][ch+ch0][ihit];
-                                            			wmhit[wnhit++]=adc_peak;
-                                         			}
-                                     			}
-                                  			}
-                              			}
-                              			
-                              			for (int iclust=0;iclust<wnclust;iclust++){
-                                  			wAvsTnorm->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustamp[iclust]);
-                                  			wCvsL->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustlwd[iclust]);
-                              			}
-                              			
-                              			for (int ch=0;ch<72;ch++){
-                                  			for (int ihit=0;ihit<wNhit[ch]&&ihit<200;ihit++){
-                                      			if(abs(ch-wchmax)<2){
-                                         			if(wnhit<999){
-                                            			wchit[wnhit]=ch;
-                                            			wthit[wnhit]=wSAMPmax[ch][ihit];
-                                            			wahit[wnhit]=wADCsum[ch][ihit];
-                                            			wmhit[wnhit++]=wADCmax[ch][ihit];
-                                         			}
-                                         			wAvsD->Fill((double)(wSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)wADCsum[ch][ihit]);
-                                         			wAvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
-                                         			wCvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch);
-                                      				
-                                      			} else {
-                                         			wAvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
-                                         			wCvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch);
-                                         			int fillok=1;
-                                         			for (int chu=0;chu<24&&fillok;chu++){
-                                             			for (int ihitu=0;ihitu<uNhit[chu]&&fillok;ihitu++){
-                                                 			if(abs(uSAMPmax[chu][ihitu]-wSAMPmax[ch][ihit])<3){
-                                                    			float y=-0.5*(chu-24.)/cos(sang)+1.*ch*tan(sang);
-                                                    			if(wSAMPmax[ch][ihit]>tmax12+50.){
-                                                       				wYvsB->Fill((double)ch,(double)y,(double)wADCmax[chu][ihitu]);
-                                                    			}
-                                                    			wTYvsB->Fill((double)wSAMPmax[ch][ihit],(double)y,(double)uADCmax[chu][ihitu]);
-                                                 			}
-                                             			}
-                                         			}
-                                      			}
-                                  			}// end hit loop
-                              			}// end ch loop
-                              			print_flg=0;
-                           			}
-                        		}
-								
-                        		w2sig=0.;
-                        		for (int ch=0;ch<240;ch++){
-                            		if(abs(ch-w2chmax)<10){ // Originally wchmax, changed to w2chmax, seemed to be typo...
-                               			w2sig+=w2Nhit[ch];
-                            		}
-                        		}
-								
-                        		//dnhit=0;
-                        		w2nhit=0;
-                        		w2size=0.;
-                        		for (int ihit=0;ihit<200;ihit++){
-                            		w2thit[ihit]=-100.;
-                            		w2ahit[ihit]=-100.;
-                            		w2mhit[ihit]=-100.;
-                            		w2chit[ihit]=-100.;
-                            		//dthit[ihit]=-100.;
-                            		//dahit[ihit]=-100.;
-                        		}
-                        		
-								//////Possible error here... Should all be w2 instead of w in this first section
-								//for w2mcharge > 100 ? Otherwise its a repeat of what is above ... 
-                        		tmax12=tmax1;
-                        		if(tmax2>tmax1)tmax12=tmax2;
-                        		tmax12=550.;
-                        		if(w2chmax>0){
-                           			if(w2mcharge>100.){
-                              			// short mode
-                              			for (int ch=0;ch<24;ch++){
-                                  			int slot; int ch0;
-                                  			slot=sl_c1w1; ch0=ch_c1w1;
-                                  			if(abs(ch-wchmax)<2){
-                                     			if(ch==wchmax)wsize=fADCnhit[0][slot][ch+ch0];
-                                     			for (int ihit=0;ihit<fADCnhit[0][slot][ch+ch0];ihit++){
-                                         			float adc_peak=fADCpeak[0][slot][ch+ch0][ihit]-fADCPedestal[0][slot][ch+ch0];
-                                         			if(adc_peak>thresh){
-                                            			wthit[wnhit]=fADCtime[0][slot][ch+ch0][ihit];
-                                            			wmhit[wnhit++]=adc_peak;
-                                         			}
-                                     			}
-                                  			}
-                              			}
-                              			
-                              			for (int iclust=0;iclust<w2nclust;iclust++){
-                                  			w2AvsTnorm->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustamp[iclust]);
-                                  			w2CvsL->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustlwd[iclust]);
-                              			}
-                              			
-                              			for (int ch=0;ch<240;ch++){
-                                  			for (int ihit=0;ihit<w2Nhit[ch]&&ihit<200;ihit++){
-                                      			if(abs(ch-w2chmax)<10){
-													//cout<<"det=GEM ch="<<ch<<" w2chmax="<<w2chmax<<endl;
-                                         			if(w2nhit<999){
-                                            			w2chit[w2nhit]=ch;
-                                            			w2thit[w2nhit]=w2SAMPmax[ch][ihit];
-                                            			w2ahit[w2nhit]=w2ADCsum[ch][ihit];
-                                            			w2mhit[w2nhit++]=w2ADCmax[ch][ihit];
-                                         			}
-                                         			w2AvsD->Fill((double)(w2SAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)w2ADCsum[ch][ihit]);
-                                         			w2AvsT->Fill((double)w2SAMPmax[ch][ihit],(double)ch,(double)w2ADCsum[ch][ihit]);
-                                         			w2CvsT->Fill((double)w2SAMPmax[ch][ihit],(double)ch);
-                                      			} else {
-                                         			w2AvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch,(double)w2ADCsum[ch][ihit]);
-                                         			w2CvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch);
-                                         			int fillok=1;
-//                                         			for (int chd=0;chd<192&&fillok;chd++){
-//                                             			for (int ihitd=0;ihitd<dNhit[chd]&&fillok;ihitd++){
-//                                                 			if(abs(dSAMPmax[chd][ihitd]-w2SAMPmax[ch][ihit])<3){
-//                                                    			float y=chd;
-//                                                    			if(w2SAMPmax[ch][ihit]>tmax12+50.){
-//                                                       				w2YvsB->Fill((double)ch,(double)y,(double)w2ADCmax[chd][ihitd]);
-//                                                    			}
-//                                                    			w2TYvsB->Fill((double)w2SAMPmax[ch][ihit],(double)y,(double)dADCmax[chd][ihitd]);
-//                                                 			}
-//                                             			}
-//                                         			}
-                                      			}
-                                  			}// end hit loop
-                              			}// end ch loop
-                              			print_flg=0;
-                           			}// end w2mcharge loop
-                        		}// end w2chmax loop
-                        		
-								// NEW
-                                 dsig=0.;
-                                 for (int ch=0;ch<192;ch++){
-                                     if(abs(ch-dchmax)<10){
-                                         dsig+=dNhit[ch];
-                                     }
-                                }
-								
-								dnhit=0;
-                        		//dsize=0.;
-                        		for (int ihit=0;ihit<200;ihit++){
-                            		dthit[ihit]=-100.;
-                            		dahit[ihit]=-100.;
-                            		dmhit[ihit]=-100.;
-                            		dchit[ihit]=-100.;
-                        		}
-                        
-                        		tmax12=tmax1;
-                        		if(tmax2>tmax1)tmax12=tmax2;
-                        		tmax12=550.;
-                        		if(dchmax>0){
-                           			if(dmcharge>100.){
+									
+                        			wsig=0.;
+                        			for (int ch=0;ch<24;ch++){
+                            			if(abs(ch-wchmax)<2){
+                               				wsig+=wNhit[ch];
+                            			}
+                        			}
+									
+                        			unhit=0;
+                        			wnhit=0;
+                        			wsize=0.;
+                        			for (int ihit=0;ihit<200;ihit++){
+                            			wthit[ihit]=-100.;
+                            			wahit[ihit]=-100.;
+                           		 		wmhit[ihit]=-100.;
+                            			wchit[ihit]=-100.;
+                            			uthit[ihit]=-100.;
+                           		 		uahit[ihit]=-100.;
+                        			}
+                        			
+                        			float tmax12=tmax1;
+                        			if(tmax2>tmax1)tmax12=tmax2;
+                        			tmax12=550.;
+                        			if(wchmax>0){
+                           				if(wmcharge>100.){
+                              				unhit=uNhit[uchmax];
+                              				for (int ihit=0;ihit<uNhit[uchmax];ihit++){
+                                  				uthit[ihit]=uSAMPmax[uchmax][ihit];
+                                  				uahit[ihit]=uADCmax[uchmax][ihit];
+                                  				uAvsT->Fill((double)uSAMPmax[uchmax][ihit],(double)uADCmax[uchmax][ihit]);
+                              				}
+                              				/// short mode
+                              				for (int ch=0;ch<24;ch++){
+                                  				int slot; int ch0;
+                                  				slot=sl_c1w1; ch0=ch_c1w1;
+                                  				if(abs(ch-wchmax)<2){
+                                     				if(ch==wchmax)wsize=fADCnhit[0][slot][ch+ch0];
+                                     				for (int ihit=0;ihit<fADCnhit[0][slot][ch+ch0];ihit++){
+                                         				float adc_peak=fADCpeak[0][slot][ch+ch0][ihit]-fADCPedestal[0][slot][ch+ch0];
+                                         				if(adc_peak>thresh){
+                                            				wthit[wnhit]=fADCtime[0][slot][ch+ch0][ihit];
+                                            				wmhit[wnhit++]=adc_peak;
+                                         				}
+                                     				}
+                                  				}
+                              				}
+                              				
+                              				for (int iclust=0;iclust<wnclust;iclust++){
+                                  				wAvsTnorm->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustamp[iclust]);
+                                  				wCvsL->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustlwd[iclust]);
+                              				}
+                              				
+                              				for (int ch=0;ch<72;ch++){
+                                  				for (int ihit=0;ihit<wNhit[ch]&&ihit<200;ihit++){
+                                      				if(abs(ch-wchmax)<2){
+                                         				if(wnhit<999){
+                                            				wchit[wnhit]=ch;
+                                            				wthit[wnhit]=wSAMPmax[ch][ihit];
+                                            				wahit[wnhit]=wADCsum[ch][ihit];
+                                            				wmhit[wnhit++]=wADCmax[ch][ihit];
+                                         				}
+                                         				wAvsD->Fill((double)(wSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)wADCsum[ch][ihit]);
+                                         				wAvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
+                                         				wCvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch);
+                                      					
+                                      				} else {
+                                         				wAvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
+                                         				wCvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch);
+                                         				int fillok=1;
+                                         				for (int chu=0;chu<24&&fillok;chu++){
+                                             				for (int ihitu=0;ihitu<uNhit[chu]&&fillok;ihitu++){
+                                                 				if(abs(uSAMPmax[chu][ihitu]-wSAMPmax[ch][ihit])<3){
+                                                    				float y=-0.5*(chu-24.)/cos(sang)+1.*ch*tan(sang);
+                                                    				if(wSAMPmax[ch][ihit]>tmax12+50.){
+                                                       					wYvsB->Fill((double)ch,(double)y,(double)wADCmax[chu][ihitu]);
+                                                    				}
+                                                    				wTYvsB->Fill((double)wSAMPmax[ch][ihit],(double)y,(double)uADCmax[chu][ihitu]);
+                                                 				}
+                                             				}
+                                         				}
+                                      				}
+                                  				}// end hit loop
+                              				}// end ch loop
+                              				print_flg=0;
+                           				}
+                        			}
+									
+                        			w2sig=0.;
+                        			for (int ch=0;ch<240;ch++){
+                            			if(abs(ch-w2chmax)<10){ // Originally wchmax, changed to w2chmax, seemed to be typo...
+                               				w2sig+=w2Nhit[ch];
+                            			}
+                        			}
+									
+                        			//dnhit=0;
+                        			w2nhit=0;
+                        			w2size=0.;
+                        			for (int ihit=0;ihit<200;ihit++){
+                            			w2thit[ihit]=-100.;
+                            			w2ahit[ihit]=-100.;
+                            			w2mhit[ihit]=-100.;
+                            			w2chit[ihit]=-100.;
+                            			//dthit[ihit]=-100.;
+                            			//dahit[ihit]=-100.;
+                        			}
+                        			
+									//////Possible error here... Should all be w2 instead of w in this first section
+									//for w2mcharge > 100 ? Otherwise its a repeat of what is above ... 
+                        			tmax12=tmax1;
+                        			if(tmax2>tmax1)tmax12=tmax2;
+                        			tmax12=550.;
+                        			if(w2chmax>0){
+                           				if(w2mcharge>100.){
+                              				// short mode
+                              				for (int ch=0;ch<24;ch++){
+                               		   			int slot; int ch0;
+                                  				slot=sl_c1w1; ch0=ch_c1w1;
+                                  				if(abs(ch-wchmax)<2){
+                                     				if(ch==wchmax)wsize=fADCnhit[0][slot][ch+ch0];
+                                     				for (int ihit=0;ihit<fADCnhit[0][slot][ch+ch0];ihit++){
+                                         				float adc_peak=fADCpeak[0][slot][ch+ch0][ihit]-fADCPedestal[0][slot][ch+ch0];
+                                         				if(adc_peak>thresh){
+                                            				wthit[wnhit]=fADCtime[0][slot][ch+ch0][ihit];
+                                            				wmhit[wnhit++]=adc_peak;
+                                         				}
+                                     				}
+                                  				}
+                              				}
+                              				
+                              				for (int iclust=0;iclust<w2nclust;iclust++){
+                                  				w2AvsTnorm->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustamp[iclust]);
+                                  				w2CvsL->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustlwd[iclust]);
+                              				}
+                              				
+                              				for (int ch=0;ch<240;ch++){
+                                  				for (int ihit=0;ihit<w2Nhit[ch]&&ihit<200;ihit++){
+                                      				if(abs(ch-w2chmax)<10){
+														//cout<<"det=GEM ch="<<ch<<" w2chmax="<<w2chmax<<endl;
+                                         				if(w2nhit<999){
+                                            				w2chit[w2nhit]=ch;
+                                            				w2thit[w2nhit]=w2SAMPmax[ch][ihit];
+                                            				w2ahit[w2nhit]=w2ADCsum[ch][ihit];
+                                            				w2mhit[w2nhit++]=w2ADCmax[ch][ihit];
+                                         				}
+                                         				w2AvsD->Fill((double)(w2SAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)w2ADCsum[ch][ihit]);
+                                         				w2AvsT->Fill((double)w2SAMPmax[ch][ihit],(double)ch,(double)w2ADCsum[ch][ihit]);
+                                         				w2CvsT->Fill((double)w2SAMPmax[ch][ihit],(double)ch);
+                                      				} else {
+                                         				w2AvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch,(double)w2ADCsum[ch][ihit]);
+                                         				w2CvsB->Fill((double)w2SAMPmax[ch][ihit],(double)ch);
+                                         				int fillok=1;
+//                                         				for (int chd=0;chd<192&&fillok;chd++){
+//                                             				for (int ihitd=0;ihitd<dNhit[chd]&&fillok;ihitd++){
+//                                              	   			if(abs(dSAMPmax[chd][ihitd]-w2SAMPmax[ch][ihit])<3){
+//                                               	     			float y=chd;
+//                                                  	  			if(w2SAMPmax[ch][ihit]>tmax12+50.){
+//                                                      	 				w2YvsB->Fill((double)ch,(double)y,(double)w2ADCmax[chd][ihitd]);
+//                                                    				}
+//                                                    				w2TYvsB->Fill((double)w2SAMPmax[ch][ihit],(double)y,(double)dADCmax[chd][ihitd]);
+//                                                 				}
+//                                             				}
+//                                         				}
+                                      				}
+                                  				}// end hit loop
+                              				}// end ch loop
+                              				print_flg=0;
+                           				}// end w2mcharge loop
+                        			}// end w2chmax loop
+                        			
+									// NEW
+                                 	dsig=0.;
+                                 	for (int ch=0;ch<192;ch++){
+                                    	 if(abs(ch-dchmax)<10){
+                                        	 dsig+=dNhit[ch];
+                                     	}
+                                	}
+									
+									dnhit=0;
+                        			//dsize=0.;
+                        			for (int ihit=0;ihit<200;ihit++){
+                            			dthit[ihit]=-100.;
+                            			dahit[ihit]=-100.;
+                            			dmhit[ihit]=-100.;
+                            			dchit[ihit]=-100.;
+                        			}
+                        			
+                        			tmax12=tmax1;
+                        			if(tmax2>tmax1)tmax12=tmax2;
+                        			tmax12=550.;
+                        			if(dchmax>0){
+                           				if(dmcharge>100.){
 										//REMOVED December - seems like an error ?
 /*                            			dnhit=dNhit[uchmax];
                               			for (int ihit=0;ihit<dNhit[dchmax];ihit++){
@@ -1626,35 +1619,35 @@ int main(int argc, char *argv[]) {
                                   			dAvsT->Fill((double)dSAMPmax[dchmax][ihit],(double)dADCmax[dchmax][ihit]);
                                 		}
 */                              		
-                                		for (int iclust=0;iclust<dnclust;iclust++){
-                                  			dAvsTnorm->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustamp[iclust]);
-                                  			dCvsL->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustlwd[iclust]);
-                                		}
-                             		 	
-                                		for (int ch=0;ch<192;ch++){
-                                  			for (int ihit=0;ihit<dNhit[ch]&&ihit<200;ihit++){
-                                      			if(abs(ch-dchmax)<10){
-													//cout<<"det=MMG ch="<<ch<<" dchmax="<<dchmax<<endl;
-                                         			if(dnhit<999){
-                                            			dchit[dnhit]=ch;
-                                            			dthit[dnhit]=dSAMPmax[ch][ihit];
-                                            			dahit[dnhit]=dADCsum[ch][ihit];
-                                            			dmhit[dnhit++]=dADCmax[ch][ihit];
-                                         			}
-                                         			dAvsD->Fill((double)(dSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)dADCsum[ch][ihit]);
-                                         			dAvsT->Fill((double)dSAMPmax[ch][ihit],(double)ch,(double)dADCsum[ch][ihit]);
-                                         			dCvsT->Fill((double)dSAMPmax[ch][ihit],(double)ch);
-                                      			} else {
-                                          			dAvsB->Fill((double)dSAMPmax[ch][ihit],(double)ch,(double)dADCsum[ch][ihit]);
-                                          			dCvsB->Fill((double)dSAMPmax[ch][ihit],(double)ch);
-                                      			}
-                                  			}// end hit loop
-                                		}// end ch loop
-                                		print_flg=0;
-									}// end dmcharge loop
-                        		}// end dhcmax loop
-								
-//								
+                                			for (int iclust=0;iclust<dnclust;iclust++){
+                                  				dAvsTnorm->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustamp[iclust]);
+                                  				dCvsL->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustlwd[iclust]);
+                                			}
+                             		 		
+                                			for (int ch=0;ch<192;ch++){
+                                  				for (int ihit=0;ihit<dNhit[ch]&&ihit<200;ihit++){
+                                      				if(abs(ch-dchmax)<10){
+														//cout<<"det=MMG ch="<<ch<<" dchmax="<<dchmax<<endl;
+                                         				if(dnhit<999){
+                                            				dchit[dnhit]=ch;
+                                            				dthit[dnhit]=dSAMPmax[ch][ihit];
+                                            				dahit[dnhit]=dADCsum[ch][ihit];
+                                            				dmhit[dnhit++]=dADCmax[ch][ihit];
+                                         				}
+                                         				dAvsD->Fill((double)(dSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)dADCsum[ch][ihit]);
+                                         				dAvsT->Fill((double)dSAMPmax[ch][ihit],(double)ch,(double)dADCsum[ch][ihit]);
+                                         				dCvsT->Fill((double)dSAMPmax[ch][ihit],(double)ch);
+                                      				} else {
+                                          				dAvsB->Fill((double)dSAMPmax[ch][ihit],(double)ch,(double)dADCsum[ch][ihit]);
+                                          				dCvsB->Fill((double)dSAMPmax[ch][ihit],(double)ch);
+                                      				}
+                                  				}// end hit loop
+                                			}// end ch loop
+                                			print_flg=0;
+										}// end dmcharge loop
+                        			}// end dhcmax loop
+									
+//									
 //// Begin GEM dedx write ////
 //
 /*
@@ -1846,95 +1839,95 @@ int main(int argc, char *argv[]) {
 // end to sergey MMG clusters
 ///
 */
-                        		wcent=wchmax+(wchmax-w2chmax/25-4.15>0)*(0.2-sqrt(0.04+98*(wsmax-53)))/98
+                        			wcent=wchmax+(wchmax-w2chmax/25-4.15>0)*(0.2-sqrt(0.04+98*(wsmax-53)))/98
                                        +(wchmax-w2chmax/25-4.15<=0)*(0.2+sqrt(0.04+98*(wsmax-53)))/98;
-             					fdcFeTree->Fill();
-            				
-                        		//cout<<" displaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyy="<<DISPLAY<<endl;
-                        		//cout<<"ucharge/dcharge="<<ucharge/dcharge<<endl;
-                        		//cout<<"ucharge="<<ucharge<<endl;
-                        		//cout<<"ucent-uch="<<ucent-uchmax<<endl;
-                        		//cout<<"usize,dsize="<<usize<<" "<<dsize<<endl;
-                         		
-                        		if(DISPLAY){
-                           			ct_plot->Reset();
-                           			wct_plot->Reset();
-                           			cty_plot->Reset();
-                           			wcty_plot->Reset();
-                           			DISPLAY=1;
-                           			int OKp=0;
-                           			int OKu=0;
-                           			int OKd=0;
-                           			int OKw2=0;
-                           			int OKw=0;
-                           			wchmax=0;
-                            		
-                           			if(wchmax!=11111){
-                              			TMultiGraph *mg = new TMultiGraph("mg","f125 samples");
-                              			TGraph *graf1[48];
-                              			TGraph *graf2[240];
-                              			float Xaxis[400];
-                              			float Yuaxis[24][400];
-                              			float Ydaxis[48][400];
-                              			float Yw2axis1[240][400];
-                              			float Yw2axis[240][200];
-                              			float Yw2axis2[240][400];
-                              			float Ypaxis[100][200];
-                              			float Ywaxis[24][400];
-                              			
-                              			int smp1=0;
-                              			int smp2=samples;
-                              			smp2=200;
-                              			int ns=smp2-smp1;
-                              			for (Int_t i=smp1;i<smp2;i++){
-                                  			Xaxis[i-smp1] = i;
-                              			}
-                              			
-                              			int ucol=6;
-                              			int wcol=1;
-                              			int slot;
-                              			int ch0;
+             						fdcFeTree->Fill();
+            						
+                        			//cout<<" displaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyy="<<DISPLAY<<endl;
+                        			//cout<<"ucharge/dcharge="<<ucharge/dcharge<<endl;
+                        			//cout<<"ucharge="<<ucharge<<endl;
+                        			//cout<<"ucent-uch="<<ucent-uchmax<<endl;
+                        			//cout<<"usize,dsize="<<usize<<" "<<dsize<<endl;
+                         			
+                        			if(DISPLAY){
+                           				ct_plot->Reset();
+                           				wct_plot->Reset();
+                           				cty_plot->Reset();
+                           				wcty_plot->Reset();
+                           				DISPLAY=1;
+                           				int OKp=0;
+                           				int OKu=0;
+                           				int OKd=0;
+                           				int OKw2=0;
+                           				int OKw=0;
+                           				wchmax=0;
+                            			
+                           				if(wchmax!=11111){
+                            	  			TMultiGraph *mg = new TMultiGraph("mg","f125 samples");
+                              				TGraph *graf1[48];
+                              				TGraph *graf2[240];
+                              				float Xaxis[400];
+                              				float Yuaxis[24][400];
+                              				float Ydaxis[48][400];
+                              				float Yw2axis1[240][400];
+                              				float Yw2axis[240][200];
+                              				float Yw2axis2[240][400];
+                              				float Ypaxis[100][200];
+                              				float Ywaxis[24][400];
+                              				
+                              				int smp1=0;
+                              				int smp2=samples;
+                              				smp2=200;
+                              				int ns=smp2-smp1;
+                              				for (Int_t i=smp1;i<smp2;i++){
+                               		   			Xaxis[i-smp1] = i;
+                              				}
+                              				
+                              				int ucol=6;
+                              				int wcol=1;
+                              				int slot;
+                              				int ch0;
 //Begin sample loop
-       			      					for (Int_t i=smp1;i<smp2;i++){
+       			      						for (Int_t i=smp1;i<smp2;i++){
 // w1
-                                			slot=sl_c1w1; ch0=ch_c1w1;
-                                			for (Int_t ch=0;ch<24;ch++){
-                                    			if(wAmax[ch]>thresh){
-                                       				Ywaxis[ch][i-smp1] = ADCSamples[0][slot][ch+ch0][i]-ADCPedestal[0][slot][ch+ch0];
-                                       				if(Ywaxis[ch][i-smp1]>thresh/3.)wct_plot->Fill((float)(ch+wchoffset)*10.,(float)(i-smp1)/1.,Ywaxis[ch][i-smp1]);
-                                       				OKw=1;
-                                    			}
-                                			} //end ch loop
+                                				slot=sl_c1w1; ch0=ch_c1w1;
+                                				for (Int_t ch=0;ch<24;ch++){
+                                    				if(wAmax[ch]>thresh){
+                                       					Ywaxis[ch][i-smp1] = ADCSamples[0][slot][ch+ch0][i]-ADCPedestal[0][slot][ch+ch0];
+                                       					if(Ywaxis[ch][i-smp1]>thresh/3.)wct_plot->Fill((float)(ch+wchoffset)*10.,(float)(i-smp1)/1.,Ywaxis[ch][i-smp1]);
+                                       					OKw=1;
+                                    				}
+                                				} //end ch loop
 // u
-                                			slot=sl_c1u1; ch0=ch_c1u1;
-                                			for (Int_t ch=0;ch<24;ch++){
-                                    			if(uAmax[ch]>thresh/1.){
-                                       				Yuaxis[ch][i-smp1] = ADCSamples[0][slot][ch+ch0][i]-ADCPedestal[0][slot][ch+ch0];
-                                       				if(Yuaxis[ch][i-smp1]>thresh/1.)wcty_plot->Fill((float)(ch+uchoffset)*5.,(float)(i-smp1)/1.,Yuaxis[ch][i-smp1]);
-                                       				OKu=1;
-                                    			}
-                                			} //end ch loop
+                                				slot=sl_c1u1; ch0=ch_c1u1;
+                                				for (Int_t ch=0;ch<24;ch++){
+                                    				if(uAmax[ch]>thresh/1.){
+                                       					Yuaxis[ch][i-smp1] = ADCSamples[0][slot][ch+ch0][i]-ADCPedestal[0][slot][ch+ch0];
+                                       					if(Yuaxis[ch][i-smp1]>thresh/1.)wcty_plot->Fill((float)(ch+uchoffset)*5.,(float)(i-smp1)/1.,Yuaxis[ch][i-smp1]);
+                                       					OKu=1;
+                                    				}
+                                				} //end ch loop
 // d
-                                			for (Int_t ch=0;ch<192;ch++){
-                                    			if(dAmax[ch]>thresh){
-                                       				int slot=GetMMGSlot(ch);
-                                       				int k=GetMMGChan(ch);
-                                       				Ydaxis[ch][i-smp1] = ADCSamples[0][slot][k][i]-ADCPedestal[0][slot][k];
-                                       				if(Ydaxis[ch][i-smp1]>thresh/1.)cty_plot->Fill((float)(ch+dchoffset)*0.4,(float)(i-smp1)/1.,Ydaxis[ch][i-smp1]);
-                                       				OKd=1;
-                                    			}
-                                			} //end ch loop
+                                				for (Int_t ch=0;ch<192;ch++){
+                                    				if(dAmax[ch]>thresh){
+                                       					int slot=GetMMGSlot(ch);
+                                       					int k=GetMMGChan(ch);
+                                       					Ydaxis[ch][i-smp1] = ADCSamples[0][slot][k][i]-ADCPedestal[0][slot][k];
+                                       					if(Ydaxis[ch][i-smp1]>thresh/1.)cty_plot->Fill((float)(ch+dchoffset)*0.4,(float)(i-smp1)/1.,Ydaxis[ch][i-smp1]);
+                                       					OKd=1;
+                                    				}
+                                				} //end ch loop
 // w2
-                                			for (Int_t ch=0;ch<240;ch++){
-                                   				if(w2Amax[ch]>thresh){
-                                      				//if(w2Amax[ch]>200.)crate->Fill((float)ch,w2Amax[ch]);
-                                      				int slot=GetGEMSlot(ch);
-                                      				int k=GetGEMChan(ch);
-                                      				Yw2axis[ch][i-smp1] = ADCSamples[0][slot][k][i]-ADCPedestal[0][slot][k];
-                                      				if(Yw2axis[ch][i-smp1]>thresh)ct_plot->Fill((float)(ch+w2choffset)*0.4,(float)(i-smp1)/1.,Yw2axis[ch][i-smp1]);
-                                      				OKw2=1;
-                                   				}
-                                			} //end ch loop
+                                				for (Int_t ch=0;ch<240;ch++){
+                                   					if(w2Amax[ch]>thresh){
+                                      					//if(w2Amax[ch]>200.)crate->Fill((float)ch,w2Amax[ch]);
+                                      					int slot=GetGEMSlot(ch);
+                                      					int k=GetGEMChan(ch);
+                                      					Yw2axis[ch][i-smp1] = ADCSamples[0][slot][k][i]-ADCPedestal[0][slot][k];
+                                      					if(Yw2axis[ch][i-smp1]>thresh)ct_plot->Fill((float)(ch+w2choffset)*0.4,(float)(i-smp1)/1.,Yw2axis[ch][i-smp1]);
+                                      					OKw2=1;
+                                   					}
+                                				} //end ch loop
 /*
 // pad
                                 for (Int_t ch=0;ch<100;ch++){
@@ -1950,58 +1943,58 @@ int main(int argc, char *argv[]) {
                                    }
                                 } //end ch loop
 */
-                           				} //end sample loop
+                           					} //end sample loop
                               			
-                              			if(OKp){
-                                 			bool above_thresh=false;
-                                 			int k=0;
-                                 			for (int k=0;k<100;k++){
-                                     			if(pAmax[k]>thresh/2.){
-                                        			cout<<" chan ========================== "<<k<<" "<<pAmax[k]<<" col= "<<wcol<<endl;
-                                        			graf2[k] = new TGraph(ns,Xaxis,Ypaxis[k]);
-                                        			graf2[k]->SetMarkerStyle(1);
-                                        			graf2[k]->SetLineStyle(1);
-                                        			graf2[k]->SetMarkerColor(wcol);
-                                        			graf2[k]->SetLineColor(wcol);
-                                        			mg->Add(graf2[k]);
-                                        			wcol++;
-                                        			above_thresh=true;
-                                     			}
-                                 			}
-                              			}
-                              			
-                              			if(OKw){
-                                  			int k=0;
-                                  			for (int k=0;k<24;k++){
-                                      			if(wAmax[k]>thresh){
-                                         			graf2[k] = new TGraph(ns,Xaxis,Ywaxis[k]);
-                                         			graf2[k]->SetMarkerStyle(1);
-                                         			graf2[k]->SetLineStyle(1);
-                                         			graf2[k]->SetMarkerColor(wcol);
-                                         			graf2[k]->SetLineColor(wcol);
-                                         			//cok mg->Add(graf2[k]);
-                                         			//cok wcol++;
-                                      			}
-                                  			}
-                              			}
-                              			
-                              			if(OKu){
-                                  			int k=0;
-                                  			for (int k=0;k<48;k++){
-                                      			if(uAmax[k]>thresh/2.){
-                                         			//cout<<" cathodes ch,dAmax,dSmax, ucol="<<k<<" "<<dAmax[k]<<" "<<dSmax[k]<<" "<<ucol<<endl;
-                                         			ucol=4;
-                                         			graf1[k] = new TGraph(ns,Xaxis,Yuaxis[k]);
-                                         			graf1[k]->SetMarkerStyle(1);
-                                         			graf1[k]->SetLineStyle(1);
-                                       	  			graf1[k]->SetMarkerColor(ucol);
-                                         			graf1[k]->SetLineColor(ucol);
-                                         			//cok mg->Add(graf1[k]);
-                                         			//cok  ucol++;
-                                         			OKu=1;
-                                      			}
-                                  			}
-                              			}
+                              				if(OKp){
+                                 				bool above_thresh=false;
+                                 				int k=0;
+                                 				for (int k=0;k<100;k++){
+                                     				if(pAmax[k]>thresh/2.){
+                                        				cout<<" chan ========================== "<<k<<" "<<pAmax[k]<<" col= "<<wcol<<endl;
+                                        				graf2[k] = new TGraph(ns,Xaxis,Ypaxis[k]);
+                                        				graf2[k]->SetMarkerStyle(1);
+                                        				graf2[k]->SetLineStyle(1);
+                                        				graf2[k]->SetMarkerColor(wcol);
+                                        				graf2[k]->SetLineColor(wcol);
+                                        				mg->Add(graf2[k]);
+                                        				wcol++;
+                                        				above_thresh=true;
+                                     				}
+                                 				}
+                              				}
+                              				
+                              				if(OKw){
+                                  				int k=0;
+                                  				for (int k=0;k<24;k++){
+                                   		   			if(wAmax[k]>thresh){
+                                       		  			graf2[k] = new TGraph(ns,Xaxis,Ywaxis[k]);
+                                         				graf2[k]->SetMarkerStyle(1);
+                                         				graf2[k]->SetLineStyle(1);
+                                         				graf2[k]->SetMarkerColor(wcol);
+                                         				graf2[k]->SetLineColor(wcol);
+                                         				//cok mg->Add(graf2[k]);
+                                         				//cok wcol++;
+                                      				}
+                                  				}
+                              				}
+                              				
+                              				if(OKu){
+                                  				int k=0;
+                                  				for (int k=0;k<48;k++){
+                                   		   			if(uAmax[k]>thresh/2.){
+                                       		  			//cout<<" cathodes ch,dAmax,dSmax, ucol="<<k<<" "<<dAmax[k]<<" "<<dSmax[k]<<" "<<ucol<<endl;
+                                         				ucol=4;
+                                         				graf1[k] = new TGraph(ns,Xaxis,Yuaxis[k]);
+                                         				graf1[k]->SetMarkerStyle(1);
+                                         				graf1[k]->SetLineStyle(1);
+                                       	  				graf1[k]->SetMarkerColor(ucol);
+                                         				graf1[k]->SetLineColor(ucol);
+                                         				//cok mg->Add(graf1[k]);
+                                         				//cok  ucol++;
+                                         				OKu=1;
+                                      				}
+                                  				}
+                              				}
          //    GEM-TRD signals:
          /*
               if(OKw2){
@@ -2030,97 +2023,96 @@ int main(int argc, char *argv[]) {
     		   	//cokcok }
               }
            */
-                             			if(OKw2>0&&OKd>0){
-                                 			//cout<<"w2ch,dch="<<w2chmax<<" "<<dchmax<<endl;
-                                 			//cout<<" delta dch-w2ch = "<<dchmax*0.04-w2chmax*0.04<<endl;
-                                 			
-                                 			TCanvas *myc;
-                                 			myc = new TCanvas("myc", "Event", 1000, 800);
-                                 			myc->Draw();
-                                 			myc->Clear("D");
-                                 			myc->Divide(3,2);
-                                 			
-                                 			myc->cd(1);
-                                 			gPad->SetGrid();
-                                 			gPad->SetLeftMargin(0.08);
-                                 			gPad->SetRightMargin(0.);
-                                 			gPad->SetTopMargin(0.);
-                                 			gPad->SetBottomMargin(0.08);
-                                 			gPad->Modified();
-                                 			mg->SetMaximum(1000.);
-                                 			mg->SetMinimum(-50.);
-                                 			mg->Draw("alp");
-                                 			
-                                 			
-                                 			myc->cd(2);
-                                			gPad->SetGrid();
-                                 			gPad->SetLeftMargin(0.08);
-                                 			gPad->SetRightMargin(0.);
-                                 			gPad->SetTopMargin(0.);
-                                 			gPad->SetBottomMargin(0.08);
-                                 			gPad->Modified();
-                                 			wct_plot->Draw("col");
-                                 			
-                                 			myc->cd(5);
-                                 			gPad->SetGrid();
-                                 			gPad->SetLeftMargin(0.08);
-                                 			gPad->SetRightMargin(0.);
-                                 			gPad->SetTopMargin(0.);
-                                 			gPad->SetBottomMargin(0.08);
-                                 			gPad->Modified();
-                                 			wcty_plot->Draw("col");
-                                 			
-                                 			myc->cd(3);
-                                 			gPad->SetGrid();
-                                 			gPad->SetLeftMargin(0.08);
-                                 			gPad->SetRightMargin(0.);
-                                 			gPad->SetTopMargin(0.);
-                                 			gPad->SetBottomMargin(0.08);
-                                 			gPad->Modified();
-                                 			ct_plot->Draw("col");
-                                 			
-                                 			myc->cd(6);
-                                 			gPad->SetGrid();
-                                 			gPad->SetLeftMargin(0.08);
-                                 			gPad->SetRightMargin(0.);
-                                 			gPad->SetTopMargin(0.);
-                                 			gPad->SetBottomMargin(0.08);
-                                 			gPad->Modified();
-                                 			cty_plot->Draw("col");
-                                 			
-                                 			myc->Update();
-                                 			//theApp.Run();
-                                 			Int_t nexti=0;
-                                 			cin>>nexti;
-                                 			if(nexti==9) myc->Print("myc.pdf");
-                                 			if(nexti==9) myc->Print("myc.root");
-                               			} // end OKw2>0&&OKd>0
-                           				
-                           			} // end display condition --> TMultiGraph wchmax!=11111
-                        		} // end DISPLAY
-        					} //end samples>0 (if (1==1))
-        				} //end NEVENT (if(true):0<evtCount<NEVENT)
-   			 		// end try
-        			} catch (evioException e) {
-            			cerr << "Event: "<<evtCount<<"  exception at eventTree()"<<endl;
-            			cerr << endl << e.toString() << endl << endl << "Try to continue" <<endl;
-          			}
-          			ReadBack = EvOchan.read();
-    			} //end of if event=< loop (if (11 == 11))
-    		} //end of event loop (Readback && evtCount<NEVENT)
-      
-    		//to_sergey_rad.close();
-    		//to_sergey_norad.close();
-    		ROOTfile->cd();
-			//uAvsT->Write(0, TObject::kOverwrite);
-    		dAvsT->Write(0, TObject::kOverwrite);
-			//wAvsT->Write(0, TObject::kOverwrite);
-			w2AvsT->Write(0, TObject::kOverwrite);
-			//crate->Write();
-    		ROOTfile->Write(0, TObject::kOverwrite);
-		} // 1==1
-	} // if fOK
-} // end file loop (while (fOK))
+                             				if(OKw2>0&&OKd>0){
+                                 				//cout<<"w2ch,dch="<<w2chmax<<" "<<dchmax<<endl;
+                                 				//cout<<" delta dch-w2ch = "<<dchmax*0.04-w2chmax*0.04<<endl;
+                                 				
+                                 				TCanvas *myc;
+                                 				myc = new TCanvas("myc", "Event", 1000, 800);
+                                 				myc->Draw();
+                                 				myc->Clear("D");
+                                 				myc->Divide(3,2);
+                                 				
+                                 				myc->cd(1);
+                                 				gPad->SetGrid();
+                                 				gPad->SetLeftMargin(0.08);
+                                 				gPad->SetRightMargin(0.);
+                                 				gPad->SetTopMargin(0.);
+                                 				gPad->SetBottomMargin(0.08);
+                                 				gPad->Modified();
+                                 				mg->SetMaximum(1000.);
+                                 				mg->SetMinimum(-50.);
+                                 				mg->Draw("alp");
+                                 				
+                                 				myc->cd(2);
+                                				gPad->SetGrid();
+                                 				gPad->SetLeftMargin(0.08);
+                                 				gPad->SetRightMargin(0.);
+                                 				gPad->SetTopMargin(0.);
+                                 				gPad->SetBottomMargin(0.08);
+                                 				gPad->Modified();
+                                 				wct_plot->Draw("col");
+                                 				
+                                 				myc->cd(5);
+                                 				gPad->SetGrid();
+                                 				gPad->SetLeftMargin(0.08);
+                                 				gPad->SetRightMargin(0.);
+                                 				gPad->SetTopMargin(0.);
+                                 				gPad->SetBottomMargin(0.08);
+                                 				gPad->Modified();
+                                 				wcty_plot->Draw("col");
+                                 				
+                                 				myc->cd(3);
+                                 				gPad->SetGrid();
+                                 				gPad->SetLeftMargin(0.08);
+                                 				gPad->SetRightMargin(0.);
+                                 				gPad->SetTopMargin(0.);
+                                 				gPad->SetBottomMargin(0.08);
+                                 				gPad->Modified();
+                                 				ct_plot->Draw("col");
+                                 				
+                                 				myc->cd(6);
+                                 				gPad->SetGrid();
+                                 				gPad->SetLeftMargin(0.08);
+                                 				gPad->SetRightMargin(0.);
+                                 				gPad->SetTopMargin(0.);
+                                 				gPad->SetBottomMargin(0.08);
+                                 				gPad->Modified();
+                                 				cty_plot->Draw("col");
+                                 				
+                                 				myc->Update();
+                                 				//theApp.Run();
+                                 				Int_t nexti=0;
+                                 				cin>>nexti;
+                                 				if(nexti==9) myc->Print("myc.pdf");
+                                 				if(nexti==9) myc->Print("myc.root");
+                               				} // end OKw2>0&&OKd>0
+                           					
+                           				} // end display condition --> TMultiGraph wchmax!=11111
+                        			} // end DISPLAY
+        						} //end samples>0 (if (1==1))
+        					} //end NEVENT (if(true):0<evtCount<NEVENT)
+   			 				// end try
+        				} catch (evioException e) {
+            				cerr << "Event: "<<evtCount<<"  exception at eventTree()"<<endl;
+            				cerr << endl << e.toString() << endl << endl << "Try to continue" <<endl;
+          				}
+          				ReadBack = EvOchan.read();
+    				} //end of if event=< loop (if (11 == 11))
+    			} //end of event loop (Readback && evtCount<NEVENT)
+      	
+    			//to_sergey_rad.close();
+    			//to_sergey_norad.close();
+    			ROOTfile->cd();
+				//uAvsT->Write(0, TObject::kOverwrite);
+    			dAvsT->Write(0, TObject::kOverwrite);
+				//wAvsT->Write(0, TObject::kOverwrite);
+				w2AvsT->Write(0, TObject::kOverwrite);
+				//crate->Write();
+    			ROOTfile->Write(0, TObject::kOverwrite);
+			} // 1==1
+		} // if fOK
+	} // end file loop (while (fOK))
 	
 	ROOTfile->Close();
 	delete ROOTfile;
