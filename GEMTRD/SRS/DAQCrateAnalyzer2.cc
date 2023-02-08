@@ -34,13 +34,13 @@ using namespace evio;
 #include "TStyle.h"
 
 #define PI 3.14159265
-#define ROLLOVER_COUNT 65460    // get this when configure TDC
-#define TDC_LOOKBACK 15794		// get this when configure TDC
-#define TDC_v2BIN_SIZE 0.0580   // ns/LSB
-#define TDC_v3BIN_SIZE 0.1160   // ns/LSB
+//#define ROLLOVER_COUNT 65460    // get this when configure TDC
+//#define TDC_LOOKBACK 15794		// get this when configure TDC
+//#define TDC_v2BIN_SIZE 0.0580   // ns/LSB
+//#define TDC_v3BIN_SIZE 0.1160   // ns/LSB
 
-float tref;
-float ave_time;
+//float tref;
+//float ave_time;
 float sang=0.*PI/180.; // strip angle w.r.t. wire
 
 int print_flg=0;
@@ -79,7 +79,7 @@ void analyzeEvent(evioDOMTree &eventTree);
 void analyzeBank(evioDOMNodeP bankPtr);
 void CountTriggers();
 
-float fADC[20][72][2000];
+//float fADC[20][72][2000];
 //float Ped[20][72];
 TFile* ROOTfile;
 TTree* fdcFeTree;
@@ -102,7 +102,6 @@ ofstream to_sergey_norad2;
 #define first_slot 0
 #define wire_slot 2
 #define wire_x_ch0 24
-#define wire_y_ch0 24
 
 // GEM-TRD first slot/ch definition
 #define gem_x_slot 0
@@ -113,50 +112,37 @@ ofstream to_sergey_norad2;
 #define mmg_x_ch0 24
 
 // pad-GEM first slot/ch definition
-#define gem_p_slot 6
-#define gem_p_ch0  0
+//#define gem_p_slot 6
+//#define gem_p_ch0  0
 
 // GEM-TRD mapping - it works the way it is
 int GetGEMSlot(int gch){
-   return gem_x_slot+(int)(gch+gem_x_ch0)/72+first_slot;
+   return (int)(gch+gem_x_ch0)/72+first_slot+gem_x_slot;
 }
 
 int GetGEMChan(int gch){
    int fch=(gch+gem_x_ch0)%72;	//fADC channel (0-71)
    int card=fch/24;				//card in module (0-2)
    int cch=fch%24;				//card channel (0-23)
-   return 23-cch+card*24;		//inversed fADC module channel
+//   return 23-cch+card*24;		//inversed fADC module channel
+   return cch+card*24;
 }
 
 // MMG mapping
 int GetMMGSlot(int gch){
-   //gch = gch+8;
    
    //return (int)(gch+mmg_x_ch0)/72+mmg_x_slot;
-   return mmg_x_slot+(int)(gch+mmg_x_ch0)/72+first_slot;
+   return (int)(gch+mmg_x_ch0)/72+first_slot+mmg_x_slot;
    //WAS PREVIOUSLY-->//return (int)(gch+mmg_x_ch0)/72+first_slot;
 }
 
 int GetMMGChan(int gch){
-   //gch = gch+8;
    
    int fch=(gch+mmg_x_ch0)%72;
    int card=fch/24;
    int cch=fch%24;
-   return 23-cch+card*24;
-}
-
-int GetPSlot(int gch){
-    if(gch<8)return 8;   
-    return gem_p_slot+(int)(gch+gem_p_ch0)/72+first_slot;
-}
-
-int GetPChan(int gch){
-    if(gch<8)return 71;
-    int fch=(gch-8+gem_p_ch0)%72;
-    int card=fch/24;
-    int cch=fch%24;
-    return cch+card*24;
+   return cch+card*24;
+//   return 23-cch+card*24;
 }
 
 
@@ -170,7 +156,6 @@ int main(int argc, char *argv[]) {
   	int CHANNEL = 1;
   	int DISPLAY = 0;
   	char InputFile[128];
-//  int ROCNum[10] = {2,3,5,6,7,8,9,10,11,12};
 	
   	for (int i=0;i<10;i++){
   		trig_trd[i]=0;
@@ -219,7 +204,7 @@ int main(int argc, char *argv[]) {
       		}
     	}
   	}
-
+	
   	sprintf(InputFile,"%s",argv[1]);
   	int RunNumber = atoi(argv[1]);
   	char DataDir[128] = "DATA";
@@ -241,7 +226,7 @@ int main(int argc, char *argv[]) {
   	//Xe: float thresh=800.;
   	//Ar(?): float thresh=500.;
   	//Original(Check): float thresh=100.;
-  	float thresh=100.;
+  	float thresh=400.;
   
   	float sthresh=40.;
   	int Slot=SLOT;
@@ -269,8 +254,7 @@ int main(int argc, char *argv[]) {
     float dsig=0;
   	int dwid=0;
   	int dsmax=0;
-	
-  	float pped=0.;
+	float dAmpmax=0.;
 	
   	float wmax=0.;
   	float wped=0.;
@@ -291,6 +275,7 @@ int main(int argc, char *argv[]) {
   	float w2sig=0;
   	int w2wid=0;
   	int w2smax=0;
+	float w2Ampmax=0.;
 	
   	float ucharge=0.;
   	float dcharge=0.;
@@ -339,68 +324,48 @@ int main(int argc, char *argv[]) {
   	fdcFeTree->Branch( "ev", &EVENT, "ev/I" );
   	fdcFeTree->Branch( "runNumber", &RunNumber, "runNumber/I");
 //    fdcFeTree->Branch( "thresh", &thresh, "thresh/F");
-//	fdcFeTree->Branch( "max_u", &umax, "max_u/F" );
-  	fdcFeTree->Branch( "max_w", &wmax, "max_w/F" );
-//  	fdcFeTree->Branch( "ped_u", &uped, "ped_u/F" );
+  	//fdcFeTree->Branch( "max_w", &wmax, "max_w/F" );
   	fdcFeTree->Branch( "ped_d", &dped, "ped_d/F" );
-  	fdcFeTree->Branch( "ped_w", &wped, "ped_w/F" );
+	fdcFeTree->Branch( "dAmpMax", &dAmpmax, "dAmpMax/F" );
+  	//fdcFeTree->Branch( "ped_w", &wped, "ped_w/F" );
   	fdcFeTree->Branch( "ped_w2", &w2ped, "ped_w2/F" );
-//  	fdcFeTree->Branch( "q_u", &ucharge, "q_u/F" );
+	fdcFeTree->Branch( "w2AmpMax", &w2Ampmax, "w2AmpMax/F" );
   	fdcFeTree->Branch( "q_d", &dcharge, "q_d/F" );
-  	fdcFeTree->Branch( "q_w", &wcharge, "q_w/F" );
+  	//fdcFeTree->Branch( "q_w", &wcharge, "q_w/F" );
   	fdcFeTree->Branch( "q_w2", &w2charge, "q_w2/F" );
-//  	fdcFeTree->Branch( "qm_u", &umcharge, "qm_u/F" );
   	fdcFeTree->Branch( "qm_d", &dmcharge, "qm_d/F" );
-  	fdcFeTree->Branch( "qm_w", &wmcharge, "qm_w/F" );
+  	//fdcFeTree->Branch( "qm_w", &wmcharge, "qm_w/F" );
   	fdcFeTree->Branch( "qm_w2", &w2mcharge, "qm_w2/F" );
-//  	fdcFeTree->Branch( "ucent", &ucent, "ucent/F" );
-//  	fdcFeTree->Branch( "ufit", &ufit, "ufit/F" );
-//  	fdcFeTree->Branch( "umcent", &umcent, "umcent/F" );
-//  	fdcFeTree->Branch( "umfit", &umfit, "umfit/F" );
-//  	fdcFeTree->Branch( "usig", &usig, "usig/F" );
-//  	fdcFeTree->Branch( "uwid", &uwid, "uwid/I" );
-//  fdcFeTree->Branch( "dfit", &dfit, "dfit/F" );
-//  fdcFeTree->Branch( "dmcent", &dmcent, "dmcent/F" );
-//  fdcFeTree->Branch( "dmfit", &dmfit, "dmfit/F" );
     fdcFeTree->Branch( "dsig", &dsig, "dsig/F" );
   	fdcFeTree->Branch( "dwid", &dwid, "dwid/I" ); 
-  	fdcFeTree->Branch( "wcent", &wcent, "wcent/F" );
-  	fdcFeTree->Branch( "wfit", &wfit, "wfit/F" );
-  	fdcFeTree->Branch( "wmcent", &wmcent, "wmcent/F" );
-  	fdcFeTree->Branch( "wmfit", &wmfit, "wmfit/F" );
-  	fdcFeTree->Branch( "wsig", &wsig, "wsig/F" );
-  	fdcFeTree->Branch( "wwid", &wwid, "wwid/I" );
-//  fdcFeTree->Branch( "w2fit", &w2fit, "w2fit/F" );
-//  fdcFeTree->Branch( "w2mcent", &w2mcent, "w2mcent/F" );
-//  fdcFeTree->Branch( "w2mfit", &w2mfit, "w2mfit/F" );
+  	//fdcFeTree->Branch( "wcent", &wcent, "wcent/F" );
+  	//fdcFeTree->Branch( "wfit", &wfit, "wfit/F" );
+  	//fdcFeTree->Branch( "wmcent", &wmcent, "wmcent/F" );
+  	//fdcFeTree->Branch( "wmfit", &wmfit, "wmfit/F" );
+  	//fdcFeTree->Branch( "wsig", &wsig, "wsig/F" );
+  	//fdcFeTree->Branch( "wwid", &wwid, "wwid/I" );
   	fdcFeTree->Branch( "w2sig", &w2sig, "w2sig/F" );
   	fdcFeTree->Branch( "w2wid", &w2wid, "w2wid/I" );
-//  	fdcFeTree->Branch( "t_u", &usmax, "t_u/I" );
   	fdcFeTree->Branch( "t_d", &dsmax, "t_d/I" );
-  	fdcFeTree->Branch( "t_w", &wsmax, "t_w/I" );
+  	//fdcFeTree->Branch( "t_w", &wsmax, "t_w/I" );
   	fdcFeTree->Branch( "t_w2", &w2smax, "t_w2/I" );
-//  	fdcFeTree->Branch( "uch", &uchmax, "uch/I" );
   	fdcFeTree->Branch( "dch", &dchmax, "dch/I" );
-  	fdcFeTree->Branch( "wch", &wchmax, "wch/I" );
+  	//fdcFeTree->Branch( "wch", &wchmax, "wch/I" );
   	fdcFeTree->Branch( "w2ch", &w2chmax, "w2ch/I" );
-//  	fdcFeTree->Branch( "usz", &usize, "usz/I" );
   	fdcFeTree->Branch( "dsz", &dsize, "dsz/I" );
-  	fdcFeTree->Branch( "wsz", &wsize, "wsz/I" );
+  	//fdcFeTree->Branch( "wsz", &wsize, "wsz/I" );
   	fdcFeTree->Branch( "w2sz", &w2size, "w2sz/I" );
   	fdcFeTree->Branch( "trig", &trig,"trig/I" );
-  	fdcFeTree->Branch( "wnhit", &wnhit, "wnhit/I" );
-  	fdcFeTree->Branch( "wthit", &wthit, "wthit[wnhit]/F" );
-  	fdcFeTree->Branch( "wahit", &wahit, "wahit[wnhit]/F" );
-  	fdcFeTree->Branch( "wmhit", &wmhit, "wmhit[wnhit]/F" );
-  	fdcFeTree->Branch( "wchit", &wchit, "wchit[wnhit]/I" );
+  	//fdcFeTree->Branch( "wnhit", &wnhit, "wnhit/I" );
+  	//fdcFeTree->Branch( "wthit", &wthit, "wthit[wnhit]/F" );
+  	//fdcFeTree->Branch( "wahit", &wahit, "wahit[wnhit]/F" );
+  	//fdcFeTree->Branch( "wmhit", &wmhit, "wmhit[wnhit]/F" );
+  	//fdcFeTree->Branch( "wchit", &wchit, "wchit[wnhit]/I" );
   	fdcFeTree->Branch( "w2nhit", &w2nhit, "w2nhit/I" );
   	fdcFeTree->Branch( "w2thit", &w2thit, "w2thit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2ahit", &w2ahit, "w2ahit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2mhit", &w2mhit, "w2mhit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2chit", &w2chit, "w2chit[w2nhit]/I" );
-//  	fdcFeTree->Branch( "unhit", &unhit, "unhit/I" );
-//  	fdcFeTree->Branch( "uthit", &uthit, "uthit[unhit]/F" );
-//  	fdcFeTree->Branch( "uahit", &uahit, "uahit[unhit]/F" );
   	fdcFeTree->Branch( "dnhit", &dnhit, "dnhit/I" );
   	fdcFeTree->Branch( "dthit", &dthit, "dthit[dnhit]/F" );
   	fdcFeTree->Branch( "dahit", &dahit, "dahit[dnhit]/F" );
@@ -456,22 +421,22 @@ int main(int argc, char *argv[]) {
   	
 //  TH1D *xeff = new TH1D("xeff","X-coordinate of the track",48,-0.5,47.5);
 //  TH1D *x2eff = new TH1D("x2eff","X-coordinate of the track",48,-0.5,47.5);
-  	TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",300,-0.5,299.5,24,-0.5,23.5);
-  	TH2D *wAvsTnorm = new TH2D("wAvsTnorm","Ch.1 Amplitude vs Time norm",300,-0.5,299.5,24,-0.5,23.5);
-  	TH2D *wCvsT = new TH2D("wCvsT","Ch.1 Width (transverese) vs Time",300,-0.5,299.5,24,-0.5,23.5);
-  	TH2D *wCvsL = new TH2D("wCvsL","Ch.1 Width (longitudinal) vs Time",300,-0.5,299.5,24,-0.5,23.5);
-  	TH2D *wAvsB = new TH2D("wAvsB","Ch.1 Amplitude vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
-  	TH2D *wCvsB = new TH2D("wCvsB","Ch.1 Counts vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
-  	TH2D *wYvsB = new TH2D("wYvsB","Ch.1 XY vs Time (background)",48,-0.5,47.5,96,-48.,48.);
-  	TH2D *wTYvsB = new TH2D("wTYvsB","Ch.1 TY vs Time (background)",300,-0.5,299.5,96,-48.,48.);
-  	TH2D *wAvsD = new TH2D("wAvsD","Ch.1 Amplitude vs Distance",1000,0.,40.,48,-0.5,47.5);
-  	wAvsT->Sumw2();
-  	wCvsT->Sumw2();
-  	wAvsB->Sumw2();
-  	wCvsB->Sumw2();
-  	wYvsB->Sumw2();
-  	wTYvsB->Sumw2();
-  	wAvsD->Sumw2();
+  	//TH2D *wAvsT = new TH2D("wAvsT","Ch.1 Amplitude vs Time",300,-0.5,299.5,24,-0.5,23.5);
+  	//TH2D *wAvsTnorm = new TH2D("wAvsTnorm","Ch.1 Amplitude vs Time norm",300,-0.5,299.5,24,-0.5,23.5);
+  	//TH2D *wCvsT = new TH2D("wCvsT","Ch.1 Width (transverese) vs Time",300,-0.5,299.5,24,-0.5,23.5);
+  	//TH2D *wCvsL = new TH2D("wCvsL","Ch.1 Width (longitudinal) vs Time",300,-0.5,299.5,24,-0.5,23.5);
+  	//TH2D *wAvsB = new TH2D("wAvsB","Ch.1 Amplitude vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
+  	//TH2D *wCvsB = new TH2D("wCvsB","Ch.1 Counts vs Time (background)",300,-0.5,299.5,48,-0.5,47.5);
+  	//TH2D *wYvsB = new TH2D("wYvsB","Ch.1 XY vs Time (background)",48,-0.5,47.5,96,-48.,48.);
+  	//TH2D *wTYvsB = new TH2D("wTYvsB","Ch.1 TY vs Time (background)",300,-0.5,299.5,96,-48.,48.);
+  	//TH2D *wAvsD = new TH2D("wAvsD","Ch.1 Amplitude vs Distance",1000,0.,40.,48,-0.5,47.5);
+  	//wAvsT->Sumw2();
+  	//wCvsT->Sumw2();
+  	//wAvsB->Sumw2();
+  	//wCvsB->Sumw2();
+  	//wYvsB->Sumw2();
+  	//wTYvsB->Sumw2();
+  	//wAvsD->Sumw2();
   	
   	TH2D *w2AvsT = new TH2D("w2AvsT","GEM Amplitude vs Time",300,-0.5,299.5,240,-0.5,239.5);
   	TH2D *w2AvsTnorm = new TH2D("w2AvsTnorm","GEM Amplitude vs Time norm",300,-0.5,299.5,240,-0.5,239.5);
@@ -479,8 +444,8 @@ int main(int argc, char *argv[]) {
   	TH2D *w2CvsL = new TH2D("w2CvsL","GEM Width (longitudinal) vs Time",300,-0.5,299.5,240,-0.5,239.5);
   	TH2D *w2AvsB = new TH2D("w2AvsB","GEM Amplitude vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
   	TH2D *w2CvsB = new TH2D("w2CvsB","GEM Counts vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
-  	TH2D *w2YvsB = new TH2D("w2YvsB","GEM X vs Y (background)",240,-0.5,239.5,240,-0.5,239.5);
-  	TH2D *w2TYvsB = new TH2D("w2TYvsB","GEM TY vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
+  	//TH2D *w2YvsB = new TH2D("w2YvsB","GEM X vs Y (background)",240,-0.5,239.5,240,-0.5,239.5);
+  	//TH2D *w2TYvsB = new TH2D("w2TYvsB","GEM TY vs Time (background)",300,-0.5,299.5,240,-0.5,239.5);
   	TH2D *w2AvsD = new TH2D("w2AvsD","GEM Amplitude vs Distance",1000,0.,35.,240,-0.5,239.5);
   	w2AvsTnorm->Sumw2();
   	w2AvsT->Sumw2();
@@ -488,8 +453,8 @@ int main(int argc, char *argv[]) {
   	w2CvsL->Sumw2();
   	w2AvsB->Sumw2();
   	w2CvsB->Sumw2();
-  	w2YvsB->Sumw2();
-  	w2TYvsB->Sumw2();
+  	//w2YvsB->Sumw2();
+  	//w2TYvsB->Sumw2();
   	w2AvsD->Sumw2();
   	xaxis = (TAxis*)w2AvsT->GetXaxis();
   	xaxis->SetTitle("Time (*8 ns)");
@@ -514,8 +479,8 @@ int main(int argc, char *argv[]) {
   	TH2D *dCvsL = new TH2D("dCvsL","MMG Width (longitudinal) vs Time",300,-0.5,299.5,200,-0.5,199.5);
   	TH2D *dAvsB = new TH2D("dAvsB","MMG Amplitude vs Time (background)",300,-0.5,299.5,200,-0.5,199.5);
   	TH2D *dCvsB = new TH2D("dCvsB","MMG Counts vs Time (background)",300,-0.5,299.5,200,-0.5,199.5);
-  	TH2D *dYvsB = new TH2D("dYvsB","MMG X vs Y (background)",200,-0.5,199.5,200,-0.5,199.5);
-  	TH2D *dTYvsB = new TH2D("dTYvsB","MMG TY vs Time (background)",1000,-0.5,999.5,200,-0.5,199.5);
+  	//TH2D *dYvsB = new TH2D("dYvsB","MMG X vs Y (background)",200,-0.5,199.5,200,-0.5,199.5);
+  	//TH2D *dTYvsB = new TH2D("dTYvsB","MMG TY vs Time (background)",1000,-0.5,999.5,200,-0.5,199.5);
   	TH2D *dAvsD = new TH2D("dAvsD","MMG Amplitude vs Distance",1000,0.,35.,200,-0.5,199.5);
   	dAvsTnorm->Sumw2();
   	dAvsT->Sumw2();
@@ -523,8 +488,8 @@ int main(int argc, char *argv[]) {
   	dCvsL->Sumw2();
   	dAvsB->Sumw2();
   	dCvsB->Sumw2();
-  	dYvsB->Sumw2();
-  	dTYvsB->Sumw2();
+  	//dYvsB->Sumw2();
+  	//dTYvsB->Sumw2();
   	dAvsD->Sumw2();
   	xaxis = (TAxis*)dAvsT->GetXaxis();
   	xaxis->SetTitle("Time (*8 ns)");
@@ -547,7 +512,7 @@ int main(int argc, char *argv[]) {
   	yaxis = (TAxis*)dCvsB->GetYaxis();
   	yaxis->SetTitle("Channel");
 	
-  	TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",300,-0.5,299.5,4096,-0.5,4095.5);
+//  	TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",300,-0.5,299.5,4096,-0.5,4095.5);
 	
 //  TH2D *Timeax = new TH2D("Timeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
 //  TH2D *Timebx = new TH2D("Timebx","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
@@ -595,9 +560,9 @@ int main(int argc, char *argv[]) {
         	fOK=false;
         	cout<<"File not found - closing"<<endl;
     	}
+		
     	if (fOK){
   			evioFileChannel EvOchan(fnam,"r",8000000);
-//      	cout<<"Here 1 - EVIO File exists"<<endl;
   			EvOchan.open();
 			bool ReadBack = EvOchan.read();
 			cout<<"Reading file..."<<endl;
@@ -605,7 +570,7 @@ int main(int argc, char *argv[]) {
         		while(ReadBack && evtCount<NEVENT) {
           			EVENT=evtCount;
 					evtCount++;
-          			///////////// begin event loop ///////////////////
+///////////// begin event loop ///////////////////
 					
          			//if(evtCount%1000==0)
           			//cout<<"[][][] new event "<<evtCount<<" [][][]"<<endl;
@@ -629,7 +594,7 @@ int main(int argc, char *argv[]) {
             					
                     			float uADCmax[72][400];
                     			float uAmax[72];
-                    			float uADCsum[72]; //Why is this one not [72][400] as the others are? No ADCsumall
+                    			float uADCsumall[72];
                     			int uSAMPmax[72][400];
                     			int uNhit[72];
                     			int uSmax[72];
@@ -645,15 +610,15 @@ int main(int argc, char *argv[]) {
                     			float wAmin[72];
 								
 								//p objects correspond to PAD-GEM
-                    			float pADCmax[240][400];
-                    			float pADCsum[240][400];
-                    			float pADCsumall[240];
-                    			int pSAMPmax[240][400];
-            					int pNSAMP[240][400];
-								int pNhit[240];
-								int pSmax[240];
-								float pAmax[240];
-								float pAmin[240]; //Where its used, doesn't seem to ever be initialized? or filled
+                    			//float pADCmax[240][400];
+                    			//float pADCsum[240][400];
+                    			//float pADCsumall[240];
+                    			//int pSAMPmax[240][400];
+            					//int pNSAMP[240][400];
+								//int pNhit[240];
+								//int pSmax[240];
+								//float pAmax[240];
+								//float pAmin[240]; //Where its used, doesn't seem to ever be initialized? or filled
 								
 								//d objects correspond to MMG
                     			float dADCmax[240][400];
@@ -665,6 +630,7 @@ int main(int argc, char *argv[]) {
 								int dSmax[240];
 								float dAmax[240];
 								float dAmin[240];
+								float dAmpMax[240];
 								
 								//w2 objects correspond to GEM
                     			float w2ADCsum[240][400];
@@ -676,6 +642,7 @@ int main(int argc, char *argv[]) {
                     			int w2Smax[240];
                     			float w2Amax[240];
                     			float w2Amin[240];
+								float w2AmpMax[240];
             					
                     			float adcval;
                     			float adcval1;
@@ -684,11 +651,11 @@ int main(int argc, char *argv[]) {
                     			samples=WindowSize;
                     			//cout<<"samples = "<<samples<<endl;
 //
-// Cell1 U-strips
+/// Cell1 U-strips
 //
                     			int uwd[24];
                     			for (int ch=0;ch<24;ch++){
-                        			uADCsum[ch]=0.; //Should be 2 dimensions..?
+                        			uADCsumall[ch]=0.;
                         			uwd[ch]=0.;
                         			uSmax[ch]=0;
                         			uAmax[ch]=0.;
@@ -707,7 +674,7 @@ int main(int argc, char *argv[]) {
                            				adcval1=ADCSamples[0][slot][ch0+ch][i-1]-ADCPedestal[0][slot][ch0+ch];
                            				adcval2=ADCSamples[0][slot][ch0+ch][i+1]-ADCPedestal[0][slot][ch0+ch];
                            				if(adcval>thresh/2.){
-                              				uADCsum[ch]+=adcval;
+                              				uADCsumall[ch]+=adcval;
                               				uwd[ch]++;
                               				if(adcval>adcval1&&adcval>adcval2){
                                  				uADCmax[ch][uNhit[ch]]=adcval;
@@ -723,7 +690,7 @@ int main(int argc, char *argv[]) {
                         			}
                     			}
 //
-// Cell1 wires
+/// Cell1 wires
 //
                      			int wwd[72];
                      			for (int ch=0;ch<72;ch++){
@@ -776,7 +743,7 @@ int main(int argc, char *argv[]) {
                          			}
                      			}
 //
-// Cell1 2D clustering
+/// Cell1 2D clustering
 //
                      			float wcht[24][400]; // amplitude vs channel and sample
                      			for (int ch=0;ch<24;ch++){
@@ -839,9 +806,9 @@ int main(int argc, char *argv[]) {
                             			} //end 2d max simple condition
                         			} //end hit loop
                      			} //end channel loop
-                     			// end Cell1 2D clustering
+/// end Cell1 2D clustering
 //
-// Cell2 wires
+/// Cell2 wires - GEM-TRD Corresponds to "Cell2 wires"
 //
                      			int w2wd[240];
                      			for (int ch=0;ch<240;ch++){
@@ -850,6 +817,7 @@ int main(int argc, char *argv[]) {
                          			w2Smax[ch]=0;
                          			w2Amax[ch]=0.;
                          			w2Amin[ch]=5000.;
+									w2AmpMax[ch]=0;
                          			for (int hit=0;hit<400;hit++){
                              			w2ADCmax[ch][hit]=0.;
                              			w2SAMPmax[ch][hit]=0;
@@ -889,13 +857,14 @@ int main(int argc, char *argv[]) {
                                    	  				w2Amax[ch]=adcval;
                                       				w2Smax[ch]=i;
                                       				w2ped=ADCPedestal[0][slot][dch];
+													w2AmpMax[ch]=w2Amax[ch];
                                    				}
                                 			}
                              			}
                          			}
                      			}
 //
-// Cell2 2D clustering
+// Cell2 wires 2D clustering - GEM 2D clustering
 //
                      			float w2cht[240][400]; // amplitude vs channel and sample
                      			for (int ch=0;ch<240;ch++){
@@ -959,7 +928,7 @@ int main(int argc, char *argv[]) {
                          			} //end hit loop
                      			} //end channel loop
                      			
-                     			w2mcharge=0.;
+                     			//w2mcharge=0.;
                      			w2smax=-100;
                      			//w2chmax=-100;
                      			for (int cl=0;cl<w2nclust;cl++){
@@ -969,9 +938,9 @@ int main(int argc, char *argv[]) {
                             			w2smax=w2clustsmp[cl];
                          			}
                      			}
-                     			//// end c2 2d clustering ////
+/// end GEM c2 2D clustering ///
 //
-// Cell2 d strips - MMG detector corresponds to "Cell2 d strips"
+/// Cell2 d strips - MMG detector corresponds to "Cell2 d strips"
 //
                      			int dwd[240];
                      			// It has 192 channels total
@@ -981,6 +950,7 @@ int main(int argc, char *argv[]) {
                          			dSmax[ch]=0;
                          			dAmax[ch]=0.;
                          			dAmin[ch]=5000.;
+									dAmpMax[ch]=0;
                          			for (int hit=0;hit<400;hit++){
                              			dADCmax[ch][hit]=0.;
                              			dSAMPmax[ch][hit]=0;
@@ -1022,6 +992,7 @@ int main(int argc, char *argv[]) {
                                       				dAmax[ch]=adcval;
                                       				dSmax[ch]=i;
                                       				dped=ADCPedestal[0][slot][dch];
+													dAmpMax[ch]=dAmax[ch];
                                    				}
                                 			}
                              			}
@@ -1068,7 +1039,7 @@ int main(int argc, char *argv[]) {
                              			&&(a>dcht[ch+2][sm]&&a>dcht[ch+2][sm-1]&&a>dcht[ch+2][sm+1])
                              			&&(a>dcht[ch+1][sm]&&a>dcht[ch+1][sm-1]&&a>dcht[ch+1][sm+1])) { //2d max simple condition
                                 			dclustsmp[dnclust]=sm; //take the time at the maximum as cluster time
-                                			dclustchn[dnclust]=ch; //take the time at the maximum as cluster time
+                                			dclustchn[dnclust]=ch; //take the channel at the maximum as cluster channel
                                 			dclustlwd[dnclust]=dNSAMP[ch][ihit]; //number of samples for the maximum (longitudinal width)
                                 			
 											int ch1=ch-10; //now sum all amplitudes around if > amax/5
@@ -1093,7 +1064,6 @@ int main(int argc, char *argv[]) {
                      			} //end channel loop
 								
 					 			//NEW
-                     			dmcharge=0.;
                      			dsmax=-100;
 					 			for (int cl=0;cl<dnclust;cl++){
 	                  				if(dclustamp[cl]>0.){
@@ -1101,15 +1071,16 @@ int main(int argc, char *argv[]) {
 		                			}
 		             			}
 								
-                     			// end Cell2 2d clustering
+/// end MMG Cell2 2D clustering ///
 
                      			umcharge=0.;
                      			usmax=-100;
                      			uchmax=-100;
-//                     			dmcharge=0.;
+                     			dmcharge=0.;
 //                     			dsmax=-100;
                      			//dchmax=-100;
                      			wmcharge=0.;
+								w2mcharge=0.;
                      			wsmax=-100;
                      			wchmax=-100;
                      			wsize=0;
@@ -1141,7 +1112,7 @@ int main(int argc, char *argv[]) {
                      			for (int ch=0;ch<24;ch++){
                          			if(uAmax[ch]>thresh/18.){ //Why thresh over 18 ??
                             			usize++;
-                            			ucharge+=uADCsum[ch];
+                            			ucharge+=uADCsumall[ch];
                             			uwid+=uwd[ch];
                          			}
                          			if(uAmax[ch]>umcharge){
@@ -1155,6 +1126,7 @@ int main(int argc, char *argv[]) {
                          			if(w2Amax[ch]>thresh){
                             			w2size++;
                             			w2charge+=w2ADCsumall[ch];
+                                        w2wid+=w2wd[ch];
                          			}
                          			if(w2Amax[ch]>w2mcharge&&ch>0&&ch<240){
                             			w2mcharge=w2Amax[ch];
@@ -1180,7 +1152,8 @@ int main(int argc, char *argv[]) {
 //////////////////// u-strips centroid & w centroid
 //                          
                      			if(1==1){
-/*                     				umax=0.;
+/*
+                     				umax=0.;
                     				for (int ch=0;ch<24;ch++){
                         				int slot; int ch0;
                         				slot=sl_c1u1; ch0=ch_c1u1;
@@ -1246,7 +1219,7 @@ int main(int argc, char *argv[]) {
                         			usize=0;
                         			FHist->Reset();
                         			for (int ich=ch1;ich<ch2+1;ich++){
-                            			adcval=uADCsum[ich];
+                            			adcval=uADCsumall[ich];
                             			if(adcval>thresh/18.){
                                				ucharge+=adcval;
                                				ucent+=(float)adcval*ich;
@@ -1256,7 +1229,7 @@ int main(int argc, char *argv[]) {
                         			}
                         			
                         			ucent/=ucharge;
-                        			centroid->SetParameter(0,(double)uADCsum[uchmax]);
+                        			centroid->SetParameter(0,(double)uADCsumall[uchmax]);
                         			centroid->SetParameter(1,(double)2.);
                         			centroid->SetParameter(2,(double)1.);
                         			if(usize>2){
@@ -1295,7 +1268,7 @@ int main(int argc, char *argv[]) {
                                   				wped=ADCPedestal[0][slot][ch+ch0];
                                				}
                            				}
-                           				
+/// u centroid                           				
                            				ucharge=0.;
                            				umcharge=0.;
                            				ucent=0.;
@@ -1335,7 +1308,7 @@ int main(int argc, char *argv[]) {
                            				usize=0;
                            				FHist->Reset();
                            				for (int ich=ch1;ich<ch2+1;ich++){
-                               				adcval=uADCsum[ich];
+                               				adcval=uADCsumall[ich];
                                				if(adcval>thresh/18.){
                                   				ucharge+=adcval;
                                   				ucent+=(float)adcval*ich;
@@ -1345,7 +1318,7 @@ int main(int argc, char *argv[]) {
                            				}
                            				
                            				ucent/=ucharge;
-                           				centroid->SetParameter(0,(double)uADCsum[uchmax]);
+                           				centroid->SetParameter(0,(double)uADCsumall[uchmax]);
                            				centroid->SetParameter(1,(double)2.);
                            				centroid->SetParameter(2,(double)1.);
                            				if(usize>2){
@@ -1355,7 +1328,7 @@ int main(int argc, char *argv[]) {
                                  				ufit=(float)centroid->GetParameter(1)+(float)ch1;
                               				}
                            				}
-///                           
+/// w centroid                          
                            				wcharge=0.;
                            				wmcharge=0.;
                            				wcent=0.;
@@ -1444,12 +1417,12 @@ int main(int argc, char *argv[]) {
                         			if(tmax2>tmax1)tmax12=tmax2;
                         			tmax12=550.;
                         			if(wchmax>0){
-                           				if(wmcharge>100.){
+                           				if(wmcharge>thresh){
                               				unhit=uNhit[uchmax];
                               				for (int ihit=0;ihit<uNhit[uchmax];ihit++){
                                   				uthit[ihit]=uSAMPmax[uchmax][ihit];
                                   				uahit[ihit]=uADCmax[uchmax][ihit];
-                                  				uAvsT->Fill((double)uSAMPmax[uchmax][ihit],(double)uADCmax[uchmax][ihit]);
+                                  				//uAvsT->Fill((double)uSAMPmax[uchmax][ihit],(double)uADCmax[uchmax][ihit]);
                               				}
                               				/// short mode
                               				for (int ch=0;ch<24;ch++){
@@ -1468,8 +1441,8 @@ int main(int argc, char *argv[]) {
                               				}
                               				
                               				for (int iclust=0;iclust<wnclust;iclust++){
-                                  				wAvsTnorm->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustamp[iclust]);
-                                  				wCvsL->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustlwd[iclust]);
+                                  				//wAvsTnorm->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustamp[iclust]);
+                                  				//wCvsL->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustlwd[iclust]);
                               				}
                               				
                               				for (int ch=0;ch<72;ch++){
@@ -1481,22 +1454,22 @@ int main(int argc, char *argv[]) {
                                             				wahit[wnhit]=wADCsum[ch][ihit];
                                             				wmhit[wnhit++]=wADCmax[ch][ihit];
                                          				}
-                                         				wAvsD->Fill((double)(wSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)wADCsum[ch][ihit]);
-                                         				wAvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
-                                         				wCvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch);
+                                         				//wAvsD->Fill((double)(wSAMPmax[ch][ihit]-48.)*dmax1/tmax1,(double)ch,(double)wADCsum[ch][ihit]);
+                                         				//wAvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
+                                         				//wCvsT->Fill((double)wSAMPmax[ch][ihit],(double)ch);
                                       					
                                       				} else {
-                                         				wAvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
-                                         				wCvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch);
+                                         				//wAvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch,(double)wADCsum[ch][ihit]);
+                                         				//wCvsB->Fill((double)wSAMPmax[ch][ihit],(double)ch);
                                          				int fillok=1;
                                          				for (int chu=0;chu<24&&fillok;chu++){
                                              				for (int ihitu=0;ihitu<uNhit[chu]&&fillok;ihitu++){
                                                  				if(abs(uSAMPmax[chu][ihitu]-wSAMPmax[ch][ihit])<3){
                                                     				float y=-0.5*(chu-24.)/cos(sang)+1.*ch*tan(sang);
                                                     				if(wSAMPmax[ch][ihit]>tmax12+50.){
-                                                       					wYvsB->Fill((double)ch,(double)y,(double)wADCmax[chu][ihitu]);
+                                                       					//wYvsB->Fill((double)ch,(double)y,(double)wADCmax[chu][ihitu]);
                                                     				}
-                                                    				wTYvsB->Fill((double)wSAMPmax[ch][ihit],(double)y,(double)uADCmax[chu][ihitu]);
+                                                    				//wTYvsB->Fill((double)wSAMPmax[ch][ihit],(double)y,(double)uADCmax[chu][ihitu]);
                                                  				}
                                              				}
                                          				}
@@ -1516,7 +1489,6 @@ int main(int argc, char *argv[]) {
 									
                         			//dnhit=0;
                         			w2nhit=0;
-                        			w2size=0.;
                         			for (int ihit=0;ihit<200;ihit++){
                             			w2thit[ihit]=-100.;
                             			w2ahit[ihit]=-100.;
@@ -1527,13 +1499,13 @@ int main(int argc, char *argv[]) {
                         			}
                         			
 									//////Possible error here... Should all be w2 instead of w in this first section
-									//for w2mcharge > 100 ? Otherwise its a repeat of what is above ... 
+									//for w2mcharge > 100 ? Otherwise its a repeat of what is above ... Seems misplaced
                         			tmax12=tmax1;
                         			if(tmax2>tmax1)tmax12=tmax2;
                         			tmax12=550.;
                         			if(w2chmax>0){
-                           				if(w2mcharge>100.){
-                              				// short mode
+                           				if(w2mcharge>thresh){
+/*                              				// short mode
                               				for (int ch=0;ch<24;ch++){
                                		   			int slot; int ch0;
                                   				slot=sl_c1w1; ch0=ch_c1w1;
@@ -1548,7 +1520,7 @@ int main(int argc, char *argv[]) {
                                      				}
                                   				}
                               				}
-                              				
+*/                              				
                               				for (int iclust=0;iclust<w2nclust;iclust++){
                                   				w2AvsTnorm->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustamp[iclust]);
                                   				w2CvsL->Fill((double)w2clustsmp[iclust],(double)w2clustchn[iclust],(double)w2clustlwd[iclust]);
@@ -1557,7 +1529,6 @@ int main(int argc, char *argv[]) {
                               				for (int ch=0;ch<240;ch++){
                                   				for (int ihit=0;ihit<w2Nhit[ch]&&ihit<200;ihit++){
                                       				if(abs(ch-w2chmax)<10){
-														//cout<<"det=GEM ch="<<ch<<" w2chmax="<<w2chmax<<endl;
                                          				if(w2nhit<999){
                                             				w2chit[w2nhit]=ch;
                                             				w2thit[w2nhit]=w2SAMPmax[ch][ihit];
@@ -1598,7 +1569,6 @@ int main(int argc, char *argv[]) {
                                 	}
 									
 									dnhit=0;
-                        			//dsize=0.;
                         			for (int ihit=0;ihit<200;ihit++){
                             			dthit[ihit]=-100.;
                             			dahit[ihit]=-100.;
@@ -1610,7 +1580,7 @@ int main(int argc, char *argv[]) {
                         			if(tmax2>tmax1)tmax12=tmax2;
                         			tmax12=550.;
                         			if(dchmax>0){
-                           				if(dmcharge>100.){
+                           				if(dmcharge>thresh){
 										//REMOVED December - seems like an error ?
 /*                            			dnhit=dNhit[uchmax];
                               			for (int ihit=0;ihit<dNhit[dchmax];ihit++){
@@ -1627,7 +1597,6 @@ int main(int argc, char *argv[]) {
                                 			for (int ch=0;ch<192;ch++){
                                   				for (int ihit=0;ihit<dNhit[ch]&&ihit<200;ihit++){
                                       				if(abs(ch-dchmax)<10){
-														//cout<<"det=MMG ch="<<ch<<" dchmax="<<dchmax<<endl;
                                          				if(dnhit<999){
                                             				dchit[dnhit]=ch;
                                             				dthit[dnhit]=dSAMPmax[ch][ihit];
@@ -1646,7 +1615,7 @@ int main(int argc, char *argv[]) {
                                 			print_flg=0;
 										}// end dmcharge loop
                         			}// end dhcmax loop
-									
+//// End Histo filling ////
 //									
 //// Begin GEM dedx write ////
 //
@@ -1928,24 +1897,9 @@ int main(int argc, char *argv[]) {
                                       					OKw2=1;
                                    					}
                                 				} //end ch loop
-/*
-// pad
-                                for (Int_t ch=0;ch<100;ch++){
-                                   if(pAmax[ch]>thresh/2.){
-                                      int slot=GetPSlot(ch);
-                                      int k=GetPChan(ch);
-                                      float padc = ADCSamples[0][slot][k][i]-ADCPedestal[0][slot][k];
-                                      Ypaxis[ch][i-smp1] = padc;
-                                      int pxch=ch/10;
-                                      int pych=ch%10;
-                                      //if(padc>thresh/2.&&abs(i-42.5)<4)pad_plot->Fill((float)(pych),(float)(pxch),padc);
-                                      OKp=1;
-                                   }
-                                } //end ch loop
-*/
                            					} //end sample loop
                               			
-                              				if(OKp){
+                              				/*if(OKp){
                                  				bool above_thresh=false;
                                  				int k=0;
                                  				for (int k=0;k<100;k++){
@@ -1962,7 +1916,7 @@ int main(int argc, char *argv[]) {
                                      				}
                                  				}
                               				}
-                              				
+                              				*/
                               				if(OKw){
                                   				int k=0;
                                   				for (int k=0;k<24;k++){
@@ -1995,34 +1949,30 @@ int main(int argc, char *argv[]) {
                                       				}
                                   				}
                               				}
-         //    GEM-TRD signals:
-         /*
-              if(OKw2){
-              	bool above_thresh=false;
-              	int k=0;
-              	for (int k=0;k<240;k++){
-              		//for (int k=0;k<240;k+=12){
-              		if(w2Amax[k]>thresh){
-              			cout<<" chan ========================== "<<k<<" col= "<<wcol<<endl;
-              			graf2[k] = new TGraph(ns,Xaxis,Yw2axis[k]);
-              			graf2[k]->SetMarkerStyle(1);
-              			graf2[k]->SetLineStyle(1);
-              			graf2[k]->SetMarkerColor(wcol);
-              			graf2[k]->SetLineColor(wcol);
-              			mg->Add(graf2[k]);
-              			wcol++;
-              			above_thresh=true;
-              		}
-              	}
-      			//cok mg->Draw("alp");
-    		   	//cokcok if(above_thresh){
-  		      		//mg->Draw("alp");
-    		   		//myc->Update();
-   		   			//Int_t nexti=0;
-   		   			//cin>>nexti;
-    		   	//cokcok }
-              }
-           */
+////    GEM-TRD signals:
+/*
+              								if(OKw2){
+              									bool above_thresh=false;
+              									//int k=0;
+              									for (int k=0;k<240;k++){
+              										if(w2Amax[k]>thresh){
+              											cout<<" chan ========== "<<k<<" col= "<<wcol<<endl;
+              											graf2[k] = new TGraph(ns,Xaxis,Yw2axis[k]);
+              											graf2[k]->SetMarkerStyle(1);
+              											graf2[k]->SetLineStyle(1);
+              											graf2[k]->SetMarkerColor(wcol);
+              											graf2[k]->SetLineColor(wcol);
+              											mg->Add(graf2[k]);
+              											wcol++;
+              											above_thresh=true;
+              										}
+              									}
+  		      									//mg->Draw("alp");
+    		   									//myc->Update();
+   		   										//Int_t nexti=0;
+   		   										//cin>>nexti;
+              								}
+*/
                              				if(OKw2>0&&OKd>0){
                                  				//cout<<"w2ch,dch="<<w2chmax<<" "<<dchmax<<endl;
                                  				//cout<<" delta dch-w2ch = "<<dchmax*0.04-w2chmax*0.04<<endl;
