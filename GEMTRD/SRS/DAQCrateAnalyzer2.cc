@@ -111,10 +111,6 @@ ofstream to_sergey_norad2;
 #define mmg_x_slot 3
 #define mmg_x_ch0 24
 
-// pad-GEM first slot/ch definition
-//#define gem_p_slot 6
-//#define gem_p_ch0  0
-
 // GEM-TRD mapping - it works the way it is
 int GetGEMSlot(int gch){
    return (int)(gch+gem_x_ch0)/72+first_slot+gem_x_slot;
@@ -124,14 +120,11 @@ int GetGEMChan(int gch){
    int fch=(gch+gem_x_ch0)%72;	//fADC channel (0-71)
    int card=fch/24;				//card in module (0-2)
    int cch=fch%24;				//card channel (0-23)
-//   return 23-cch+card*24;		//inversed fADC module channel
-   return cch+card*24;
+   return cch+card*24;			//fADC module channel
 }
 
 // MMG mapping
 int GetMMGSlot(int gch){
-   
-   //return (int)(gch+mmg_x_ch0)/72+mmg_x_slot;
    return (int)(gch+mmg_x_ch0)/72+first_slot+mmg_x_slot;
    //WAS PREVIOUSLY-->//return (int)(gch+mmg_x_ch0)/72+first_slot;
 }
@@ -142,7 +135,6 @@ int GetMMGChan(int gch){
    int card=fch/24;
    int cch=fch%24;
    return cch+card*24;
-//   return 23-cch+card*24;
 }
 
 
@@ -324,43 +316,25 @@ int main(int argc, char *argv[]) {
   	fdcFeTree->Branch( "ev", &EVENT, "ev/I" );
   	fdcFeTree->Branch( "runNumber", &RunNumber, "runNumber/I");
 //    fdcFeTree->Branch( "thresh", &thresh, "thresh/F");
-  	//fdcFeTree->Branch( "max_w", &wmax, "max_w/F" );
   	fdcFeTree->Branch( "ped_d", &dped, "ped_d/F" );
 	fdcFeTree->Branch( "dAmpMax", &dAmpmax, "dAmpMax/F" );
-  	//fdcFeTree->Branch( "ped_w", &wped, "ped_w/F" );
   	fdcFeTree->Branch( "ped_w2", &w2ped, "ped_w2/F" );
 	fdcFeTree->Branch( "w2AmpMax", &w2Ampmax, "w2AmpMax/F" );
   	fdcFeTree->Branch( "q_d", &dcharge, "q_d/F" );
-  	//fdcFeTree->Branch( "q_w", &wcharge, "q_w/F" );
   	fdcFeTree->Branch( "q_w2", &w2charge, "q_w2/F" );
   	fdcFeTree->Branch( "qm_d", &dmcharge, "qm_d/F" );
-  	//fdcFeTree->Branch( "qm_w", &wmcharge, "qm_w/F" );
   	fdcFeTree->Branch( "qm_w2", &w2mcharge, "qm_w2/F" );
     fdcFeTree->Branch( "dsig", &dsig, "dsig/F" );
   	fdcFeTree->Branch( "dwid", &dwid, "dwid/I" ); 
-  	//fdcFeTree->Branch( "wcent", &wcent, "wcent/F" );
-  	//fdcFeTree->Branch( "wfit", &wfit, "wfit/F" );
-  	//fdcFeTree->Branch( "wmcent", &wmcent, "wmcent/F" );
-  	//fdcFeTree->Branch( "wmfit", &wmfit, "wmfit/F" );
-  	//fdcFeTree->Branch( "wsig", &wsig, "wsig/F" );
-  	//fdcFeTree->Branch( "wwid", &wwid, "wwid/I" );
   	fdcFeTree->Branch( "w2sig", &w2sig, "w2sig/F" );
   	fdcFeTree->Branch( "w2wid", &w2wid, "w2wid/I" );
   	fdcFeTree->Branch( "t_d", &dsmax, "t_d/I" );
-  	//fdcFeTree->Branch( "t_w", &wsmax, "t_w/I" );
   	fdcFeTree->Branch( "t_w2", &w2smax, "t_w2/I" );
   	fdcFeTree->Branch( "dch", &dchmax, "dch/I" );
-  	//fdcFeTree->Branch( "wch", &wchmax, "wch/I" );
   	fdcFeTree->Branch( "w2ch", &w2chmax, "w2ch/I" );
   	fdcFeTree->Branch( "dsz", &dsize, "dsz/I" );
-  	//fdcFeTree->Branch( "wsz", &wsize, "wsz/I" );
   	fdcFeTree->Branch( "w2sz", &w2size, "w2sz/I" );
   	fdcFeTree->Branch( "trig", &trig,"trig/I" );
-  	//fdcFeTree->Branch( "wnhit", &wnhit, "wnhit/I" );
-  	//fdcFeTree->Branch( "wthit", &wthit, "wthit[wnhit]/F" );
-  	//fdcFeTree->Branch( "wahit", &wahit, "wahit[wnhit]/F" );
-  	//fdcFeTree->Branch( "wmhit", &wmhit, "wmhit[wnhit]/F" );
-  	//fdcFeTree->Branch( "wchit", &wchit, "wchit[wnhit]/I" );
   	fdcFeTree->Branch( "w2nhit", &w2nhit, "w2nhit/I" );
   	fdcFeTree->Branch( "w2thit", &w2thit, "w2thit[w2nhit]/F" );
   	fdcFeTree->Branch( "w2ahit", &w2ahit, "w2ahit[w2nhit]/F" );
@@ -512,8 +486,6 @@ int main(int argc, char *argv[]) {
   	yaxis = (TAxis*)dCvsB->GetYaxis();
   	yaxis->SetTitle("Channel");
 	
-//  	TH2D *uAvsT = new TH2D("uAvsT","Amplitude vs Time",300,-0.5,299.5,4096,-0.5,4095.5);
-	
 //  TH2D *Timeax = new TH2D("Timeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
 //  TH2D *Timebx = new TH2D("Timebx","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
 //  TH2D *DTimeax = new TH2D("DTimeax","Time between peaks vs time",1000,-0.5,999.5,48,-24.5,23.5);
@@ -599,6 +571,7 @@ int main(int argc, char *argv[]) {
                     			int uNhit[72];
                     			int uSmax[72];
 								
+								//w objects correspond to wire chamber
 								float wADCsumall[72];
                     			float wADCsum[72][400];
             					float wADCmax[72][400];
@@ -610,15 +583,6 @@ int main(int argc, char *argv[]) {
                     			float wAmin[72];
 								
 								//p objects correspond to PAD-GEM
-                    			//float pADCmax[240][400];
-                    			//float pADCsum[240][400];
-                    			//float pADCsumall[240];
-                    			//int pSAMPmax[240][400];
-            					//int pNSAMP[240][400];
-								//int pNhit[240];
-								//int pSmax[240];
-								//float pAmax[240];
-								//float pAmin[240]; //Where its used, doesn't seem to ever be initialized? or filled
 								
 								//d objects correspond to MMG
                     			float dADCmax[240][400];
@@ -928,9 +892,7 @@ int main(int argc, char *argv[]) {
                          			} //end hit loop
                      			} //end channel loop
                      			
-                     			//w2mcharge=0.;
                      			w2smax=-100;
-                     			//w2chmax=-100;
                      			for (int cl=0;cl<w2nclust;cl++){
                          			if(w2clustamp[cl]>0.){
                             			//w2mcharge=w2clustamp[cl];
@@ -1078,7 +1040,7 @@ int main(int argc, char *argv[]) {
                      			uchmax=-100;
                      			dmcharge=0.;
 //                     			dsmax=-100;
-                     			//dchmax=-100;
+//                     			dchmax=-100;
                      			wmcharge=0.;
 								w2mcharge=0.;
                      			wsmax=-100;
@@ -1152,96 +1114,6 @@ int main(int argc, char *argv[]) {
 //////////////////// u-strips centroid & w centroid
 //                          
                      			if(1==1){
-/*
-                     				umax=0.;
-                    				for (int ch=0;ch<24;ch++){
-                        				int slot; int ch0;
-                        				slot=sl_c1u1; ch0=ch_c1u1;
-                        				adcval=uADCmax[ch][0];
-                        				if(adcval>umax){
-                           					umax=adcval;
-                           					uchmax=ch;
-                           					usmax=uSAMPmax[ch][0];
-                           					uped=ADCPedestal[0][slot][ch+ch0];
-                         				}
-                     				}
-                     				wmax=0.;
-                     				for (int ch=0;ch<72;ch++){
-                        				int slot; int ch0;
-                        				slot=sl_c1w1; ch0=ch_c1w1;
-                        				adcval=wADCmax[ch][0];
-                        				if(adcval>wmax){
-                           					wmax=adcval;
-                           					wchmax=ch;
-                           					wsmax=wSAMPmax[ch][0];
-                           					wped=ADCPedestal[0][slot][ch+ch0];
-                         				}
-                     				}
-                        			
-                        			ucharge=0.;
-                        			umcharge=0.;
-                        			ucent=0.;
-                        			ufit=0.;
-                        			umcent=0.;
-                        			umfit=0.;
-                        			int ch1=uchmax-3;
-                        			if(ch1<0)ch1=0;
-                        			int ch2=uchmax+3;
-                        			if(ch2>23)ch2=23;
-                        			usig=0.;
-                        			
-                        			usize=0;
-                        			FHist->Reset();
-                        			for (int ich=ch1;ich<ch2+1;ich++){
-                            			adcval=uADCmax[ich][0];
-                            			if(adcval>thresh){
-                               				umcharge+=adcval;
-                               				umcent+=(float)adcval*ich;
-                               				FHist->Fill((double)ich-ch1,(double)adcval);
-                               				usize++;
-                            			}
-                        			}
-                        			
-                        			umcent/=umcharge;
-                        			centroid->SetParameter(0,(double)uADCmax[uchmax][0]);
-                        			centroid->SetParameter(1,(double)2.);
-                        			centroid->SetParameter(2,(double)1.);
-                        			if(usize>2){
-                           				TFitResultPtr res=FHist->Fit("centroid","QS");
-                           				int fstatus=res;
-                           				if(fstatus==0){
-                              				umfit=(float)centroid->GetParameter(1)+(float)ch1;
-                              				usig=abs((float)centroid->GetParameter(2));
-                              				// umcharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                           				}
-                        			}
-                        			
-                        			usize=0;
-                        			FHist->Reset();
-                        			for (int ich=ch1;ich<ch2+1;ich++){
-                            			adcval=uADCsumall[ich];
-                            			if(adcval>thresh/18.){
-                               				ucharge+=adcval;
-                               				ucent+=(float)adcval*ich;
-                               				FHist->Fill((double)ich-ch1,(double)adcval);
-                               				usize++;
-                            			}
-                        			}
-                        			
-                        			ucent/=ucharge;
-                        			centroid->SetParameter(0,(double)uADCsumall[uchmax]);
-                        			centroid->SetParameter(1,(double)2.);
-                        			centroid->SetParameter(2,(double)1.);
-                        			if(usize>2){
-                           				TFitResultPtr res=FHist->Fit("centroid","QS");
-                           				int fstatus=res;
-                           				if(fstatus==0){
-                              				ufit=(float)centroid->GetParameter(1)+(float)ch1;
-                              				// usig=abs((float)centroid->GetParameter(2));
-                              				// ucharge=centroid->GetParameter(0)*usig*sqrt(2.*PI);
-                           				}
-                        			}
-*/                        			
                         			if(wchmax>0&&uchmax>0){
                            				umax=0.;
                            				for (int ch=0;ch<24;ch++){
@@ -1422,7 +1294,6 @@ int main(int argc, char *argv[]) {
                               				for (int ihit=0;ihit<uNhit[uchmax];ihit++){
                                   				uthit[ihit]=uSAMPmax[uchmax][ihit];
                                   				uahit[ihit]=uADCmax[uchmax][ihit];
-                                  				//uAvsT->Fill((double)uSAMPmax[uchmax][ihit],(double)uADCmax[uchmax][ihit]);
                               				}
                               				/// short mode
                               				for (int ch=0;ch<24;ch++){
@@ -1438,11 +1309,6 @@ int main(int argc, char *argv[]) {
                                          				}
                                      				}
                                   				}
-                              				}
-                              				
-                              				for (int iclust=0;iclust<wnclust;iclust++){
-                                  				//wAvsTnorm->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustamp[iclust]);
-                                  				//wCvsL->Fill((double)wclustsmp[iclust],(double)wclustchn[iclust],(double)wclustlwd[iclust]);
                               				}
                               				
                               				for (int ch=0;ch<72;ch++){
@@ -1580,15 +1446,7 @@ int main(int argc, char *argv[]) {
                         			if(tmax2>tmax1)tmax12=tmax2;
                         			tmax12=550.;
                         			if(dchmax>0){
-                           				if(dmcharge>thresh){
-										//REMOVED December - seems like an error ?
-/*                            			dnhit=dNhit[uchmax];
-                              			for (int ihit=0;ihit<dNhit[dchmax];ihit++){
-                                  			dthit[ihit]=dSAMPmax[dchmax][ihit];
-                                  			dahit[ihit]=dADCmax[dchmax][ihit];
-                                  			dAvsT->Fill((double)dSAMPmax[dchmax][ihit],(double)dADCmax[dchmax][ihit]);
-                                		}
-*/                              		
+                           				if(dmcharge>thresh){                           		
                                 			for (int iclust=0;iclust<dnclust;iclust++){
                                   				dAvsTnorm->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustamp[iclust]);
                                   				dCvsL->Fill((double)dclustsmp[iclust],(double)dclustchn[iclust],(double)dclustlwd[iclust]);
@@ -1813,11 +1671,6 @@ int main(int argc, char *argv[]) {
              						fdcFeTree->Fill();
             						
                         			//cout<<" displaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyy="<<DISPLAY<<endl;
-                        			//cout<<"ucharge/dcharge="<<ucharge/dcharge<<endl;
-                        			//cout<<"ucharge="<<ucharge<<endl;
-                        			//cout<<"ucent-uch="<<ucent-uchmax<<endl;
-                        			//cout<<"usize,dsize="<<usize<<" "<<dsize<<endl;
-                         			
                         			if(DISPLAY){
                            				ct_plot->Reset();
                            				wct_plot->Reset();
